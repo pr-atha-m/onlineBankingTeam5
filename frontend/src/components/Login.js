@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import "./Login.css";
 import loginpic from "../images/login.jpg";
 
+
+
 export class Login extends Component {
   constructor(props) {
     super(props);
@@ -10,6 +12,32 @@ export class Login extends Component {
       password: "",
       isLoggedIn: false,
     };
+  }
+
+  async componentDidMount(){
+
+    let options = {
+      method:"POST",
+      headers: {
+        'Content-Type': 'application/json',
+    },
+      body:JSON.stringify(
+      
+        {
+            "user_name":"pratham",
+            "user_email":"pb@gmail.com",
+            "user_pwd":"4523"
+        
+        }
+      
+      )
+
+    }
+    let p = await fetch("http://localhost:8080/banking/validate", options)
+    
+    let response  = await p.json();
+
+    console.log(response)
   }
 
   handleInputChange = (e) => {
