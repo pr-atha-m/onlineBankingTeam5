@@ -8,6 +8,7 @@ export class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      serverResponse:"",
       email: "",
       password: "",
       isLoggedIn: false,
@@ -22,11 +23,11 @@ export class Login extends Component {
         'Content-Type': 'application/json',
     },
       body:JSON.stringify(
-      
+       
         {
-            "user_name":"pratham",
-            "user_email":"pb@gmail.com",
-            "user_pwd":"4523"
+            "user_name":this.state.user_name,
+            "user_email":this.state.user_email,
+            "user_pwd":this.state.user_pwd
         
         }
       
@@ -36,6 +37,8 @@ export class Login extends Component {
     let p = await fetch("http://localhost:8080/banking/validate", options)
     
     let response  = await p.json();
+    this.state.serverResponse = response.message;
+    console.log(this.state.serverResponse)
 
     console.log(response)
   }
@@ -46,14 +49,18 @@ export class Login extends Component {
   };
 
   handleLogin = () => {
-    if (
-      this.state.email === "Pratham" &&
-      this.state.password === "wellsfargo"
-    ) {
+    this.componentDidMount();
+
+    console.log(this.state.serverResponse)
+    if(this.state.serverResponse === "Login Successful"){
       setTimeout(() => {
         this.setState({ isLoggedIn: true });
       }, 2000);
     }
+
+
+    
+
   };
 
   render() {
