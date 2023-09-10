@@ -41,6 +41,10 @@ public class UserController {
        System.out.println(user_email);
     return user;
 	}
+	private boolean isValidEmail(String email)
+	  {
+		  return email.matches("^[\\w-]+(\\.[\\w-]+)*@[\\w-]+(\\.[\\w-]+)+$");
+	  }
 	
 	  @PostMapping("/user")
 	    public ResponseEntity<Object> creatingUser(@Validated @RequestBody User newUser) {
@@ -69,10 +73,7 @@ public class UserController {
 		  
 	    }
 	  
-	  private boolean isValidEmail(String email)
-	  {
-		  return email.matches("^[\\w-]+(\\.[\\w-]+)*@[\\w-]+(\\.[\\w-]+)+$");
-	  }
+	  
 	  
 	  private boolean isValidPassword(String password) {
 		  return password.length()>=8;
@@ -86,6 +87,10 @@ public class UserController {
 		  
 		  if(email==null|| email.isEmpty())
 			 return ResponseEntity.badRequest().body("{\"message\":\"Email is not provided\"}");
+		  if(!isValidEmail(email))
+		  {
+			  return ResponseEntity.badRequest().body("{\"message\":\"Invalid email \"}");
+		  }
 			  
 		  User user= userService.getUserByEmail(email)
 					.orElseThrow(() -> new ResourceNotFound("User not found for this email :: " + email));
@@ -102,5 +107,7 @@ public class UserController {
 	    	   return ResponseEntity.badRequest().body("{\"message\":\"Password is incorrect\"}");
 	       }
 	       return ResponseEntity.ok("{\"message\":\"Login Successful\"}");
+	       
+	       
 	  }
 }
