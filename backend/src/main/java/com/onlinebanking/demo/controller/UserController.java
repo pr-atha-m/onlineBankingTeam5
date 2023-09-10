@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,26 +43,26 @@ public class UserController {
 	}
 	
 	  @PostMapping("/user")
-	    public String creatingUser(@Validated @RequestBody User newUser) {
+	    public ResponseEntity<Object> creatingUser(@Validated @RequestBody User newUser) {
 		  String email=newUser.getUser_email();
 		  String password=newUser.getUser_pwd();
 		  
 		 if(!isValidEmail(email) && !isValidPassword(password) )
 		  {
-			  return "Invalid email and password";
+			 return ResponseEntity.badRequest().body("{\"message\":\"Invalid email and password\"}");
 		  }
 		  else if(!isValidPassword(password))
 		  {
-			  return "Invalid password";
+			  return ResponseEntity.badRequest().body("{\"message\":\"Password should be atleast 8 characters\"}");
 		  }
 		  else if(!isValidEmail(email))
 		  {
-			  return "Invalid email ";
+			  return ResponseEntity.badRequest().body("{\"message\":\"Invalid email \"}");
 		  }
 		 
 		  else {
 	         userService.createUser(newUser);
-	         return "User created successfully";
+	         return ResponseEntity.ok("{\"message\":\"User created successfully\"}");
 		  }
 		  
 		  
@@ -78,13 +79,13 @@ public class UserController {
 	
 }
 	  @PostMapping("/validate")
-	  public String validateLogin(@RequestBody User loginReq)throws ResourceNotFound
+	  public ResponseEntity<Object> validateLogin(@RequestBody User loginReq)throws ResourceNotFound
 	  {
 		  String email=loginReq.getUser_email();
 		  String pwd=loginReq.getUser_pwd();
 		  
 		  if(email==null|| email.isEmpty())
-			  return "Email not provided";
+			 return ResponseEntity.badRequest().body("{\"message\":\"Email is not provided\"}");
 			  
 		  User user= userService.getUserByEmail(email)
 					.orElseThrow(() -> new ResourceNotFound("User not found for this email :: " + email));
@@ -92,14 +93,14 @@ public class UserController {
 	       
 	       if(user==null)
 	       {
-	    	   return "email not found";
+	    	   return ResponseEntity.badRequest().body("{\"message\":\"Email is not found\"}");
 	       }
 	      
 	       
 	       if(pwd==null || !(pwd.equals(user.getUser_pwd())))
 	       {
-	    	   return "Invalid Password";
+	    	   return ResponseEntity.badRequest().body("{\"message\":\"Password is incorrect\"}");
 	       }
-	       return "login successful";
+	       return ResponseEntity.ok("{\"message\":\"Login Successful\"}");
 	  }
 }
