@@ -1,4 +1,4 @@
-body {
+.body1 {
   font-family: Georgia, "Times New Roman", Times, serif;
   background-color: #f2f2f2;
   margin-top: 0;
@@ -35,7 +35,7 @@ h1 {
 }
 
 .logindetails {
-  margin-left: 75px;
+  margin-left: 90px;
 }
 form {
   display: flex;
@@ -53,10 +53,10 @@ input[type="password"] {
   font-size: 15px;
   border: none;
   border-bottom: 1px solid #1890ff;
-  padding-bottom: 10px;
+  padding-bottom: 2px;
   outline: none;
-  width: 120%;
-  margin-bottom: 15px;
+  
+  margin-bottom: 5px;
   font-family: Georgia, "Times New Roman", Times, serif;
 }
 [placeholder]:focus::-webkit-input-placeholder {
@@ -65,9 +65,7 @@ input[type="password"] {
   opacity: 1;
 }
 
-input[type="email"] {
-  margin-top: 10px;
-}
+
 
 /* input[type="password"] {
   margin-top: 15px;
