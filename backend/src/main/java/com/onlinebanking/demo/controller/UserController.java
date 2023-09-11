@@ -17,8 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 import com.onlinebanking.demo.entity.User;
+import com.onlinebanking.demo.exceptions.InvalidException;
+import com.onlinebanking.demo.exceptions.NotFoundException;
 import com.onlinebanking.demo.exceptions.ResourceNotFound;
-import com.onlinebanking.demo.repository.UserRepository;
 import com.onlinebanking.demo.service.UserServiceInterface;
 
 @RestController
@@ -47,29 +48,24 @@ public class UserController {
 	  }
 	
 	  @PostMapping("/user")
-	    public ResponseEntity<Object> creatingUser(@Validated @RequestBody User newUser) {
+	    public ResponseEntity<Object> creatingUser(@Validated @RequestBody User newUser) throws InvalidException {
 		  String email=newUser.getUser_email();
 		  String password=newUser.getUser_pwd();
-		  
-		 if(!isValidEmail(email) && !isValidPassword(password) )
+		  if(!isValidEmail(email))
 		  {
-			 return ResponseEntity.badRequest().body("{\"message\":\"Invalid email and password\"}");
-		  }
-		  else if(!isValidPassword(password))
-		  {
-			  return ResponseEntity.badRequest().body("{\"message\":\"Password should be atleast 8 characters\"}");
-		  }
-		  else if(!isValidEmail(email))
-		  {
-			  return ResponseEntity.badRequest().body("{\"message\":\"Invalid email \"}");
+			  throw new InvalidException("Invalid email");
 		  }
 		 
-		  else {
-	         userService.createUser(newUser);
-	         return ResponseEntity.ok("{\"message\":\"User created successfully\"}");
+		
+		  if(!isValidPassword(password))
+		  {
+			  throw new InvalidException("Password should be of atleast 8 characters");
 		  }
 		  
-		  
+		 
+	         userService.createUser(newUser);
+	         return ResponseEntity.ok("{\"message\":\"User created successfully\"}");
+		    
 		  
 	    }
 	  
@@ -80,17 +76,24 @@ public class UserController {
 	
 }
 	  @PostMapping("/validate")
-	  public ResponseEntity<Object> validateLogin(@RequestBody User loginReq)throws ResourceNotFound
+	  public ResponseEntity<Object> validateLogin(@RequestBody User loginReq)throws ResourceNotFound, NotFoundException, InvalidException
 	  {
 		  String email=loginReq.getUser_email();
 		  String pwd=loginReq.getUser_pwd();
 		  
 		  if(email==null|| email.isEmpty())
-			 return ResponseEntity.badRequest().body("{\"message\":\"Email is not provided\"}");
+			 throw new NotFoundException("Please enter the email");
+		  
 		  if(!isValidEmail(email))
 		  {
-			  return ResponseEntity.badRequest().body("{\"message\":\"Invalid email \"}");
+			  throw new InvalidException("Invalid email");
 		  }
+		  if(pwd==null || pwd.isEmpty() ) 
+	       {
+			  throw new NotFoundException("Please enter the password");
+	       }
+		  
+		  
 			  
 		  User user= userService.getUserByEmail(email)
 					.orElseThrow(() -> new ResourceNotFound("User not found for this email :: " + email));
@@ -98,17 +101,14 @@ public class UserController {
 	       
 	       if(user==null)
 	       {
-	    	   return ResponseEntity.badRequest().body("{\"message\":\"Email is not found\"}");
+	    	   throw new NotFoundException("User not found with the provided email");
 	       }
 	      
 	       
-	       if(pwd==null || pwd.isEmpty() ) 
-	       {
-	    	   return ResponseEntity.badRequest().body("{\"message\":\"Please enter the password\"}");
-	       }
+	      
 	       if(!(pwd.equals(user.getUser_pwd())))
 	    		   {
-	    	   return ResponseEntity.badRequest().body("{\"message\":\"Password is incorrect\"}");
+	       throw new InvalidException("Invalid password");
 	    		   }
 	       return ResponseEntity.ok("{\"message\":\"Login Successful\"}");
 	       
