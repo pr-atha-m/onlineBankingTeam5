@@ -51,6 +51,9 @@ export const Login1 = () => {
     },[userpwd,useremail]);
 
      const handleInputChange = (e) => {
+
+        e.preventDefault();
+        setFor
         let value  = e.target.value;
         let inputName = e.target.name;
         if(inputName === "email"){
@@ -81,7 +84,10 @@ export const Login1 = () => {
         else if(message.includes("User not found for this email")){
             alert("User not found for this email please create a new account")
         }
-    
+
+        else if (message === "Invalid email "){
+            alert("Please enter a valid email!")
+        }    
     
         
     
@@ -96,7 +102,7 @@ export const Login1 = () => {
     
     
         return (
-          <div>
+            <div>
             <div>
               <div className="container">
                 <img className="loginimg" src={loginpic} alt="" />
