@@ -27,13 +27,13 @@ import com.onlinebanking.demo.service.UserServiceInterface;
 public class UserController {
 	@Autowired
 	UserServiceInterface userService;
-	 //@GetMapping(path = "/products", produces = {MediaType.APPLICATION_XML_VALUE})
+	 
     @GetMapping(path = "/userdetails", produces = {MediaType.APPLICATION_JSON_VALUE})
     List<User> users(){
         return userService.getUser();
     }
     
-	//Demo of @PathVariable
+	
 	@GetMapping("/user/{user_email}")
 	User findByEmail(@PathVariable String user_email) throws ResourceNotFound
 	{	User user= userService.getUserByEmail(user_email)
@@ -102,10 +102,14 @@ public class UserController {
 	       }
 	      
 	       
-	       if(pwd==null || !(pwd.equals(user.getUser_pwd())))
+	       if(pwd==null || pwd.isEmpty() ) 
 	       {
-	    	   return ResponseEntity.badRequest().body("{\"message\":\"Password is incorrect\"}");
+	    	   return ResponseEntity.badRequest().body("{\"message\":\"Please enter the password\"}");
 	       }
+	       if(!(pwd.equals(user.getUser_pwd())))
+	    		   {
+	    	   return ResponseEntity.badRequest().body("{\"message\":\"Password is incorrect\"}");
+	    		   }
 	       return ResponseEntity.ok("{\"message\":\"Login Successful\"}");
 	       
 	       
