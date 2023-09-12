@@ -1,117 +1,91 @@
-package com.onlinebanking.demo.controller;
+package com.onlinebanking.demo.entity;
 
-import java.util.List;
+import java.util.Date;
+import java.util.Set;
 
+import org.springframework.format.annotation.DateTimeFormat;
 
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 
-import com.onlinebanking.demo.entity.User;
-import com.onlinebanking.demo.exceptions.ResourceNotFound;
-import com.onlinebanking.demo.repository.UserRepository;
-import com.onlinebanking.demo.service.UserServiceInterface;
 
-@RestController
-@RequestMapping("/banking")
 
-public class UserController {
-	@Autowired
-	UserServiceInterface userService;
-	 
-    @GetMapping(path = "/userdetails", produces = {MediaType.APPLICATION_JSON_VALUE})
-    List<User> users(){
-        return userService.getUser();
-    }
-    
+@Entity
+@Table(name = "User")
+public class User {
 	
-	@GetMapping("/user/{user_email}")
-	User findByEmail(@PathVariable String user_email) throws ResourceNotFound
-	{	User user= userService.getUserByEmail(user_email)
-	.orElseThrow(() -> new ResourceNotFound("User not found for this id :: " + user_email));
-       System.out.println(user_email);
-    return user;
+	private String user_email;
+	private String user_pwd;
+	private String first_name;
+	private String last_name;
+	
+	//This implies that 1 user can have many accounts.
+//	@OneToMany(cascade=CascadeType.ALL)
+//	private Set<Account> accounts;
+	
+	public User() {
+		super();
 	}
-	private boolean isValidEmail(String email)
-	  {
-		  return email.matches("^[\\w-]+(\\.[\\w-]+)*@[\\w-]+(\\.[\\w-]+)+$");
-	  }
 	
-	  @PostMapping("/user")
-	    public ResponseEntity<Object> creatingUser(@Validated @RequestBody User newUser) {
-		  String email=newUser.getUser_email();
-		  String password=newUser.getUser_pwd();
-		  
-		 if(!isValidEmail(email) && !isValidPassword(password) )
-		  {
-			 return ResponseEntity.badRequest().body("{\"message\":\"Invalid email and password\"}");
-		  }
-		  else if(!isValidPassword(password))
-		  {
-			  return ResponseEntity.badRequest().body("{\"message\":\"Password should be atleast 8 characters\"}");
-		  }
-		  else if(!isValidEmail(email))
-		  {
-			  return ResponseEntity.badRequest().body("{\"message\":\"Invalid email \"}");
-		  }
-		 
-		  else {
-	         userService.createUser(newUser);
-	         return ResponseEntity.ok("{\"message\":\"User created successfully\"}");
-		  }
-		  
-		  
-		  
-	    }
-	  
-	  
-	  
-	  private boolean isValidPassword(String password) {
-		  return password.length()>=8;
+	public User(String first_name, String last_name, String user_email, String user_pwd) {
+		super();
+		
+		this.first_name = first_name;
+		this.user_email = user_email;
+		this.user_pwd = user_pwd;
+		this.last_name=last_name;
+	}
+
 	
-}
-	  @PostMapping("/validate")
-	  public ResponseEntity<Object> validateLogin(@RequestBody User loginReq)throws ResourceNotFound
-	  {
-		  String email=loginReq.getUser_email();
-		  String pwd=loginReq.getUser_pwd();
-		  
-		  if(email==null|| email.isEmpty())
-			 return ResponseEntity.badRequest().body("{\"message\":\"Email is not provided\"}");
-		  if(!isValidEmail(email))
-		  {
-			  return ResponseEntity.badRequest().body("{\"message\":\"Invalid email \"}");
-		  }
-			  
-		  User user= userService.getUserByEmail(email)
-					.orElseThrow(() -> new ResourceNotFound("User not found for this email :: " + email));
-	       System.out.println(email);
-	       
-	       if(user==null)
-	       {
-	    	   return ResponseEntity.badRequest().body("{\"message\":\"Email is not found\"}");
-	       }
-	      
-	       
-	       if(pwd==null || pwd.isEmpty() ) 
-	       {
-	    	   return ResponseEntity.badRequest().body("{\"message\":\"Please enter the password\"}");
-	       }
-	       if(!(pwd.equals(user.getUser_pwd())))
-	    		   {
-	    	   return ResponseEntity.badRequest().body("{\"message\":\"Password is incorrect\"}");
-	    		   }
-	       return ResponseEntity.ok("{\"message\":\"Login Successful\"}");
-	       
-	       
-	  }
+	
+//	public Set<Account> getAccounts() {
+//		return accounts;
+//	}
+//	public void setAccounts(Set<Account> accounts) {
+//		this.accounts = accounts;
+//	}
+	
+	
+	@Id
+	@Column(name = "user_email", nullable = false)
+	@NotEmpty(message="You need to submit the email id")
+	@Email(message="This is not a valid email format")
+	public String getUser_email() {
+		return user_email;
+	}
+	public void setUser_email(String user_email) {
+		this.user_email = user_email;
+	}
+	
+	@Column(name = "password", nullable = false)
+	@NotEmpty(message="Password cannot be blank")
+	@Size(min=8,max=16,message="The password needs to be between 8 and 16 characters")
+	@Pattern(regexp= " ^(?=.*[0-9]) (?=.*[A-Z]) (?=.*[@#$%^&+=!])", message="Password should contain atleast 1 digit, 1 capital letter, 1 special character ")
+	public String getUser_pwd() {
+		return user_pwd;
+	}
+	public void setUser_pwd(String user_pwd) {
+		this.user_pwd = user_pwd;
+	}
+	
+	@Column(name = "first_name", nullable = false)
+	@NotEmpty(message="First name cannot be empty")
+	public String getFirst_name() {
+		return first_name;
+	}
+
+	public void setFirst_name(String first_name) {
+		this.first_name = first_name;
+	}
+	
+	@Column(name = "last_name", nullable = false)
+	@NotEmpty(message="last name cannot be empty")
+	public String getLast_name() {
+		return last_name;
+	}
+
+	public void setLast_name(String last_name) {
+		this.last_name = last_name;
+	}
 }
