@@ -72,7 +72,7 @@ export const Login = ({ setUserState }) => {
         else{ alert(resp.message);
         }
         setUserState(resp.user);
-        navigate("/", { replace: true });;
+        navigate("/dashboard", { replace: true });;
 
       });
      

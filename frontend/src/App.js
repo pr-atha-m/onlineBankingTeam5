@@ -6,6 +6,7 @@ import Home from "./components/Home";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useState } from "react";
 import Forgot from "./components/Forgot";
+import Dashboard from "./components/Dashboard";
 
 function App() {
  
@@ -33,7 +34,7 @@ function App() {
           ></Route>
           
           <Route path="/signup" element={<Register />}></Route>
-
+          <Route path="/dashboard" element={<Dashboard />}></Route>
           <Route
             path="/forgotpassword"
             element={<Forgot/>}>
