@@ -11,12 +11,18 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.onlinebanking.demo.entity.User;
+import com.onlinebanking.demo.entity.User_account;
+import com.onlinebanking.demo.repository.UserAccountRepository;
 import com.onlinebanking.demo.repository.UserRepository;
 
 @Service
 public class UserService implements UserServiceInterface {
 	@Autowired
 	UserRepository userRepo;
+	
+	@Autowired
+	UserAccountRepository userAccountRepo;
+	
 	
 	@Override
 	public List<User> getUser()
@@ -34,6 +40,12 @@ public class UserService implements UserServiceInterface {
 	public User createUser(@Validated @RequestBody User user)
 	{
 		return userRepo.save(user);
+	}
+	
+	@Override
+	public User_account createUserAccount(@Validated @RequestBody User_account user)
+	{
+		return userAccountRepo.save(user);
 	}
 //	
 //	@Override

@@ -46,39 +46,29 @@ public class UserController {
 		  return email.matches("^[\\w-]+(\\.[\\w-]+)*@[\\w-]+(\\.[\\w-]+)+$");
 	  }
 	
-	  @PostMapping("/user")
+	  @PostMapping("/user/register")
 	    public ResponseEntity<Object> creatingUser(@Validated @RequestBody User newUser) {
-		  String email=newUser.getUser_email();
-		  String password=newUser.getUser_pwd();
-		  
-		 if(!isValidEmail(email) && !isValidPassword(password) )
-		  {
-			 return ResponseEntity.badRequest().body("{\"message\":\"Invalid email and password\"}");
-		  }
-		  else if(!isValidPassword(password))
-		  {
-			  return ResponseEntity.badRequest().body("{\"message\":\"Password should be atleast 8 characters\"}");
-		  }
-		  else if(!isValidEmail(email))
-		  {
-			  return ResponseEntity.badRequest().body("{\"message\":\"Invalid email \"}");
-		  }
 		 
-		  else {
-	         userService.createUser(newUser);
-	         return ResponseEntity.ok("{\"message\":\"User created successfully\"}");
-		  }
-		  
-		  
-		  
+	        User user= userService.createUser(newUser);
+	        System.out.println(user.getFirst_name());
+	        return ResponseEntity.ok(user);
 	    }
 	  
+	  @PostMapping("/user/{id}/open")
+	  public ResponseEntity<Object> creatingUserAccount(@Validated @RequestBody User newUser) {
+			 
+	        User user= userService.createUser(newUser);
+	        System.out.println(user.getFirst_name());
+	        return ResponseEntity.ok(user);
+	  
+	  }
 	  
 	  
-	  private boolean isValidPassword(String password) {
-		  return password.length()>=8;
+	  
+//	  private boolean isValidPassword(String password) {
+//		  return password.length()>=8;
 	
-}
+//}
 	  @PostMapping("/validate")
 	  public ResponseEntity<Object> validateLogin(@RequestBody User loginReq)throws ResourceNotFound
 	  {
