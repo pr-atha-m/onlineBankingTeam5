@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 import com.onlinebanking.demo.entity.User;
+import com.onlinebanking.demo.entity.User_account;
 import com.onlinebanking.demo.exceptions.ResourceNotFound;
 import com.onlinebanking.demo.repository.UserRepository;
 import com.onlinebanking.demo.service.UserServiceInterface;
@@ -27,7 +28,7 @@ import com.onlinebanking.demo.service.UserServiceInterface;
 public class UserController {
 	@Autowired
 	UserServiceInterface userService;
-	 //@GetMapping(path = "/products", produces = {MediaType.APPLICATION_XML_VALUE})
+	
     @GetMapping(path = "/userdetails", produces = {MediaType.APPLICATION_JSON_VALUE})
     List<User> users(){
         return userService.getUser();
@@ -54,15 +55,24 @@ public class UserController {
 	        return ResponseEntity.ok(user);
 	    }
 	  
-	  @PostMapping("/user/{id}/open")
-	  public ResponseEntity<Object> creatingUserAccount(@Validated @RequestBody User newUser) {
-			 
-	        User user= userService.createUser(newUser);
-	        System.out.println(user.getFirst_name());
+	  @PostMapping("/user/createaccount")
+	    public ResponseEntity<Object> creatingUser(@Validated @RequestBody User_account newUser) {
+		 
+	        User_account user= userService.createUserAccount(newUser);
+	        System.out.println(user.getUser_email());
 	        return ResponseEntity.ok(user);
+	    }
 	  
-	  }
 	  
+//	  @PostMapping("/user/{id}/open")
+//	  public ResponseEntity<Object> creatingUserAccount(@Validated @RequestBody User newUser) {
+//			 
+//	        User user= userService.createUser(newUser);
+//	        System.out.println(user.getFirst_name());
+//	        return ResponseEntity.ok(user);
+//	  
+//	  }
+//	  
 	  
 	  
 //	  private boolean isValidPassword(String password) {

@@ -13,8 +13,10 @@ import jakarta.validation.constraints.*;
 @Table(name = "User_account")
 public class User_account {
 	
+	private int user_id;
 	private String user_email;
 	private int acc_no;
+	private String acc_type;
 	private String phone_no;
 	private String father_name;
 	private String aadhar_no;
@@ -33,11 +35,13 @@ public class User_account {
 	}
 	
 	
-	public User_account(String user_email, int acc_no, String phone_no, String father_name, String aadhar_no, Date dob,
+	public User_account(int user_id, String user_email, int acc_no, String acc_type, String phone_no, String father_name, String aadhar_no, Date dob,
 			String res_addr, String perm_addr, String occ_type, float gross_annual_income, String source_of_income,
 			boolean debit_status, boolean net_banking) {
 		super();
+		this.user_id = user_id;  
 		this.user_email = user_email;
+		this.acc_type  = acc_type;
 		this.acc_no = acc_no;
 		this.phone_no = phone_no;
 		this.father_name = father_name;
@@ -53,6 +57,20 @@ public class User_account {
 	}
 	
 	@Id
+	@GeneratedValue(strategy= GenerationType.IDENTITY)
+	@Column(name = "id")
+	public int getuser_id() {
+		return user_id;
+	}
+		public void setUser_id(int user_id) {
+		this.user_id = user_id;
+	}
+	
+	
+	
+	
+	
+	
 	@Column(name = "user_email", nullable = false)
 	@NotEmpty(message="You need to submit the email id")
 	@Email(message="This is not a valid email format")
@@ -64,9 +82,19 @@ public class User_account {
 		this.user_email = user_email;
 	}
 	
+	@Column(name = "acc_type", nullable = false)
+	@NotEmpty(message="Account Type cannot be null")
+	public String getAcc_type() {
+		return acc_type;
+	}
+
+	public void setAcc_type(String acc_type) {
+		this.acc_type = acc_type;
+	}
+	
 
 	@Column(name = "acc_no", nullable = false)
-	@NotEmpty(message="Account number cannot be null")
+	//@NotEmpty(message="Account number cannot be null")
 	public int getAcc_no() {
 		return acc_no;
 	}
