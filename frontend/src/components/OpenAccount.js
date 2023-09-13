@@ -10,11 +10,18 @@ const Register = () => {
   const [isSubmit, setIsSubmit] = useState(false);
   const  min= 100000000000;
   const max = 999999999999;
-
+const [selectedOption, setSelectedOption] = useState('');
   let acc_no = Math.floor(Math.random()* (max-min+1)) + min;
+  const options = [
+    'Savings',
+    'Salary',
+    'Current',
+    'NRI'
+  ]
   const [user, setUserDetails] = useState({
     email: '',
     phoneNumber: '',
+    accountType: '',
     fatherName: '',
     adhaarNumber: '',
     dateOfBirth: '',
@@ -34,6 +41,10 @@ const Register = () => {
       [name]: value,
     });
   };
+
+  const handleOptionChange = (e) =>{
+    setSelectedOption(e.target.value);
+  }
 
   const validateForm = (values) => {
     console.log(values)
@@ -137,6 +148,7 @@ const Register = () => {
             {
                 "user_email":user.email,
                 "acc_no":"",
+                "acc_type":selectedOption,
                 "phone_no":user.phoneNumber,
                 "father_name":user.fatherName,
                 "aadhar_no":user.adhaarNumber,
@@ -178,6 +190,18 @@ const Register = () => {
           <p className="openAccount-title">Open Savings Account</p>
           <p className="accountDetails">Please fill in the following details.</p>
 
+   <select id="dropdown" value={selectedOption} onChange={handleOptionChange}>
+
+    <option value="">Select An Account Type</option>
+    {options.map((option,index) => (
+        <option key={index} value={option}>
+
+            {option}
+        </option>
+    ))}
+
+
+   </select>
           <input
             type="email"
             name="email"
@@ -187,7 +211,18 @@ const Register = () => {
             value={user.email}
             className="openinputs"
           />
-           <p className="formerros" >{formErrors.email}</p>
+           <p className="formerros" >{formErrors.accountType}</p>
+
+           {/* <input
+            type="accountType"
+            name="accountType"
+            id="accountType"
+            placeholder="Account Type"
+            onChange={changeHandler}
+            value={user.accountType}
+            className="openinputs"
+          /> */}
+           {/* <p className="formerros" >{formErrors.email}</p> */}
 
           <input
             type="tel"
