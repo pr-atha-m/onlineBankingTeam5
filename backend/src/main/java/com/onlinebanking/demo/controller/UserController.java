@@ -1,8 +1,7 @@
 package com.onlinebanking.demo.controller;
 
 import java.util.List;
-
-
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -17,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 import com.onlinebanking.demo.entity.User;
+import com.onlinebanking.demo.entity.User_account;
 import com.onlinebanking.demo.exceptions.ResourceNotFound;
 import com.onlinebanking.demo.repository.UserRepository;
 import com.onlinebanking.demo.service.UserServiceInterface;
@@ -34,6 +34,7 @@ public class UserController {
     }
     
 	//Demo of @PathVariable
+    // Can be used for dashboard
 	@GetMapping("/user/{user_email}")
 	User findByEmail(@PathVariable String user_email) throws ResourceNotFound
 	{	User user= userService.getUserByEmail(user_email)
@@ -46,6 +47,7 @@ public class UserController {
 		  return email.matches("^[\\w-]+(\\.[\\w-]+)*@[\\w-]+(\\.[\\w-]+)+$");
 	  }
 	
+	@GetMapping("/")
 	  @PostMapping("/user/register")
 	    public ResponseEntity<Object> creatingUser(@Validated @RequestBody User newUser) {
 		 
@@ -54,17 +56,26 @@ public class UserController {
 	        return ResponseEntity.ok(user);
 	    }
 	  
-	  @PostMapping("/user/{id}/open")
-	  public ResponseEntity<Object> creatingUserAccount(@Validated @RequestBody User newUser) {
+	  @PostMapping("/user/open")
+	  public ResponseEntity<Object> creatingUserAccount(@Validated @RequestBody User_account userDetails) throws ResourceNotFound {
 			 
-	        User user= userService.createUser(newUser);
-	        System.out.println(user.getFirst_name());
-	        return ResponseEntity.ok(user);
-	  
+		  	String email=userDetails.getUser_email();
+		  	Optional<User> user = userService.getUserByEmail(email);
+		  	
+		  	if (user.isPresent())
+		  	{
+		  		 User_account user_d= userService.createUserAccount(userDetails);
+			     System.out.println(user_d.getAadhar_no());
+			     return ResponseEntity.ok(user_d);
+		  	}
+		  	
+		  	else
+		  	{
+		  		throw new ResourceNotFound("This email is not registered -" + email);
+		  	}
+	      
 	  }
-	  
-	  
-	  
+	    
 //	  private boolean isValidPassword(String password) {
 //		  return password.length()>=8;
 	
