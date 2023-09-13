@@ -64,9 +64,32 @@ const Register = () => {
   useEffect(() => {
     if (Object.keys(formErrors).length === 0 && isSubmit) {
       console.log(user);
-      axios.post("http://localhost:9002/signup/", user).then((res) => {
-        alert(res.data.message);
-        navigate("/login", { replace: true });
+      let options = {
+        method:"POST",
+        headers: {
+          'Content-Type': 'application/json',
+      },
+        body:JSON.stringify(
+         
+          {
+              "first_name":user.fname,
+              "last_name":user.lname,
+              "user_email":user.email,
+              "user_pwd":user.password
+          
+          }
+        
+        )
+  
+      }
+      fetch("http://localhost:8080/banking/user/register", options)
+      .then((resp)=>  resp.json())
+      .then((resp) => {
+       
+        console.log("Registration Success")
+        
+        navigate("/login", { replace: true });;
+
       });
     }
   }, [formErrors]);
@@ -80,7 +103,7 @@ const Register = () => {
         <div className="signupdetails">
          
 <form>
-          <h1>Create your account</h1>
+          <p className="register-title">Create your account</p>
           <input
             type="text"
             name="fname"
@@ -90,7 +113,7 @@ const Register = () => {
             value={user.fname}
             className="registerInputs"
           />
-          <p>{formErrors.fname}</p>
+          <p className="formerros">{formErrors.fname}</p>
           <input
             type="text"
             name="lname"
@@ -100,7 +123,7 @@ const Register = () => {
             value={user.lname}
             className="registerInputs"
           />
-          <p >{formErrors.lname}</p>
+          <p className="formerros">{formErrors.lname}</p>
           <input
             type="email"
             name="email"
@@ -110,7 +133,7 @@ const Register = () => {
             value={user.email}
             className="registerInputs"
           />
-          <p >{formErrors.email}</p>
+          <p className="formerros">{formErrors.email}</p>
           <input
             type="password"
             name="password"
@@ -120,7 +143,7 @@ const Register = () => {
             value={user.password}
             className="registerInputs"
           />
-          <p>{formErrors.password}</p>
+          <p className="formerros">{formErrors.password}</p>
           <input
             type="password"
             name="cpassword"
@@ -130,7 +153,7 @@ const Register = () => {
             value={user.cpassword}
             className="registerInputs"
           />
-          <p >{formErrors.cpassword}</p>
+          <p className="formerros">{formErrors.cpassword}</p>
           <button  onClick={signupHandler}>
             Register
           </button>

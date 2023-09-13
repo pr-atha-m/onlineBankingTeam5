@@ -7,6 +7,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useState } from "react";
 import Forgot from "./components/Forgot";
 import Dashboard from "./components/Dashboard";
+import OpenAccount from "./components/OpenAccount"
 
 function App() {
  
@@ -35,6 +36,7 @@ function App() {
           
           <Route path="/signup" element={<Register />}></Route>
           <Route path="/dashboard" element={<Dashboard />}></Route>
+          <Route path="/createaccount" element={<OpenAccount />}></Route>
           <Route
             path="/forgotpassword"
             element={<Forgot/>}>

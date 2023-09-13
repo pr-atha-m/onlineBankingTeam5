@@ -9,11 +9,15 @@
   
     height: 100vh;
   }
-  h1 {
+  .formerros{
+    color: red;
+  }
+  .register-title {
     font-size: 24px;
     /* margin-left: 60px; */
     margin-bottom: 30px;
     text-align: center;
+    font-weight: bold;
   }
   
   .signupimg {
@@ -36,12 +40,6 @@
   
   .signupdetails {
     margin-left: 105px;
-  }
-  form {
-    display: flex;
-    text-align: center;
-    align-items: center;
-    flex-direction: column;
   }
   label {
     font-weight: bold;

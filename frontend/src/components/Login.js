@@ -68,11 +68,12 @@ export const Login = ({ setUserState }) => {
        
         if(resp.message === "Login Successful"){
           setIsLoggedIn(true);
+          navigate("/dashboard", { replace: true });
         }
         else{ alert(resp.message);
         }
         setUserState(resp.user);
-        navigate("/dashboard", { replace: true });;
+        
 
       });
      
@@ -91,7 +92,7 @@ export const Login = ({ setUserState }) => {
                 <div class="vl"></div>
     
                 <div className="logindetails">
-                  <h1>Login Page</h1>
+                  <p className="login-title">Login Page</p>
                   <form>
      
         <input
@@ -103,7 +104,7 @@ export const Login = ({ setUserState }) => {
           value={user.email}
           className="registerInputs"
         />
-        <p >{formErrors.email}</p>
+        <p className="formerros" >{formErrors.email}</p>
         <input
           type="password"
           name="password"
@@ -113,7 +114,7 @@ export const Login = ({ setUserState }) => {
           value={user.password}
           className="registerInputs"
         />
-        <p >{formErrors.password}</p>
+        <p className="formerros">{formErrors.password}</p>
         <button onClick={loginHandler}>
           Login
         </button>
