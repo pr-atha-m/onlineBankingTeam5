@@ -3,6 +3,7 @@ package com.onlinebanking.demo.service;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.http.ResponseEntity;
 
@@ -15,6 +16,8 @@ public interface UserServiceInterface {
 	Optional<User> getUserByEmail(String user_email);
   User createUser(User user);
   User_account createUserAccount(User_account user);
+Set<User_account> getUserAccDetails(String user_email);
+  
 //   ResponseEntity<User> updateUser(String user_email, User userDetails) ;
 //   Map<String, Boolean> deleteUser(String user_email) ;
    

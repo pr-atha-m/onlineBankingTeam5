@@ -17,6 +17,7 @@ public class User_account {
 	private String user_email;
 	private String acc_no;
 	private String acc_type;
+	private Date acc_date;
 	private String phone_no;
 	private String father_name;
 	private String aadhar_no;
@@ -28,6 +29,12 @@ public class User_account {
 	private String source_of_income;
 	private boolean debit_status;
 	private boolean net_banking;
+	private double balance;
+	
+	
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="user_email",referencedColumnName="user_email")
+	private User user;
 	
 	public User_account() {
 		super();
@@ -35,14 +42,15 @@ public class User_account {
 	}
 	
 	
-	public User_account(int user_id, String user_email, String acc_no, String acc_type, String phone_no, String father_name, String aadhar_no, Date dob,
+	public User_account(int user_id, String user_email, String acc_no, String acc_type, Date acc_date,String phone_no, String father_name, String aadhar_no, Date dob,
 			String res_addr, String perm_addr, String occ_type, float gross_annual_income, String source_of_income,
-			boolean debit_status, boolean net_banking) {
+			boolean debit_status, boolean net_banking,double balance) {
 		super();
 		this.user_id = user_id;  
 		this.user_email = user_email;
 		this.acc_type  = acc_type;
 		this.acc_no = acc_no;
+		this.acc_date=acc_date;
 		this.phone_no = phone_no;
 		this.father_name = father_name;
 		this.aadhar_no = aadhar_no;
@@ -54,8 +62,33 @@ public class User_account {
 		this.source_of_income = source_of_income;
 		this.debit_status = debit_status;
 		this.net_banking = net_banking;
+		this.balance=balance;
 	}
+	@Column(name = "acc_date", nullable = false)
+	@NotEmpty
+	public Date getAcc_date() {
+		return acc_date;
+	}
+
+
+	public void setAcc_date(Date acc_date) {
+		this.acc_date = acc_date;
+	}
+
+	@Column(name = "balance", nullable = false)
+	@NotEmpty
+	public double getBalance() {
+		return balance;
+	}
+
+
+	public void setBalance(double balance) {
+		this.balance = balance;
+	}
+
+
 	
+
 	@Id
 	@GeneratedValue(strategy= GenerationType.IDENTITY)
 	@Column(name = "id")

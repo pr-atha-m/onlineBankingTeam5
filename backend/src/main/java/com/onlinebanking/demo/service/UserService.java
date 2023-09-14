@@ -3,12 +3,14 @@ package com.onlinebanking.demo.service;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 
@@ -77,6 +79,12 @@ public class UserService implements UserServiceInterface {
             }
         }
         return String.format("1%011d", nextNumber);
+	}
+	
+	@Override
+	public Set<User_account> getUserAccDetails(String user_email) {
+	 return userAccountRepo.findByUser_user_email(user_email);
+		
 	}
 }
 //	
