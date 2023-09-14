@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.onlinebanking.demo.entity.User;
 import com.onlinebanking.demo.entity.User_account;
+import com.onlinebanking.demo.entity.Accounts;
 import com.onlinebanking.demo.repository.UserAccountRepository;
 import com.onlinebanking.demo.repository.UserRepository;
+import com.onlinebanking.demo.repository.AccountRepository;
 
 @Service
 public class UserService implements UserServiceInterface {
@@ -22,6 +24,9 @@ public class UserService implements UserServiceInterface {
 	
 	@Autowired
 	UserAccountRepository userAccountRepo;
+	
+	@Autowired
+	AccountRepository accountRepo;
 	
 	
 	@Override
@@ -45,9 +50,14 @@ public class UserService implements UserServiceInterface {
 	@Override
 	public User_account createUserAccount(@Validated @RequestBody User_account user)
 	{
+		
 		return userAccountRepo.save(user);
 	}
-//	
+	
+	@Override
+	public Accounts createAccount(@Validated @RequestBody Accounts user){
+		return accountRepo.save(user);
+	}
 //	@Override
 //	public ResponseEntity<User> updateUser(String user_email ,@Validated@RequestBody User changedUser)
 //	{

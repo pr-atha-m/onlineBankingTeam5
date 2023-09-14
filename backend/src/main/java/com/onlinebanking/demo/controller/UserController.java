@@ -17,9 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 import com.onlinebanking.demo.entity.User;
+import com.onlinebanking.demo.entity.Accounts;
 import com.onlinebanking.demo.entity.User_account;
 import com.onlinebanking.demo.exceptions.ResourceNotFound;
 import com.onlinebanking.demo.repository.UserRepository;
+import com.onlinebanking.demo.repository.AccountRepository;
 import com.onlinebanking.demo.service.UserServiceInterface;
 
 @RestController
@@ -55,11 +57,19 @@ public class UserController {
 	        return ResponseEntity.ok(user);
 	    }
 	  
-	  @PostMapping("/user/createaccount")
+	  @PostMapping("/user/open")
 	    public ResponseEntity<Object> creatingUser(@Validated @RequestBody User_account newUser) {
 		 
 	        User_account user= userService.createUserAccount(newUser);
+	        
 	        System.out.println(user.getUser_email());
+	        return ResponseEntity.ok(user);
+	    }
+	  
+	  @PostMapping("/user/createaccount")
+	    public ResponseEntity<Object> creatingAccount(@Validated @RequestBody Accounts newAccount) {
+		 
+	        Accounts user= userService.createAccount(newAccount);
 	        return ResponseEntity.ok(user);
 	    }
 	  
