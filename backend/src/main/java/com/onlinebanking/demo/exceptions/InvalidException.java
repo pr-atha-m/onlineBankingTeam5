@@ -5,8 +5,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(value = HttpStatus.BAD_REQUEST)
 public class InvalidException extends Exception {
-	public InvalidException(String message) {
+	private HttpStatus status;
+	public InvalidException(String message,HttpStatus status) {
 		super(message);
+		this.status=status;
+	}
+	public HttpStatus getStatus() {
+		return status;
 	}
 
 }

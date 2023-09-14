@@ -21,8 +21,8 @@ public class User {
 	private String last_name;
 	
 	//This implies that 1 user can have many accounts.
-	@OneToMany(cascade=CascadeType.ALL)
-	private Set<Account> accounts;
+//	@OneToMany(cascade=CascadeType.ALL)
+//	private Set<Account> accounts;
 	
 	public User() {
 		super();
@@ -39,12 +39,12 @@ public class User {
 
 	
 	
-	public Set<Account> getAccounts() {
-		return accounts;
-	}
-	public void setAccounts(Set<Account> accounts) {
-		this.accounts = accounts;
-	}
+//	public Set<Account> getAccounts() {
+//		return accounts;
+//	}
+//	public void setAccounts(Set<Account> accounts) {
+//		this.accounts = accounts;
+//	}
 	
 	
 	@Id
