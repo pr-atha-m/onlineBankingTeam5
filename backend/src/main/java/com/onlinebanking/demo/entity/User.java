@@ -39,6 +39,12 @@ public class User {
 
 	
 	
+//	public Set<Account> getAccounts() {
+//		return accounts;
+//	}
+//	public void setAccounts(Set<Account> accounts) {
+//		this.accounts = accounts;
+//	}
 	
 	
 	@Id

@@ -1,20 +1,28 @@
 package com.onlinebanking.demo.exceptions;
 
-public class ErrorResponse {
-	private String message;
-	private int status;
-	
-	public ErrorResponse(String message) {
-		this.message=message;
-		this.status=status;
-	}
-	
-	public String getMessage() {
-		return message;
-	}
- public void setMessage(String message) {
-	 this.message=message;
- }
- 
+import java.util.Date;
 
-}
+public class ErrorResponse {
+	private Date timestamp;
+	 private String message;
+	 private int status;
+
+	 public ErrorResponse(Date timestamp, String message,int status) {
+	  super();
+	  this.timestamp = timestamp;
+	  this.message = message;
+	  this.status=status;
+	 }
+
+	 public Date getTimestamp() {
+	  return timestamp;
+	 }
+
+	 public String getMessage() {
+	  return message;
+	 }
+
+	 public int getStatus() {
+	  return status;
+	 }
+	}

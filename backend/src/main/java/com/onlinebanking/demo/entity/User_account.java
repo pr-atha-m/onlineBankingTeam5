@@ -8,14 +8,13 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-
 @Entity
 @Table(name = "User_account")
 public class User_account {
 	
 	private int user_id;
 	private String user_email;
-	private int acc_no;
+	private String acc_no;
 	private String acc_type;
 	private String phone_no;
 	private String father_name;
@@ -35,7 +34,8 @@ public class User_account {
 	}
 	
 	
-	public User_account(int user_id, String user_email, int acc_no, String acc_type, String phone_no, String father_name, String aadhar_no, Date dob,
+	
+	public User_account(int user_id, String user_email, String acc_no, String acc_type, String phone_no, String father_name, String aadhar_no, Date dob,
 			String res_addr, String perm_addr, String occ_type, float gross_annual_income, String source_of_income,
 			boolean debit_status, boolean net_banking) {
 		super();
@@ -95,11 +95,11 @@ public class User_account {
 
 	@Column(name = "acc_no", nullable = false)
 	//@NotEmpty(message="Account number cannot be null")
-	public int getAcc_no() {
+	public String getAcc_no() {
 		return acc_no;
 	}
 
-	public void setAcc_no(int acc_no) {
+	public void setAcc_no(String acc_no) {
 		this.acc_no = acc_no;
 	}
 	
@@ -211,5 +211,9 @@ public class User_account {
 	public void setNet_banking(boolean net_banking) {
 		this.net_banking = net_banking;
 	}
+	
+	
+		
+		
 
 }
