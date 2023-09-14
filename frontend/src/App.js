@@ -7,19 +7,17 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useState } from "react";
 import Forgot from "./components/Forgot";
 import Dashboard from "./components/Dashboard";
-import OpenAccount from "./components/OpenAccount"
+import OpenAccount from "./components/OpenAccount";
+import Services from "./components/Services";
+import AccountDetails from "./components/AccountDetails";
 
 function App() {
- 
   const [userstate, setUserState] = useState({});
   return (
     <div className="App">
       <Router>
         <Routes>
-        <Route
-            path="/"
-            element={<Home/>}
-          ></Route>
+          <Route path="/" element={<Home />}></Route>
           <Route
             path="/login"
             element={
@@ -33,15 +31,15 @@ function App() {
               )
             }
           ></Route>
-          
+
           <Route path="/signup" element={<Register />}></Route>
           <Route path="/dashboard" element={<Dashboard />}></Route>
           <Route path="/createaccount" element={<OpenAccount />}></Route>
-          <Route
-            path="/forgotpassword"
-            element={<Forgot/>}>
+          <Route path="/forgotpassword" element={<Forgot />}></Route>
 
-            </Route>
+          <Route path="/service" element={<Services />}></Route>
+
+          <Route path="/accountdetails" element={<AccountDetails />}></Route>
         </Routes>
       </Router>
     </div>

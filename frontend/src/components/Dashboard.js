@@ -1,32 +1,19 @@
-import React from 'react'
+import React from "react";
 import "./Styles/Home.css";
+import Navbar from "./Navbar";
 
 const Dashboard = () => {
   return (
     <>
-    <nav className='navbar'>
-      <div className = "logo">Dashboard</div>
+      <Navbar />
 
-      <ul className='nav-links'>
-        <li><a href='/services'>Services</a></li>
-        <li><a href='/createaccount'>Open Account</a></li>
-        <li><a href='/'>Logout</a></li>
-        
-
-      </ul>
-
-
-    </nav>
-
-
-<section>
-    <div className='home-title'>
-        <h1>Welcome to FinShot</h1>
+      <section>
+        <div className="home-title">
+          <h1>Welcome to FinShot</h1>
         </div>
-</section>
+      </section>
+    </>
+  );
+};
 
-</>
-  )
-}
-
-export default Dashboard
+export default Dashboard;
