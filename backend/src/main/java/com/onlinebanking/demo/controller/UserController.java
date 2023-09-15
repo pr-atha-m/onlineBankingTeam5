@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -155,6 +156,17 @@ public class UserController {
 	       
 	  }
 	  
+	  @PutMapping ("/withdraw")
+	  public ResponseEntity<String> Withdraw(@RequestParam String acc_no, @RequestParam float amount)
+	  {
+		  float rem_balance = userService.Withdraw(acc_no, amount);
+		  if(rem_balance==-1)
+		  {
+			  return ResponseEntity.badRequest().body("You dont have enough balance to withdraw " + amount);
+		  }
+		  
+		  return ResponseEntity.ok("Your remaining balance is now " + rem_balance);
+	  }
 
 	
 	  

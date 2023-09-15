@@ -27,6 +27,7 @@ public class User_account {
 	private String source_of_income;
 	private boolean debit_status;
 	private boolean net_banking;
+	private float balance;
 	
 	public User_account() {
 		super();
@@ -37,7 +38,7 @@ public class User_account {
 	
 	public User_account(int user_id, String emailId, String acc_no, String acc_type, String phone_no, String father_name, String aadhar_no, Date dob,
 			String res_addr, String perm_addr, String occ_type, float gross_annual_income, String source_of_income,
-			boolean debit_status, boolean net_banking) {
+			boolean debit_status, boolean net_banking, float balance) {
 		super();
 		this.user_id = user_id;  
 		this.emailId = emailId;
@@ -54,10 +55,11 @@ public class User_account {
 		this.source_of_income = source_of_income;
 		this.debit_status = debit_status;
 		this.net_banking = net_banking;
+		this.balance=balance;
 	}
 	
 	
-	@Id
+	
 	@GeneratedValue(strategy= GenerationType.IDENTITY)
 	@Column(name = "id",nullable = true)
 	public int getuser_id() {
@@ -91,7 +93,7 @@ public class User_account {
 		this.acc_type = acc_type;
 	}
 	
-
+	@Id
 	@Column(name = "acc_no", nullable = false)
 	//@NotEmpty(message="Account number cannot be null")
 	public String getAcc_no() {
@@ -209,6 +211,18 @@ public class User_account {
 
 	public void setNet_banking(boolean net_banking) {
 		this.net_banking = net_banking;
+	}
+
+
+
+	public float getBalance() {
+		return balance;
+	}
+
+
+
+	public void setBalance(float balance) {
+		this.balance = balance;
 	}
 	
 	

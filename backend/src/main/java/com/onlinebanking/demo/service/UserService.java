@@ -96,6 +96,20 @@ public class UserService implements UserServiceInterface {
        
         return String.format("1%011d", nextNumber);
 	}
+
+	@Override
+	public float Withdraw(String acc_no, float amount) {
+		// TODO Auto-generated method stub
+		Optional<User_account> acc= userAccountRepo.findById(acc_no);
+		if(acc.get().getBalance() >=amount)
+		{
+			float new_bal = acc.get().getBalance()-amount;
+			acc.get().setBalance(new_bal);
+			userAccountRepo.save(acc.get());
+			return new_bal;
+		}
+		return -1;
+	}
 	
 	
 	
