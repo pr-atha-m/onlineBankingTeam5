@@ -33,7 +33,10 @@ const Navbar = ({ isLoggedIn }) => {
               gap: "20px",
             }}
           >
-            <li>
+            
+            {isLoggedIn ? (
+              <>
+              <li>
               <Link
                 to="/service"
                 style={{ textDecoration: "none", color: "#333" }}
@@ -41,8 +44,6 @@ const Navbar = ({ isLoggedIn }) => {
                 Services
               </Link>
             </li>
-            {isLoggedIn ? (
-              <>
                 <li>
                   <Link
                     to="/profile"
