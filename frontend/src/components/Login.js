@@ -68,6 +68,7 @@ export const Login = ({ setUserState }) => {
        
         if(resp.message === "Login Successful"){
           setIsLoggedIn(true);
+          localStorage.setItem("emailId",user.email)
           navigate("/dashboard", { replace: true });
         }
         else{ alert(resp.message);

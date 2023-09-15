@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useEffect, useState} from "react";
 import styled from "styled-components";
 import Navbar from "./Navbar";
 
@@ -35,24 +35,39 @@ const TableCell = styled.td`
 `;
 
 const AccountDetails = () => {
-  const accountData = [
-    {
-      accountNumber: "1234567890",
-      accountType: "Savings",
-      balance: "999999",
-      accountOpenDate: "2023-01-15",
-    },
-    {
-      accountNumber: "1828187199",
-      accountType: "Salary",
-      balance: "138811",
-      accountOpenDate: "2022-11-20",
-    },
-    // Add more accounts here
-  ];
+  const [details,setDetails]=  useState([])
+  useEffect(() => {
+ 
+   
+    let options = {
+      method:"GET",
+      headers: {
+        'Content-Type': 'application/json',
+
+      }
+      }
+    fetch(`http://localhost:8080/banking/user/by-email?emailId=${localStorage.getItem("emailId")}`, options)
+    .then((resp)=> resp.json())
+    .then((resp) => {
+     
+    setDetails(resp);
+    console.log(resp)
+   
+      
+
+    });
+   
+  
+}, []);
+
+
+console.log(details)
+
+
 
   return (
     <>
+    
       <Navbar isLoggedIn={true}/>
       <Container>
         <h1 style={{ textAlign: "center" }}>Account Details</h1>
@@ -66,12 +81,12 @@ const AccountDetails = () => {
             </TableRow>
           </thead>
           <tbody>
-            {accountData.map((account, index) => (
+            {details.map((account, index) => (
               <TableRow key={index}>
-                <TableCell>{account.accountNumber}</TableCell>
-                <TableCell>{account.accountType}</TableCell>
-                <TableCell>{account.balance}</TableCell>
-                <TableCell>{account.accountOpenDate}</TableCell>
+                <TableCell>{account.acc_no}</TableCell>
+                <TableCell>{account.acc_type}</TableCell>
+                <TableCell>{account.acc_bal}</TableCell>
+                <TableCell>{account.acc_open_date}</TableCell>
               </TableRow>
             ))}
           </tbody>

@@ -17,6 +17,8 @@ const CenteredContainer = styled.div`
   min-height: 80vh;
 `;
 
+
+
 const Services = () => {
   const services = [
     {
