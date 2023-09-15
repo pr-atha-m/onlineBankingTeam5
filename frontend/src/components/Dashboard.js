@@ -5,7 +5,7 @@ import Navbar from "./Navbar";
 const Dashboard = () => {
   return (
     <>
-      <Navbar />
+      <Navbar isLoggedIn={true}/>
 
       <section>
         <div className="home-title">

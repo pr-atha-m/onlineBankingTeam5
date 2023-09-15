@@ -14,10 +14,11 @@ import com.onlinebanking.demo.entity.User_account;
 public interface UserServiceInterface {
 	List<User> getUser();
 	Optional<User> getUserByEmail(String user_email);
+
   User createUser(User user);
-  User_account getBalanceByAccountNumber(String acc_no);
-  User_account createUserAccount(User_account user);
   
+  User_account createUserAccount(User_account user);
+  List<User_account> getUserDetailsByEmail(String emailId);
   
 //  Accounts createAccount(Accounts user);
   

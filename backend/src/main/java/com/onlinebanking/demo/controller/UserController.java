@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -26,6 +27,7 @@ import com.onlinebanking.demo.exceptions.InvalidException;
 import com.onlinebanking.demo.exceptions.NotFoundException;
 import com.onlinebanking.demo.exceptions.ResourceNotFound;
 import com.onlinebanking.demo.repository.UserRepository;
+import com.onlinebanking.demo.repository.UserAccountRepository;
 
 import com.onlinebanking.demo.service.UserServiceInterface;
 
@@ -33,14 +35,32 @@ import com.onlinebanking.demo.service.UserServiceInterface;
 @RequestMapping("/banking")
 @CrossOrigin(origins="http://localhost:8080")
 public class UserController {
+	
+	
+
+	
 	@Autowired
 	UserServiceInterface userService;
+	
 	
 	 //To get the details of all users
     @GetMapping(path = "/userdetails", produces = {MediaType.APPLICATION_JSON_VALUE})
     List<User> users(){
         return userService.getUser();
     }
+    
+    @GetMapping("/user/by-email")
+	public ResponseEntity<List<User_account>> getUderDetailsByEmail(@RequestParam("emailId") String emailId){
+		List<User_account> user = userService.getUserDetailsByEmail(emailId);
+		if(user != null) {
+			return ResponseEntity.ok(user);
+		}
+		else {
+			return ResponseEntity.notFound().build();
+					}
+		
+	}
+		
     
 	//To get details of a user by email id
 	@GetMapping("/user/{user_email}")
@@ -80,7 +100,7 @@ public class UserController {
 	  @PostMapping("/user/open")
 	  public ResponseEntity<Object> creatingUserAccount(@Validated @RequestBody User_account UserDetails)throws ResourceNotFound {
 			 
-	        String email=UserDetails.getUser_email();
+	        String email=UserDetails.getemailId();
 	        Optional<User>user=userService.getUserByEmail(email);
 	        if(user.isPresent())
 	        {
@@ -134,4 +154,9 @@ public class UserController {
 	       
 	       
 	  }
+	  
+
+	
+	  
+	  
 }

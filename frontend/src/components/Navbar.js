@@ -35,7 +35,7 @@ const Navbar = ({ isLoggedIn }) => {
           >
             <li>
               <Link
-                to="/services"
+                to="/service"
                 style={{ textDecoration: "none", color: "#333" }}
               >
                 Services
@@ -53,7 +53,7 @@ const Navbar = ({ isLoggedIn }) => {
                 </li>
                 <li>
                   <Link
-                    to="/logout"
+                    to="/dashboard"
                     style={{
                       textDecoration: "none",
                       color: "#333",

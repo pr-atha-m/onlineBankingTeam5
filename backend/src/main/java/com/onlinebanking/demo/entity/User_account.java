@@ -13,7 +13,7 @@ import jakarta.validation.constraints.*;
 public class User_account {
 	
 	private int user_id;
-	private String user_email;
+	private String emailId;
 	private String acc_no;
 	private String acc_type;
 	private String phone_no;
@@ -35,12 +35,12 @@ public class User_account {
 	
 	
 	
-	public User_account(int user_id, String user_email, String acc_no, String acc_type, String phone_no, String father_name, String aadhar_no, Date dob,
+	public User_account(int user_id, String emailId, String acc_no, String acc_type, String phone_no, String father_name, String aadhar_no, Date dob,
 			String res_addr, String perm_addr, String occ_type, float gross_annual_income, String source_of_income,
 			boolean debit_status, boolean net_banking) {
 		super();
 		this.user_id = user_id;  
-		this.user_email = user_email;
+		this.emailId = emailId;
 		this.acc_type  = acc_type;
 		this.acc_no = acc_no;
 		this.phone_no = phone_no;
@@ -56,9 +56,10 @@ public class User_account {
 		this.net_banking = net_banking;
 	}
 	
+	
 	@Id
 	@GeneratedValue(strategy= GenerationType.IDENTITY)
-	@Column(name = "id")
+	@Column(name = "id",nullable = true)
 	public int getuser_id() {
 		return user_id;
 	}
@@ -68,18 +69,16 @@ public class User_account {
 	
 	
 	
-	
-	
-	
-	@Column(name = "user_email", nullable = false)
+
+	@Column(name = "emailId", nullable = false)
 	@NotEmpty(message="You need to submit the email id")
 	@Email(message="This is not a valid email format")
-	public String getUser_email() {
-		return user_email;
+	public String getemailId() {
+		return emailId;
 	}
 	
-	public void setUser_email(String user_email) {
-		this.user_email = user_email;
+	public void setemailId(String emailId) {
+		this.emailId = emailId;
 	}
 	
 	@Column(name = "acc_type", nullable = false)

@@ -23,6 +23,7 @@ import jakarta.persistence.Query;
 
 @Service
 public class UserService implements UserServiceInterface {
+	
 	@Autowired
 	UserRepository userRepo;
 	
@@ -36,6 +37,7 @@ public class UserService implements UserServiceInterface {
 	
 
 	
+
 	
 	@Override
 	public List<User> getUser()
@@ -48,6 +50,8 @@ public class UserService implements UserServiceInterface {
 	{
 		return userRepo.findById(user_email);
 	}
+	
+
 	
 	@Override
 	public User createUser(@Validated @RequestBody User user)
@@ -64,7 +68,11 @@ public class UserService implements UserServiceInterface {
 		user.setAcc_no(generateAccountNumber());
 		return userAccountRepo.save(user) ; 
 	}
+	@Override
+	public List<User_account> getUserDetailsByEmail(String emailId) {
 
+		return userAccountRepo.findByEmailId(emailId);
+	}
 
 //	@Override
 //	public Accounts createAccount(@Validated @RequestBody Accounts user){
@@ -91,14 +99,7 @@ public class UserService implements UserServiceInterface {
 	
 	
 	
-	@Override
-	public User_account getBalanceByAccountNumber(String acc_no)
-	{
-		return userRepo.findById(user_email);
-	}
-	
-	
-	
+
 	
 }
 //	

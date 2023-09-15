@@ -53,7 +53,7 @@ const AccountDetails = () => {
 
   return (
     <>
-      <Navbar />
+      <Navbar isLoggedIn={true}/>
       <Container>
         <h1 style={{ textAlign: "center" }}>Account Details</h1>
         <Table>
