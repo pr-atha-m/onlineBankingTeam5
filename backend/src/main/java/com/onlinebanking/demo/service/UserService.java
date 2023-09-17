@@ -34,11 +34,6 @@ public class UserService implements UserServiceInterface {
 	
 	private final BCryptPasswordEncoder passwordEncoder=new BCryptPasswordEncoder();
 	
-	
-
-	
-
-	
 	@Override
 	public List<User> getUser()
 	{
@@ -52,7 +47,6 @@ public class UserService implements UserServiceInterface {
 	}
 	
 
-	
 	@Override
 	public User createUser(@Validated @RequestBody User user)
 	{
@@ -101,6 +95,7 @@ public class UserService implements UserServiceInterface {
 	public float Withdraw(String acc_no, float amount) {
 		// TODO Auto-generated method stub
 		Optional<User_account> acc= userAccountRepo.findById(acc_no);
+		
 		if(acc.get().getBalance() >=amount)
 		{
 			float new_bal = acc.get().getBalance()-amount;
