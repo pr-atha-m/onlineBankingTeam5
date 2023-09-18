@@ -24,6 +24,7 @@ import com.onlinebanking.demo.entity.User;
 
 import com.onlinebanking.demo.entity.User_account;
 import com.onlinebanking.demo.entity.User_account;
+import com.onlinebanking.demo.exceptions.BalanceExceptions;
 import com.onlinebanking.demo.exceptions.InvalidException;
 import com.onlinebanking.demo.exceptions.NotFoundException;
 import com.onlinebanking.demo.exceptions.ResourceNotFound;
@@ -67,7 +68,7 @@ public class UserController {
 	@GetMapping("/user/{user_email}")
 	User findByEmail(@PathVariable String user_email) throws ResourceNotFound
 	{	User user= userService.getUserByEmail(user_email)
-	.orElseThrow(() -> new ResourceNotFound("User not found for this id :: " + user_email));
+	.orElseThrow(() -> new ResourceNotFound("User not found for this id :: " + user_email,HttpStatus.NOT_FOUND));
        System.out.println(user_email);
     return user;
 	}
@@ -110,7 +111,7 @@ public class UserController {
 	        	return ResponseEntity.ok(user_d);
 	        }
 	        else {
-	        	throw new ResourceNotFound("This Email is not Registered-"+ email);
+	        	throw new ResourceNotFound("This Email is not Registered-"+ email,HttpStatus.NOT_FOUND);
 	        }
 	  }
 	
@@ -140,7 +141,7 @@ public class UserController {
 	       }
 			  
 		  User user= userService.getUserByEmail(email)
-					.orElseThrow(() -> new ResourceNotFound("User not found for this email :: " + email));
+					.orElseThrow(() -> new ResourceNotFound("User not found for this email :: " + email,HttpStatus.NOT_FOUND));
 	       System.out.println(email);
 	       
 	   
@@ -157,12 +158,12 @@ public class UserController {
 	  }
 	  
 	  @PutMapping ("/withdraw")
-	  public ResponseEntity<String> Withdraw(@RequestParam String acc_no, @RequestParam float amount)
+	  public ResponseEntity<String> Withdraw(@RequestParam String acc_no, @RequestParam float amount) throws BalanceExceptions
 	  {
 		  float rem_balance = userService.Withdraw(acc_no, amount);
 		  if(rem_balance==-1)
 		  {
-			  return ResponseEntity.badRequest().body("You dont have enough balance to withdraw " + amount);
+			  throw new BalanceExceptions("Insufficient Balance in your account",HttpStatus.BAD_REQUEST);
 		  }
 		  
 		  return ResponseEntity.ok("Your remaining balance is now " + rem_balance);

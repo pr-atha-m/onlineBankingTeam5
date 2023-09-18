@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.onlinebanking.demo.entity.Transaction;
+import com.onlinebanking.demo.exceptions.BalanceExceptions;
+import com.onlinebanking.demo.exceptions.ResourceNotFound;
 import com.onlinebanking.demo.service.TransactionService;
 
 @RestController
@@ -51,7 +53,7 @@ public class TransactionController {
 	
 	
 	@PostMapping("/execute")
-	public ResponseEntity<String> ExecuteTransaction (@RequestBody Transaction trans)
+	public ResponseEntity<String> ExecuteTransaction (@RequestBody Transaction trans) throws ResourceNotFound, BalanceExceptions
 	{
 			trans_service.executeTransaction(trans);
 			return ResponseEntity.ok("Transaction is successfull");
