@@ -2,13 +2,17 @@ package com.onlinebanking.demo.controller;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.onlinebanking.demo.entity.Transaction;
@@ -21,6 +25,18 @@ public class TransactionController {
 	
 	@Autowired
 	private TransactionService trans_service;
+	
+	@GetMapping("/tranactionHistory")
+	public ResponseEntity<Optional<List<Transaction>>> transHistory (@RequestParam String acc_no)
+	{
+		Optional<List<Transaction>> temp = trans_service.transactionHistory(acc_no);
+		if(temp.isPresent())
+		{
+			return ResponseEntity.ok(temp);
+		}
+		
+		return ResponseEntity.notFound().build();
+	}
 	
 	@PostMapping("/save")
 	public ResponseEntity<String> saveTransaction (@RequestBody Transaction trans)

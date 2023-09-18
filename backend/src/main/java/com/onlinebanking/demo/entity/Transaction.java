@@ -9,7 +9,7 @@ import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.NotEmpty;
 
 @Entity
-@Table(name="Transaction")
+@Table(name="Transaction_table")
 public class Transaction {
 	
 	private int trans_id;

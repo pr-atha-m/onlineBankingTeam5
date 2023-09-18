@@ -1,5 +1,6 @@
 package com.onlinebanking.demo.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +57,17 @@ public class TransactionService implements TransactionServiceInterface{
 		accRepo.save(sender_account.get());
 		accRepo.save(receiver_account.get());
 		
+	}
+
+	@Override
+	public Optional<List<Transaction>> transactionHistory(String acc_no) {
+		// TODO Auto-generated method stub
+		Optional<List<Transaction>> temp = transRepo.findTransactionHistory(acc_no);
+		if (temp.isPresent())
+		{
+			return temp;
+		}
+		return Optional.empty();
 	}
 
 	
