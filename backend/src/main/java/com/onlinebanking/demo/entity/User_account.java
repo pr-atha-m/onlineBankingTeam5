@@ -1,6 +1,7 @@
 package com.onlinebanking.demo.entity;
 
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Set;
 
@@ -15,6 +16,8 @@ public class User_account {
 	private int user_id;
 	private String emailId;
 	private String acc_no;
+	private Long acc_bal;
+	private String acc_open_date;
 	private String acc_type;
 	private String phone_no;
 	private String father_name;
@@ -35,12 +38,14 @@ public class User_account {
 	
 	
 	
-	public User_account(int user_id, String emailId, String acc_no, String acc_type, String phone_no, String father_name, String aadhar_no, Date dob,
+	public User_account(int user_id,Long acc_bal, String acc_open_date, String emailId, String acc_no, String acc_type, String phone_no, String father_name, String aadhar_no, Date dob,
 			String res_addr, String perm_addr, String occ_type, float gross_annual_income, String source_of_income,
 			boolean debit_status, boolean net_banking) {
 		super();
 		this.user_id = user_id;  
 		this.emailId = emailId;
+		this.acc_bal = acc_bal;
+		this.acc_open_date = acc_open_date;
 		this.acc_type  = acc_type;
 		this.acc_no = acc_no;
 		this.phone_no = phone_no;
@@ -56,7 +61,35 @@ public class User_account {
 		this.net_banking = net_banking;
 	}
 	
-	
+
+	@Column(name = "acc_bal", nullable = false)
+	@NotEmpty(message="Account Balance can't be empty")
+	public Long getAcc_bal() {
+		return acc_bal;
+	}
+
+
+
+	public void setAcc_bal(Long acc_bal) {
+		this.acc_bal = acc_bal;
+	}
+
+
+
+	@Column(name = "acc_open_date", nullable = false)
+	@NotEmpty(message="You need to set account opening date")
+	public String getAcc_open_date() {
+		return acc_open_date;
+	}
+
+
+
+	public void setAcc_open_date(String acc_open_date) {
+		this.acc_open_date = acc_open_date;
+	}
+
+
+
 	@Id
 	@GeneratedValue(strategy= GenerationType.IDENTITY)
 	@Column(name = "id",nullable = true)

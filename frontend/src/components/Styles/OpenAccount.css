@@ -17,7 +17,9 @@
 }
 
 .openAccountBtn{
-    margin-top: 30px;
+  margin-left: 30px;
+  width: 60%;
+    /* margin-top: 30px; */
 }
 .v3{
     border-left: 1px solid rgb(167, 171, 167);

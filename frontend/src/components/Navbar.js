@@ -54,7 +54,7 @@ const Navbar = ({ isLoggedIn }) => {
                 </li>
                 <li>
                   <Link
-                    to="/dashboard"
+                    to="/"
                     style={{
                       textDecoration: "none",
                       color: "#333",

@@ -4,7 +4,8 @@ import styled from "styled-components";
 import Navbar from "./Navbar";
 
 const CardRow = styled.div`
-  display: flex;
+  display: flex; 
+  flex-wrap:wrap;
   justify-content: center;
   align-items: center;
   gap: 16px;
@@ -22,6 +23,12 @@ const CenteredContainer = styled.div`
 const Services = () => {
   const services = [
     {
+      title: "Open an Account",
+      description: "Open an Account with Us and Take the First step towards a Secure future",
+      iconClass: "fas fa-credit-card",
+      link:"/createaccount"
+    },
+    {
       title: "Check Account Balance",
       description: "View your current account balance and transaction history.",
       iconClass: "fas fa-wallet",
@@ -31,7 +38,7 @@ const Services = () => {
       title: "Transaction History",
       description: "Track your recent transactions and manage your finances.",
       iconClass: "fas fa-history",
-      link:"/transaction"
+      link:"/transactions"
     },
     {
       title: "Apply for Debit Card",
@@ -39,6 +46,14 @@ const Services = () => {
       iconClass: "fas fa-credit-card",
       link:"/creditcard"
     },
+
+    {
+      title: "Withdraw Money",
+      description: "Unlock Your Fortune with swift withdrawals -Your Money, Your Way!",
+      iconClass: "fas fa-credit-card",
+      link:"/withdraw"
+    },
+   
     // Add more services here
   ];
   return (

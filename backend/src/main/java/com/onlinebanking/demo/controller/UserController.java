@@ -1,5 +1,9 @@
 package com.onlinebanking.demo.controller;
 
+import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -101,6 +105,14 @@ public class UserController {
 	  public ResponseEntity<Object> creatingUserAccount(@Validated @RequestBody User_account UserDetails)throws ResourceNotFound {
 			 
 	        String email=UserDetails.getemailId();
+	        UserDetails.setAcc_bal(0l);
+	        Date date = new Date();
+	        SimpleDateFormat sdf  =  new SimpleDateFormat("yyyy-mm-dd");
+	        String formattedDate = sdf.format(date);
+	        
+	        
+	        UserDetails.setAcc_open_date(formattedDate);
+	        
 	        Optional<User>user=userService.getUserByEmail(email);
 	        if(user.isPresent())
 	        {

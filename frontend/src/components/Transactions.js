@@ -19,7 +19,7 @@ const TableHeader = styled.th`
   background-color: #0fe3e0;
   color: #fff;
   padding: 12px;
-  text-align: left;
+  text-align: center;
   border: 1px solid #ddd;
 `;
 
@@ -34,7 +34,7 @@ const TableCell = styled.td`
   border: 1px solid #ddd;
 `;
 
-const AccountDetails = () => {
+const Transactions = () => {
   const [details,setDetails]=  useState([])
   useEffect(() => {
  
@@ -74,7 +74,7 @@ console.log(details)
         <Table>
           <thead>
             <TableRow>
-              <TableHeader>Account Number</TableHeader>
+              <TableHeader>Transaction Id</TableHeader>
               <TableHeader>Account Type</TableHeader>
               <TableHeader>Balance</TableHeader>
               <TableHeader>Account Open Date</TableHeader>
@@ -96,4 +96,4 @@ console.log(details)
   );
 };
 
-export default AccountDetails;
+export default Transactions;

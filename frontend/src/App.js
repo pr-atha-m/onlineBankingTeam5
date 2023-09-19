@@ -10,6 +10,8 @@ import Dashboard from "./components/Dashboard";
 import OpenAccount from "./components/OpenAccount";
 import Services from "./components/Services";
 import AccountDetails from "./components/AccountDetails";
+import Withdrawal from "./components/Withdrawal";
+import Transactions from "./components/Transactions";
 
 function App() {
   const [userstate, setUserState] = useState({});
@@ -40,6 +42,8 @@ function App() {
           <Route path="/service" element={<Services />}></Route>
 
           <Route path="/accountdetails" element={<AccountDetails />}></Route>
+          <Route path="/withdraw" element={<Withdrawal />}></Route>
+          <Route path="/transactions" element={<Transactions />}></Route>
         </Routes>
       </Router>
     </div>
