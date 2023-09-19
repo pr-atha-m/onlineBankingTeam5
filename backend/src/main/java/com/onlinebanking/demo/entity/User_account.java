@@ -94,9 +94,9 @@ public class User_account {
 
 
 
-	@Id
+
 	@GeneratedValue(strategy= GenerationType.IDENTITY)
-	@Column(name = "id",nullable = true)
+	@Column(name = "id",nullable = false)
 	public int getuser_id() {
 		return user_id;
 	}
@@ -127,6 +127,7 @@ public class User_account {
 	public void setAcc_type(String acc_type) {
 		this.acc_type = acc_type;
 	}
+	
 	
 	@Id
 	@Column(name = "acc_no", nullable = false)

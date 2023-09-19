@@ -85,7 +85,7 @@ console.log(details)
               <TableRow key={index}>
                 <TableCell>{account.acc_no}</TableCell>
                 <TableCell>{account.acc_type}</TableCell>
-                <TableCell>{account.acc_bal}</TableCell>
+                <TableCell>{account.balance}</TableCell>
                 <TableCell>{account.acc_open_date}</TableCell>
               </TableRow>
             ))}

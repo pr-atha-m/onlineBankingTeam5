@@ -15,7 +15,7 @@ public class Transaction {
 	private int trans_id;
 	private String sender_account;
 	private String receiver_account;
-	private float amount;
+	private String amount;
 	private String trans_date;
 	private String maturity_remarks;
 	private String trans_mode;
@@ -25,7 +25,7 @@ public class Transaction {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public Transaction(int trans_id, String sender_account, String receiver_account, float amount, String trans_date,
+	public Transaction(int trans_id, String sender_account, String receiver_account, String amount, String trans_date,
 			String maturity_remarks, String trans_mode, String instructions) {
 		super();
 		this.trans_id = trans_id;
@@ -40,7 +40,7 @@ public class Transaction {
 	
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy= GenerationType.AUTO)
 	@Column(name="trans_id",nullable=false)
 	public int getTrans_id() {
 		return trans_id;
@@ -70,10 +70,10 @@ public class Transaction {
 	@Column(name="amount", nullable=false)
 	@NotEmpty(message="You need to enter an amount")
 	@DecimalMax(value="100000.0")
-	public float getAmount() {
+	public String getAmount() {
 		return amount;
 	}
-	public void setAmount(float amount) {
+	public void setAmount(String amount) {
 		this.amount = amount;
 	}
 	

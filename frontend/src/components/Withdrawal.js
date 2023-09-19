@@ -11,10 +11,31 @@ export const Withdrawal = ({ setUserState }) => {
    
     amount: "",
   });
-  const loginHandler = (e) => {
+  const loginHandler = async (e) => {
     e.preventDefault();
-    console.log(user,selectedOption)
+    
     setFormErrors(validateForm(user));
+    console.log(user,selectedOption)
+    
+    const options = {
+      method:"PUT",
+      headers: {
+        'Content-Type': 'application/json',
+
+      }
+
+    };
+
+    fetch(`http://localhost:8080/banking/withdraw?acc_no=${selectedOption}&amount=${user.amount}`,options)
+    .then((resp)=> resp.json()
+    .then((resp) => {
+      console.log(resp.message);
+      alert(resp.message);
+    }))
+    
+  
+
+   
 
     // if (!formErrors) {
 
@@ -76,6 +97,8 @@ export const Withdrawal = ({ setUserState }) => {
     }
     else if (!values.amount) {
       error.amount = "Please enter a Amount";
+    }else if(values.amount <=0){
+      error.amount = "Please Enter A valid Amount";
     } 
     return error;
   };

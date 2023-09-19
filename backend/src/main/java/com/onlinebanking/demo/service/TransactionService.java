@@ -1,5 +1,7 @@
 package com.onlinebanking.demo.service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,6 +38,10 @@ public class TransactionService implements TransactionServiceInterface{
 	@Transactional(rollbackFor = TransactionException.class)
 	public void executeTransaction(Transaction trans) throws ResourceNotFound, BalanceExceptions {
 		// TODO Auto-gengetByIdethod stub
+		DateTimeFormatter date_format= DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		String formatted_date = LocalDate.now().format(date_format);
+		trans.setTrans_date(formatted_date);
+		saveTransaction(trans);
 		Optional<User_account> sender = accRepo.findById(trans.getSender_account());
 		if(sender!=null)
 		{
@@ -46,7 +52,9 @@ public class TransactionService implements TransactionServiceInterface{
 				throw new ResourceNotFound("Account not found with this account number",HttpStatus.NOT_FOUND);
 			}
 			else {
-				float amount = trans.getAmount();
+			String am = trans.getAmount();
+			
+				float amount = Float.parseFloat(am);
 				if (sender.get().getBalance() >= amount)
 				{
 					performTransaction(sender, receiver, trans);
@@ -63,7 +71,8 @@ public class TransactionService implements TransactionServiceInterface{
 	public void performTransaction(Optional<User_account> sender_account, Optional<User_account> receiver_account,
 			Transaction trans) {
 		// TODO Auto-generated method stub
-		float amount = trans.getAmount();
+		String am = trans.getAmount();
+		float amount = Float.parseFloat(am);
 		sender_account.get().setBalance(sender_account.get().getBalance()-amount);
 		receiver_account.get().setBalance(receiver_account.get().getBalance()+amount);
 		

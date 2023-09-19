@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,8 +29,8 @@ public class TransactionController {
 	@Autowired
 	private TransactionService trans_service;
 	
-	@GetMapping("/tranactionHistory")
-	public ResponseEntity<Optional<List<Transaction>>> transHistory (@RequestParam String acc_no)
+	@GetMapping("/transactionHistory/{acc_no}")
+	public ResponseEntity<Optional<List<Transaction>>> transHistory (@PathVariable String acc_no)
 	{
 		Optional<List<Transaction>> temp = trans_service.transactionHistory(acc_no);
 		if(temp.isPresent())

@@ -165,22 +165,52 @@ public class UserController {
 	       throw new InvalidException("Invalid password",HttpStatus.BAD_REQUEST);
 	    		   }
 	       return ResponseEntity.ok("{\"message\":\"Login Successful\"}");
-	       
+	     
 	       
 	  }
 	  
+//	  @PutMapping("/withdraw1/{acc_no}/{amount}")
+//	  public void Withdraw1(@PathVariable String acc_no, @PathVariable String amount) throws BalanceExceptions
+//	  {
+//		  float am  =  Float.parseFloat(amount); 
+//		  float rem_balance = userService.Withdraw(acc_no, am);
+//		  System.out.print(rem_balance);
+//		  System.out.print(am);
+//	  }
+//	  
+	  
+	  
 	  @PutMapping ("/withdraw")
-	  public ResponseEntity<String> Withdraw(@RequestParam String acc_no, @RequestParam float amount) throws BalanceExceptions
+	  public ResponseEntity<String> Withdraw(@RequestParam String acc_no, @RequestParam String amount) throws BalanceExceptions
 	  {
-		  float rem_balance = userService.Withdraw(acc_no, amount);
+		  
+		  System.out.print(amount);
+		  float am  =  Float.parseFloat(amount); 
+		  float rem_balance = userService.Withdraw(acc_no, am);
 		  if(rem_balance==-1)
 		  {
 			  throw new BalanceExceptions("Insufficient Balance in your account",HttpStatus.BAD_REQUEST);
 		  }
-		  
-		  return ResponseEntity.ok("Your remaining balance is now " + rem_balance);
+		
+		  String msg= String.format("Your remaining balance is , %s!", rem_balance);
+		  return ResponseEntity.ok("{" + "\"message\": \"" + msg + "\"}");
 	  }
 
+	  
+//	  "{\"message\":\"Your remaining balance is now \" + rem_balance\"}"
+	  
+	  
+	  @PutMapping ("/deposit")
+	  public ResponseEntity<String> Depoist(@RequestParam String acc_no, @RequestParam String amount) 
+	  {
+		  
+		  System.out.print(amount);
+		  float am  =  Float.parseFloat(amount); 
+		  float rem_balance = userService.Deposit(acc_no, am);
+		  
+		
+		  return ResponseEntity.ok("Your remaining balance is now " + rem_balance);
+	  }
 	
 	  
 	  

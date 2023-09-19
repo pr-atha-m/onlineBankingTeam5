@@ -14,7 +14,7 @@ const Register = () => {
   let acc_no = Math.floor(Math.random() * (max - min + 1)) + min;
   const options = ["Savings", "Salary", "Current", "NRI"];
   const [user, setUserDetails] = useState({
-    email: "",
+    emailId: "",
     phoneNumber: "",
     accountType: "",
     fatherName: "",
@@ -48,10 +48,10 @@ const Register = () => {
     const phoneRegex = /^\d{10}$/;
     const adhaarRegex = /^\d{12}$/;
     const incomeRegex = /^[0-9]+(\.[0-9]{1,2})?$/;
-    if (!values.email) {
-      error.email = "Email is required";
-    } else if (!regexEmail.test(values.email)) {
-      error.email = "This is not a valid email format!";
+    if (!values.emailId) {
+      error.emailId = "Email is required";
+    } else if (!regexEmail.test(values.emailId)) {
+      error.emailId = "This is not a valid email format!";
     } else if (!values.phoneNumber) {
       error.phoneNumber = "Phone Number is required!";
     } else if (!phoneRegex.test(values.phoneNumber)) {
@@ -120,8 +120,8 @@ const Register = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          user_email: user.email,
-          acc_no: "",
+          emailId: user.emailId,
+    
           acc_type: selectedOption,
           phone_no: user.phoneNumber,
           father_name: user.fatherName,
@@ -136,7 +136,7 @@ const Register = () => {
           net_banking: false,
         }),
       };
-      fetch("http://localhost:8080/banking/user/createaccount", options)
+      fetch("http://localhost:8080/banking/user/open", options)
         .then((resp) => resp.json())
         .then((resp) => {
           alert("Account Opened");
@@ -173,11 +173,11 @@ const Register = () => {
               </select>
               <input
                 type="email"
-                name="email"
-                id="email"
+                name="emailId"
+                id="emailId"
                 placeholder="Email"
                 onChange={changeHandler}
-                value={user.email}
+                value={user.emailId}
                 className="openinputs"
               />
               <p className="formerros">{formErrors.accountType}</p>

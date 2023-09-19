@@ -96,6 +96,7 @@ public class UserService implements UserServiceInterface {
 		// TODO Auto-generated method stub
 		Optional<User_account> acc= userAccountRepo.findById(acc_no);
 		
+		System.out.print("Hello");
 		if(acc.get().getBalance() >=amount)
 		{
 			float new_bal = acc.get().getBalance()-amount;
@@ -106,6 +107,16 @@ public class UserService implements UserServiceInterface {
 		return -1;
 	}
 	
+	@Override
+	public float Deposit(String acc_no, float amount) {
+		// TODO Auto-generated method stub
+		Optional<User_account> acc= userAccountRepo.findById(acc_no);
+		
+			float new_bal = acc.get().getBalance()+amount;
+			acc.get().setBalance(new_bal);
+			userAccountRepo.save(acc.get());
+			return new_bal;
+	}
 	
 	
 

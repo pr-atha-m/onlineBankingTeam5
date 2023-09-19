@@ -20,6 +20,7 @@ public interface UserServiceInterface {
   User_account createUserAccount(User_account user);
   List<User_account> getUserDetailsByEmail(String emailId);
   float Withdraw (String acc_no, float amount);
+  float Deposit (String acc_no, float amount);
   
 //  Accounts createAccount(Accounts user);
   
