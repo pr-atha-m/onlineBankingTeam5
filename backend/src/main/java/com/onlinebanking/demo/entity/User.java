@@ -21,8 +21,8 @@ public class User {
 	private String last_name;
 	
 	//This implies that 1 user can have many accounts.
-@OneToMany(mappedBy="user",cascade=CascadeType.ALL,fetch=FetchType.LAZY)
-private Set<User_account> accounts;
+//	@OneToMany(cascade=CascadeType.ALL)
+//	private Set<Account> accounts;
 	
 	public User() {
 		super();

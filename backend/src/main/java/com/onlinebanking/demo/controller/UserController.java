@@ -1,8 +1,11 @@
 package com.onlinebanking.demo.controller;
 
+import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,30 +25,54 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 import com.onlinebanking.demo.entity.User;
+
 import com.onlinebanking.demo.entity.User_account;
+import com.onlinebanking.demo.entity.User_account;
+import com.onlinebanking.demo.exceptions.BalanceExceptions;
 import com.onlinebanking.demo.exceptions.InvalidException;
 import com.onlinebanking.demo.exceptions.NotFoundException;
 import com.onlinebanking.demo.exceptions.ResourceNotFound;
 import com.onlinebanking.demo.repository.UserRepository;
+import com.onlinebanking.demo.repository.UserAccountRepository;
+
 import com.onlinebanking.demo.service.UserServiceInterface;
 
 @RestController
 @RequestMapping("/banking")
 @CrossOrigin(origins="http://localhost:8080")
 public class UserController {
+	
+	
+
+	
 	@Autowired
 	UserServiceInterface userService;
+	
+	
 	 //To get the details of all users
     @GetMapping(path = "/userdetails", produces = {MediaType.APPLICATION_JSON_VALUE})
     List<User> users(){
         return userService.getUser();
     }
     
+    @GetMapping("/user/by-email")
+	public ResponseEntity<List<User_account>> getUderDetailsByEmail(@RequestParam("emailId") String emailId){
+		List<User_account> user = userService.getUserDetailsByEmail(emailId);
+		if(user != null) {
+			return ResponseEntity.ok(user);
+		}
+		else {
+			return ResponseEntity.notFound().build();
+					}
+		
+	}
+		
+    
 	//To get details of a user by email id
 	@GetMapping("/user/{user_email}")
 	User findByEmail(@PathVariable String user_email) throws ResourceNotFound
 	{	User user= userService.getUserByEmail(user_email)
-	.orElseThrow(() -> new ResourceNotFound("User not found for this id :: " + user_email));
+	.orElseThrow(() -> new ResourceNotFound("User not found for this id :: " + user_email,HttpStatus.NOT_FOUND));
        System.out.println(user_email);
     return user;
 	}
@@ -78,7 +106,15 @@ public class UserController {
 	  @PostMapping("/user/open")
 	  public ResponseEntity<Object> creatingUserAccount(@Validated @RequestBody User_account UserDetails)throws ResourceNotFound {
 			 
-	        String email=UserDetails.getUser_email();
+	        String email=UserDetails.getemailId();
+	        UserDetails.setAcc_bal(0l);
+	        Date date = new Date();
+	        SimpleDateFormat sdf  =  new SimpleDateFormat("yyyy-mm-dd");
+	        String formattedDate = sdf.format(date);
+	        
+	        
+	        UserDetails.setAcc_open_date(formattedDate);
+	        
 	        Optional<User>user=userService.getUserByEmail(email);
 	        if(user.isPresent())
 	        {
@@ -86,17 +122,18 @@ public class UserController {
 	        	System.out.println(user_d.getAadhar_no());
 	        	return ResponseEntity.ok(user_d);
 	        }
-	        else
-	        	throw new ResourceNotFound("This Email is not Registered-"+ email);
-	  
+	        else {
+	        	throw new ResourceNotFound("This Email is not Registered-"+ email,HttpStatus.NOT_FOUND);
+	        }
 	  }
-	  
+	
+	
 	 
 	  
   private boolean isValidPassword(String password) {
 	  return password.length()>=8;
 	
-}
+  		}
 	  @PostMapping("/validate")
 	  public ResponseEntity<Object> validateLogin(@RequestBody User loginReq)throws ResourceNotFound, InvalidException, NotFoundException
 	  {
@@ -116,7 +153,7 @@ public class UserController {
 	       }
 			  
 		  User user= userService.getUserByEmail(email)
-					.orElseThrow(() -> new ResourceNotFound("User not found for this email :: " + email));
+					.orElseThrow(() -> new ResourceNotFound("User not found for this email :: " + email,HttpStatus.NOT_FOUND));
 	       System.out.println(email);
 	       
 	   
@@ -128,13 +165,53 @@ public class UserController {
 	       throw new InvalidException("Invalid password",HttpStatus.BAD_REQUEST);
 	    		   }
 	       return ResponseEntity.ok("{\"message\":\"Login Successful\"}");
-	       
+	     
 	       
 	  }
 	  
-	  @GetMapping("/accountsummary")
-		public Set<User_account> getUserAccDetails(@RequestParam String user_email) {
-		 return userService.getUserAccDetails(user_email);
-			
-		}
+//	  @PutMapping("/withdraw1/{acc_no}/{amount}")
+//	  public void Withdraw1(@PathVariable String acc_no, @PathVariable String amount) throws BalanceExceptions
+//	  {
+//		  float am  =  Float.parseFloat(amount); 
+//		  float rem_balance = userService.Withdraw(acc_no, am);
+//		  System.out.print(rem_balance);
+//		  System.out.print(am);
+//	  }
+//	  
+	  
+	  
+	  @PutMapping ("/withdraw")
+	  public ResponseEntity<String> Withdraw(@RequestParam String acc_no, @RequestParam String amount) throws BalanceExceptions
+	  {
+		  
+		  System.out.print(amount);
+		  float am  =  Float.parseFloat(amount); 
+		  float rem_balance = userService.Withdraw(acc_no, am);
+		  if(rem_balance==-1)
+		  {
+			  throw new BalanceExceptions("Insufficient Balance in your account",HttpStatus.BAD_REQUEST);
+		  }
+		
+		  String msg= String.format("Your remaining balance is , %s!", rem_balance);
+		  return ResponseEntity.ok("{" + "\"message\": \"" + msg + "\"}");
+	  }
+
+	  
+//	  "{\"message\":\"Your remaining balance is now \" + rem_balance\"}"
+	  
+	  
+	  @PutMapping ("/deposit")
+	  public ResponseEntity<String> Depoist(@RequestParam String acc_no, @RequestParam String amount) 
+	  {
+		  
+		  System.out.print(amount);
+		  float am  =  Float.parseFloat(amount); 
+		  float rem_balance = userService.Deposit(acc_no, am);
+		  
+		
+		  return ResponseEntity.ok("Your remaining balance is now " + rem_balance);
+	  }
+	
+	  
+	  
 }

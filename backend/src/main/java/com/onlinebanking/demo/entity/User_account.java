@@ -1,6 +1,7 @@
 package com.onlinebanking.demo.entity;
 
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Set;
 
@@ -8,16 +9,16 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-
 @Entity
 @Table(name = "User_account")
 public class User_account {
 	
 	private int user_id;
-	private String user_email;
+	private String emailId;
 	private String acc_no;
+	private Long acc_bal;
+	private String acc_open_date;
 	private String acc_type;
-	private Date acc_date;
 	private String phone_no;
 	private String father_name;
 	private String aadhar_no;
@@ -29,12 +30,7 @@ public class User_account {
 	private String source_of_income;
 	private boolean debit_status;
 	private boolean net_banking;
-	private double balance;
-	
-	
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="user_email",referencedColumnName="user_email")
-	private User user;
+	private float balance;
 	
 	public User_account() {
 		super();
@@ -42,15 +38,17 @@ public class User_account {
 	}
 	
 	
-	public User_account(int user_id, String user_email, String acc_no, String acc_type, Date acc_date,String phone_no, String father_name, String aadhar_no, Date dob,
+	
+	public User_account(int user_id,Long acc_bal, String acc_open_date, String emailId, String acc_no, String acc_type, String phone_no, String father_name, String aadhar_no, Date dob,
 			String res_addr, String perm_addr, String occ_type, float gross_annual_income, String source_of_income,
-			boolean debit_status, boolean net_banking,double balance) {
+			boolean debit_status, boolean net_banking, float balance) {
 		super();
 		this.user_id = user_id;  
-		this.user_email = user_email;
+		this.emailId = emailId;
+		this.acc_bal = acc_bal;
+		this.acc_open_date = acc_open_date;
 		this.acc_type  = acc_type;
 		this.acc_no = acc_no;
-		this.acc_date=acc_date;
 		this.phone_no = phone_no;
 		this.father_name = father_name;
 		this.aadhar_no = aadhar_no;
@@ -64,34 +62,41 @@ public class User_account {
 		this.net_banking = net_banking;
 		this.balance=balance;
 	}
-	@Column(name = "acc_date", nullable = false)
-	@NotEmpty
-	public Date getAcc_date() {
-		return acc_date;
-	}
-
-
-	public void setAcc_date(Date acc_date) {
-		this.acc_date = acc_date;
-	}
-
-	@Column(name = "balance", nullable = false)
-	@NotEmpty
-	public double getBalance() {
-		return balance;
-	}
-
-
-	public void setBalance(double balance) {
-		this.balance = balance;
-	}
-
-
+	
+	
 	
 
-	@Id
+	@Column(name = "acc_bal", nullable = false)
+	@NotEmpty(message="Account Balance can't be empty")
+	public Long getAcc_bal() {
+		return acc_bal;
+	}
+
+
+
+	public void setAcc_bal(Long acc_bal) {
+		this.acc_bal = acc_bal;
+	}
+
+
+
+	@Column(name = "acc_open_date", nullable = false)
+	@NotEmpty(message="You need to set account opening date")
+	public String getAcc_open_date() {
+		return acc_open_date;
+	}
+
+
+
+	public void setAcc_open_date(String acc_open_date) {
+		this.acc_open_date = acc_open_date;
+	}
+
+
+
+
 	@GeneratedValue(strategy= GenerationType.IDENTITY)
-	@Column(name = "id")
+	@Column(name = "id",nullable = false)
 	public int getuser_id() {
 		return user_id;
 	}
@@ -101,18 +106,16 @@ public class User_account {
 	
 	
 	
-	
-	
-	
-	@Column(name = "user_email", nullable = false)
+
+	@Column(name = "emailId", nullable = false)
 	@NotEmpty(message="You need to submit the email id")
 	@Email(message="This is not a valid email format")
-	public String getUser_email() {
-		return user_email;
+	public String getemailId() {
+		return emailId;
 	}
 	
-	public void setUser_email(String user_email) {
-		this.user_email = user_email;
+	public void setemailId(String emailId) {
+		this.emailId = emailId;
 	}
 	
 	@Column(name = "acc_type", nullable = false)
@@ -125,7 +128,8 @@ public class User_account {
 		this.acc_type = acc_type;
 	}
 	
-
+	
+	@Id
 	@Column(name = "acc_no", nullable = false)
 	//@NotEmpty(message="Account number cannot be null")
 	public String getAcc_no() {
@@ -244,5 +248,21 @@ public class User_account {
 	public void setNet_banking(boolean net_banking) {
 		this.net_banking = net_banking;
 	}
+
+
+
+	public float getBalance() {
+		return balance;
+	}
+
+
+
+	public void setBalance(float balance) {
+		this.balance = balance;
+	}
+	
+	
+		
+		
 
 }

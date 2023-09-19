@@ -1,21 +1,22 @@
 package com.onlinebanking.demo.service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 
 import com.onlinebanking.demo.entity.User;
 import com.onlinebanking.demo.entity.User_account;
+import com.onlinebanking.demo.exceptions.BalanceExceptions;
 import com.onlinebanking.demo.repository.UserAccountRepository;
 import com.onlinebanking.demo.repository.UserRepository;
 
@@ -24,6 +25,7 @@ import jakarta.persistence.Query;
 
 @Service
 public class UserService implements UserServiceInterface {
+	
 	@Autowired
 	UserRepository userRepo;
 	
@@ -33,9 +35,6 @@ public class UserService implements UserServiceInterface {
 	private EntityManager entityManager;
 	
 	private final BCryptPasswordEncoder passwordEncoder=new BCryptPasswordEncoder();
-	
-	
-	
 	
 	@Override
 	public List<User> getUser()
@@ -49,6 +48,7 @@ public class UserService implements UserServiceInterface {
 		return userRepo.findById(user_email);
 	}
 	
+
 	@Override
 	public User createUser(@Validated @RequestBody User user)
 	{
@@ -61,31 +61,72 @@ public class UserService implements UserServiceInterface {
 	@Override
 	public User_account createUserAccount(@Validated @RequestBody User_account user)
 	{
-		
 		user.setAcc_no(generateAccountNumber());
-		return userAccountRepo.save(user);
+		return userAccountRepo.save(user) ; 
 	}
+	@Override
+	public List<User_account> getUserDetailsByEmail(String emailId) {
+
+		return userAccountRepo.findByEmailId(emailId);
+	}
+
+//	@Override
+//	public Accounts createAccount(@Validated @RequestBody Accounts user){
+//		return accountRepo.save(user);
+//	}
+
 	private String generateAccountNumber() {
         String query = "SELECT MAX(acc_no) FROM user_account";
         Query maxQuery = entityManager.createNativeQuery(query);
         String maxAccountNumber = (String) maxQuery.getSingleResult();
+        
         int nextNumber = 1;
-
-        if (maxAccountNumber != null) {
+       
+        if (maxAccountNumber != null && maxAccountNumber.length()>=2 ) {
             try {
                 nextNumber = Integer.parseInt(maxAccountNumber.substring(2)) + 1;
             } catch (NumberFormatException e) {
                 // Handle parsing error as needed
             }
         }
+       
         return String.format("1%011d", nextNumber);
+	}
+
+	@Override
+	public float Withdraw(String acc_no, float amount) throws BalanceExceptions {
+		// TODO Auto-generated method stub
+		Optional<User_account> acc= userAccountRepo.findById(acc_no);
+		
+		System.out.print("Hello");
+		if (amount<0)
+		{
+			throw new BalanceExceptions("amount cannot be negative",HttpStatus.BAD_REQUEST);
+		}
+		if(acc.get().getBalance() >=amount)
+		{
+			float new_bal = acc.get().getBalance()-amount;
+			acc.get().setBalance(new_bal);
+			userAccountRepo.save(acc.get());
+			return new_bal;
+		}
+		return -1;
 	}
 	
 	@Override
-	public Set<User_account> getUserAccDetails(String user_email) {
-	 return userAccountRepo.findByUser_user_email(user_email);
+	public float Deposit(String acc_no, float amount) {
+		// TODO Auto-generated method stub
+		Optional<User_account> acc= userAccountRepo.findById(acc_no);
 		
+			float new_bal = acc.get().getBalance()+amount;
+			acc.get().setBalance(new_bal);
+			userAccountRepo.save(acc.get());
+			return new_bal;
 	}
+	
+	
+
+	
 }
 //	
 //	@Override
