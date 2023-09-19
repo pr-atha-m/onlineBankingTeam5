@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 	@ExceptionHandler(NotFoundException.class)
-	public ResponseEntity<?>HandleNotFoundException(InvalidException ex){
+	public ResponseEntity<?>HandleNotFoundException(NotFoundException ex){
 		ErrorResponse errorResponse=new ErrorResponse(new Date(), ex.getMessage(),ex.getStatus().value());
 		return new ResponseEntity<>(errorResponse,HttpStatus.NOT_FOUND);
 	}
@@ -20,4 +20,11 @@ public class GlobalExceptionHandler {
 		ErrorResponse errorResponse=new ErrorResponse(new Date(), ex.getMessage(),ex.getStatus().value() );
 		return new ResponseEntity<>(errorResponse,HttpStatus.BAD_REQUEST);
 	}
+	@ExceptionHandler(BalanceExceptions.class)
+	public ResponseEntity<?>HandleBalanceExceptions(BalanceExceptions ex){
+		ErrorResponse errorResponse=new ErrorResponse(new Date(), ex.getMessage(),ex.getStatus().value() );
+		return new ResponseEntity<>(errorResponse,HttpStatus.BAD_REQUEST);
+	}
+	
+	
 }
