@@ -1,5 +1,7 @@
 package com.onlinebanking.demo.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -7,7 +9,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.onlinebanking.demo.entity.Admin;
-import com.onlinebanking.demo.entity.User;
 import com.onlinebanking.demo.repository.AdminRepository;
 
 @Service
@@ -24,6 +25,11 @@ public class AdminService implements AdminServiceInterface {
 		 String hashPassword= passwordEncoder.encode(admin.getAdmin_pwd());
 		admin.setAdmin_pwd(hashPassword);
 		return adminRepo.save(admin);
+	}
+	
+	public Optional<Admin> getByEmail(String admin_email)
+	{
+		return adminRepo.findById(admin_email);
 	}
 
 }

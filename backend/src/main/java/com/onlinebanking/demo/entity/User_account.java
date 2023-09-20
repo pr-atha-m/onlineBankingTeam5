@@ -32,6 +32,7 @@ public class User_account {
 	private boolean net_banking;
 	private float balance;
 	
+	
 	public User_account() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -39,13 +40,12 @@ public class User_account {
 	
 	
 	
-	public User_account(int user_id,Long acc_bal, String acc_open_date, String emailId, String acc_no, String acc_type, String phone_no, String father_name, String aadhar_no, Date dob,
+	public User_account(int user_id, String acc_open_date, String emailId, String acc_no, String acc_type, String phone_no, String father_name, String aadhar_no, Date dob,
 			String res_addr, String perm_addr, String occ_type, float gross_annual_income, String source_of_income,
 			boolean debit_status, boolean net_banking, float balance) {
 		super();
 		this.user_id = user_id;  
 		this.emailId = emailId;
-		this.acc_bal = acc_bal;
 		this.acc_open_date = acc_open_date;
 		this.acc_type  = acc_type;
 		this.acc_no = acc_no;
@@ -61,22 +61,10 @@ public class User_account {
 		this.debit_status = debit_status;
 		this.net_banking = net_banking;
 		this.balance=balance;
+		
 	}
 	
 	
-	
-
-	@Column(name = "acc_bal", nullable = false)
-	@NotEmpty(message="Account Balance can't be empty")
-	public Long getAcc_bal() {
-		return acc_bal;
-	}
-
-
-
-	public void setAcc_bal(Long acc_bal) {
-		this.acc_bal = acc_bal;
-	}
 
 
 
@@ -250,7 +238,7 @@ public class User_account {
 	}
 
 
-
+    @Column(name="Balance",nullable=false)
 	public float getBalance() {
 		return balance;
 	}
@@ -260,6 +248,9 @@ public class User_account {
 	public void setBalance(float balance) {
 		this.balance = balance;
 	}
+
+
+   
 	
 	
 		

@@ -15,7 +15,7 @@ import jakarta.validation.constraints.Size;
 @Table(name="admin")
 public class Admin {
 	
-	public int admin_id;
+	//public Long admin_id;
 	public String admin_user;
 	public String admin_email;
 	public String admin_pwd;
@@ -24,24 +24,24 @@ public class Admin {
 		super();
 	}
 	
-	public Admin(int admin_id,String admin_user, String admin_email, String admin_pwd) {
+	public Admin(String admin_user, String admin_email, String admin_pwd) {
 		super();
-		this.admin_id=admin_id;
+		//this.admin_id=admin_id;
 		this.admin_user = admin_user;
 		this.admin_email = admin_email;
 		this.admin_pwd = admin_pwd;
 	}
 	
-	@Id
-	@GeneratedValue(strategy= GenerationType.IDENTITY)
-	@Column(name = "admin_id",nullable = false)
-	public int getAdmin_id() {
-		return admin_id;
-	}
-
-	public void setAdmin_id(int admin_id) {
-		this.admin_id = admin_id;
-	}
+//	@Id
+//	@GeneratedValue(strategy= GenerationType.IDENTITY)
+//	@Column(name = "admin_id",nullable = false)
+//	public Long getAdmin_id() {
+//		return admin_id;
+//	}
+//
+//	public void setAdmin_id(Long admin_id) {
+//		this.admin_id = admin_id;
+//	}
 
 	@Column(name = "admin_username", nullable = false)
 	@NotEmpty(message="username cannot be empty")
@@ -52,6 +52,7 @@ public class Admin {
 		this.admin_user = admin_user;
 	}
 	
+	@Id
 	@Column(name = "admin_email", nullable = false)
 	@NotEmpty(message="You need to submit the email id")
 	@Email(message="This is not a valid email format")

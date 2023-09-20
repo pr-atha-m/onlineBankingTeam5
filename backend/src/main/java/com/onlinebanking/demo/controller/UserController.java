@@ -56,7 +56,7 @@ public class UserController {
     }
     
     @GetMapping("/user/by-email")
-	public ResponseEntity<List<User_account>> getUderDetailsByEmail(@RequestParam("emailId") String emailId){
+	public ResponseEntity<List<User_account>> getUserDetailsByEmail(@RequestParam("emailId") String emailId){
 		List<User_account> user = userService.getUserDetailsByEmail(emailId);
 		if(user != null) {
 			return ResponseEntity.ok(user);
@@ -107,7 +107,7 @@ public class UserController {
 	  public ResponseEntity<Object> creatingUserAccount(@Validated @RequestBody User_account UserDetails)throws ResourceNotFound {
 			 
 	        String email=UserDetails.getemailId();
-	        UserDetails.setAcc_bal(0l);
+	        UserDetails.setBalance(0f);
 	        Date date = new Date();
 	        SimpleDateFormat sdf  =  new SimpleDateFormat("yyyy-mm-dd");
 	        String formattedDate = sdf.format(date);
@@ -209,7 +209,8 @@ public class UserController {
 		  float rem_balance = userService.Deposit(acc_no, am);
 		  
 		
-		  return ResponseEntity.ok("Your remaining balance is now " + rem_balance);
+		  String msg= String.format("Your remaining balance is , %s!", rem_balance);
+		  return ResponseEntity.ok("{" + "\"message\": \"" + msg + "\"}");
 	  }
 	
 	  
