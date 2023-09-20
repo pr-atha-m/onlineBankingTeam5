@@ -34,6 +34,7 @@
     text-align: center;
   }
   .accountimg{
+    margin-top: 5%;
     width: 50%;
     height: 70%
   }
@@ -72,5 +73,12 @@ margin-bottom: 30px;;
   }
 
   .dropdown{
-    height: 30px;
+    height: 25px;
+    width:120%;
+  }
+
+  .dropdown1{
+    height: 25px;
+    width:120%;
+    margin-bottom: 0px;
   }

@@ -49,6 +49,7 @@
   
   input[type="email"],
   input[type="password"],
+  input[type="number"],
   input[type="text"] {
     font-size: 15px;
     border: none;

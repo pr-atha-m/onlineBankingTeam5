@@ -50,7 +50,7 @@ const Services = () => {
       title: "Transfer Money",
       description: "Open an Account with Us and Take the First step towards a Secure future",
       iconClass: "fas fa-credit-card",
-      link:"/createaccount"
+      link:"/transfer"
     },
     {
       title: "Withdraw Money",

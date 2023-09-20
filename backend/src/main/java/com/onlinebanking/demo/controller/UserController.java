@@ -208,8 +208,8 @@ public class UserController {
 		  float am  =  Float.parseFloat(amount); 
 		  float rem_balance = userService.Deposit(acc_no, am);
 		  
-		
-		  return ResponseEntity.ok("Your remaining balance is now " + rem_balance);
+		  String msg= String.format("Your new balance, %s!", rem_balance);
+		  return ResponseEntity.ok("{" + "\"message\": \"" + msg + "\"}");
 	  }
 	
 	  
