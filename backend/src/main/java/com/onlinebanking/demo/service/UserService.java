@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.onlinebanking.demo.entity.User;
 import com.onlinebanking.demo.entity.User_account;
+import com.onlinebanking.demo.exceptions.BalanceExceptions;
 import com.onlinebanking.demo.repository.UserAccountRepository;
 import com.onlinebanking.demo.repository.UserRepository;
 
@@ -92,11 +94,17 @@ public class UserService implements UserServiceInterface {
 	}
 
 	@Override
-	public float Withdraw(String acc_no, float amount) {
+
+	public float Withdraw(String acc_no, float amount) throws BalanceExceptions {
+
 		// TODO Auto-generated method stub
 		Optional<User_account> acc= userAccountRepo.findById(acc_no);
-		
-		System.out.print("Hello");
+	
+		if (amount<0)
+		{
+			throw new BalanceExceptions("amount cannot be negative",HttpStatus.BAD_REQUEST);
+		}
+
 		if(acc.get().getBalance() >=amount)
 		{
 			float new_bal = acc.get().getBalance()-amount;

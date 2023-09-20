@@ -13,11 +13,16 @@ import org.springframework.transaction.TransactionException;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.onlinebanking.demo.entity.Transaction;
+
+import com.onlinebanking.demo.entity.User;
 import com.onlinebanking.demo.entity.User_account;
 import com.onlinebanking.demo.exceptions.BalanceExceptions;
+import com.onlinebanking.demo.exceptions.InvalidException;
 import com.onlinebanking.demo.exceptions.ResourceNotFound;
 import com.onlinebanking.demo.repository.TransactionRepository;
 import com.onlinebanking.demo.repository.UserAccountRepository;
+import com.onlinebanking.demo.repository.UserRepository;
+
 
 
 @Service
@@ -29,6 +34,11 @@ public class TransactionService implements TransactionServiceInterface{
 	@Autowired
 	UserAccountRepository accRepo;
 
+	
+	@Autowired
+	UserRepository userRepo;
+
+
 	@Override
 	public Transaction saveTransaction(Transaction trans) {
 		return transRepo.save(trans);
@@ -36,13 +46,24 @@ public class TransactionService implements TransactionServiceInterface{
 
 	@Override
 	@Transactional(rollbackFor = TransactionException.class)
-	public void executeTransaction(Transaction trans) throws ResourceNotFound, BalanceExceptions {
+
+	public void executeTransaction(Transaction trans) throws ResourceNotFound,InvalidException, BalanceExceptions {
 		// TODO Auto-gengetByIdethod stub
+		Optional<User_account> sender = accRepo.findById(trans.getSender_account());
+		String email=sender.get().getemailId();
+		Optional<User> user=userRepo.findById(email);
+		
+		if(user.get().isStatus()==false)
+		{
+			throw new InvalidException("Your User account has been disabled by the admin",HttpStatus.BAD_REQUEST);
+		}
+		
 		DateTimeFormatter date_format= DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		String formatted_date = LocalDate.now().format(date_format);
 		trans.setTrans_date(formatted_date);
 		saveTransaction(trans);
-		Optional<User_account> sender = accRepo.findById(trans.getSender_account());
+
+
 		if(sender!=null)
 		{
 			Optional<User_account> receiver = accRepo.findById(trans.getReceiver_account());
@@ -50,11 +71,20 @@ public class TransactionService implements TransactionServiceInterface{
 			if(receiver ==null)
 			{
 				throw new ResourceNotFound("Account not found with this account number",HttpStatus.NOT_FOUND);
+}
+			else if(sender==receiver)
+			{
+				throw new InvalidException("Transfer cannot done to same account",HttpStatus.BAD_REQUEST);
 			}
 			else {
 			String am = trans.getAmount();
 			
 				float amount = Float.parseFloat(am);
+
+				if(amount<0)
+				{
+					throw new BalanceExceptions("amount cannot be negative",HttpStatus.BAD_REQUEST);
+				}
 				if (sender.get().getBalance() >= amount)
 				{
 					performTransaction(sender, receiver, trans);

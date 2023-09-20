@@ -45,8 +45,9 @@ const Transactions = () => {
         'Content-Type': 'application/json',
 
       }
-      }
+    }
     fetch(`http://localhost:8080/transaction/transactionHistory/${localStorage.getItem("acc_no")}`, options)
+  
     .then((resp)=> resp.json())
     .then((resp) => {
      
@@ -70,22 +71,27 @@ console.log(details)
     
       <Navbar isLoggedIn={true}/>
       <Container>
+
         <h1 style={{ textAlign: "center" }}>Transaction History</h1>
+
         <Table>
           <thead>
             <TableRow>
               <TableHeader>Transaction Id</TableHeader>
+
               <TableHeader>Sender Account</TableHeader>
               <TableHeader>Receiver Account</TableHeader>
               <TableHeader>Amount</TableHeader>
               <TableHeader>Transaction Date</TableHeader>
               <TableHeader>Maturity Remakrs</TableHeader>
               <TableHeader>Transaction mode</TableHeader>
+
             </TableRow>
           </thead>
           <tbody>
             {details.map((account, index) => (
               <TableRow key={index}>
+
                 <TableCell>{account.trans_id}</TableCell>
                 <TableCell>{account.sender_account}</TableCell>
                 <TableCell>{account.receiver_account}</TableCell>
@@ -93,6 +99,8 @@ console.log(details)
                 <TableCell>{account.trans_date}</TableCell>
                 <TableCell>{account.maturity_remarks}</TableCell>
                 <TableCell>{account.trans_mode}</TableCell>
+
+
               </TableRow>
             ))}
           </tbody>

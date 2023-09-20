@@ -19,7 +19,7 @@ public class User {
 	private String user_pwd;
 	private String first_name;
 	private String last_name;
-	
+    private boolean status=true;
 	//This implies that 1 user can have many accounts.
 //	@OneToMany(cascade=CascadeType.ALL)
 //	private Set<Account> accounts;
@@ -28,13 +28,14 @@ public class User {
 		super();
 	}
 	
-	public User(String first_name, String last_name, String user_email, String user_pwd) {
+	public User(String first_name, String last_name, String user_email, String user_pwd,boolean status) {
 		super();
 		
 		this.first_name = first_name;
 		this.user_email = user_email;
 		this.user_pwd = user_pwd;
 		this.last_name=last_name;
+		this.status=status;
 	}
 
 	
@@ -88,4 +89,16 @@ public class User {
 	public void setLast_name(String last_name) {
 		this.last_name = last_name;
 	}
+	
+	 @Column(name="Status",nullable=false)
+		public boolean isStatus() {
+			return status;
+		}
+
+
+
+		public void setStatus(boolean status) {
+			this.status = status;
+		}
+		
 }

@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+
+import { Link } from "react-router-dom";
+
 import './Styles/Admin.css'; // Import your CSS file for styling
 
 function Admin() {
@@ -19,25 +22,96 @@ function Admin() {
     };
 
     return (
-        <div className="admin-card">
-            <h1>Admin Dashboard</h1>
-            <div className="search-container">
-                <input
-                    type="text"
-                    placeholder="Enter Email ID"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                />
-                <button onClick={fetchUserData}>Search</button>
-            </div>
-            {userData && (
-                <div className="user-data">
-                    <h2>User Information</h2>
-                    <p><strong>Email:</strong> {userData.email}</p>
-                    {/* Add more user data fields as needed */}
-                </div>
-            )}
+        <div>
+        <nav style={{ backgroundColor: "#f5f5f5", padding: "7px" }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <div>
+            <Link
+              to="/"
+              style={{
+                textDecoration: "none",
+                color: "#333",
+                fontSize: "24px",
+                marginLeft: "20px",
+              }}
+            >
+             Admin Dashboard
+            </Link>
+          </div>
+          <div>
+            <ul
+              style={{
+                listStyleType: "none",
+                padding: 0,
+                display: "flex",
+                gap: "20px",
+              }}
+            >
+              
+    
+                  <li>
+                    <Link
+                      to="/profile"
+                      style={{ textDecoration: "none", color: "#333" }}
+                    >
+                      Profile
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/"
+                      style={{
+                        textDecoration: "none",
+                        color: "#333",
+                        marginRight: "20px",
+                      }}
+                    >
+                      Logout
+                    </Link>
+                  </li>
+                
+            </ul>
+          </div>
         </div>
+      </nav>
+
+<div>
+    <div className = "body1">
+<div className="container">
+  <img className="loginimg"  alt="" />
+  <div class="vl"></div>
+
+  <div className="searchDetails">
+    <p className="login-title">Search User</p>
+    <form>
+
+<input
+type="email"
+name="email"
+id="email"
+placeholder="Email"
+// onChange={changeHandler}
+// value={user.email}
+className="registerInputs"
+/>
+{/* <p className="formerros" >{formErrors.email}</p> */}
+
+
+<button className= "searchBtn">
+Search
+</button>
+    </form>
+  </div>
+</div>
+</div>
+</div>
+</div>
     );
 }
 

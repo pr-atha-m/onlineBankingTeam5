@@ -17,6 +17,7 @@ import AccountNumber from "./components/AccountNumber";
 import Transfer from "./components/Transfer";
 import Admin from "./components/Admin";
 
+
 function App() {
   const [userstate, setUserState] = useState({});
   return (
@@ -48,11 +49,13 @@ function App() {
           <Route path="/accountdetails" element={<AccountDetails />}></Route>
           <Route path="/withdraw" element={<Withdrawal />}></Route>
           <Route path="/transactions" element={<Transactions />}></Route>
+
           <Route path="/deposit" element={<Addfund />}></Route>
           <Route path="/accountno" element={<AccountNumber/>}></Route>
           <Route path="/transfer" element={<Transfer/>}></Route>
 
           <Route path="/admin" element={<Admin/>}></Route>
+
         </Routes>
       </Router>
     </div>

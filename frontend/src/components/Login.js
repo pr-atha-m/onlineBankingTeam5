@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./Styles/Login.css";
 import loginpic from "../images/login.jpg";
+
 import { useNavigate, NavLink } from "react-router-dom";
 export const Login = ({ setUserState }) => {
   const navigate = useNavigate();
@@ -68,12 +69,14 @@ export const Login = ({ setUserState }) => {
         if(resp.message === "Login Successful"){
           setIsLoggedIn(true);
           localStorage.setItem("emailId",user.email)
+
           if(user.email === "Admin@gmail.com"){
             navigate("/Admin", { replace: true });
           }
           else{
           navigate("/dashboard", { replace: true });
           }
+
         }
         else{ alert(resp.message);
         }

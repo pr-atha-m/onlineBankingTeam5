@@ -9,6 +9,9 @@ import org.springframework.http.ResponseEntity;
 import com.onlinebanking.demo.entity.User;
 import com.onlinebanking.demo.entity.User_account;
 
+import com.onlinebanking.demo.exceptions.BalanceExceptions;
+
+
 //import com.onlinebanking.demo.exception.ResourceNotFoundException;
 
 public interface UserServiceInterface {
@@ -19,7 +22,9 @@ public interface UserServiceInterface {
   
   User_account createUserAccount(User_account user);
   List<User_account> getUserDetailsByEmail(String emailId);
-  float Withdraw (String acc_no, float amount);
+
+  float Withdraw (String acc_no, float amount) throws BalanceExceptions;
+
   float Deposit (String acc_no, float amount);
   
 //  Accounts createAccount(Accounts user);

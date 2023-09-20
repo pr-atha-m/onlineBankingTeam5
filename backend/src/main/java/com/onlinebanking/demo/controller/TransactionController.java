@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.http.HttpStatus;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +21,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.onlinebanking.demo.entity.Transaction;
 import com.onlinebanking.demo.exceptions.BalanceExceptions;
+
+import com.onlinebanking.demo.exceptions.InvalidException;
+import com.onlinebanking.demo.exceptions.NotFoundException;
+
 import com.onlinebanking.demo.exceptions.ResourceNotFound;
 import com.onlinebanking.demo.service.TransactionService;
 
@@ -30,7 +37,9 @@ public class TransactionController {
 	private TransactionService trans_service;
 	
 	@GetMapping("/transactionHistory/{acc_no}")
-	public ResponseEntity<Optional<List<Transaction>>> transHistory (@PathVariable String acc_no)
+
+	public ResponseEntity<Optional<List<Transaction>>> transHistory (@PathVariable String acc_no) throws NotFoundException
+
 	{
 		Optional<List<Transaction>> temp = trans_service.transactionHistory(acc_no);
 		if(temp.isPresent())
@@ -38,7 +47,9 @@ public class TransactionController {
 			return ResponseEntity.ok(temp);
 		}
 		
-		return ResponseEntity.notFound().build();
+
+		throw new NotFoundException("No transactions for this account",HttpStatus.NOT_FOUND);
+
 	}
 	
 	@PostMapping("/save")
@@ -49,15 +60,19 @@ public class TransactionController {
 		trans.setTrans_date(formatted_date);
 		Transaction temp= trans_service.saveTransaction(trans);
 		System.out.println(temp.getTrans_date());
-		return ResponseEntity.ok("Transaction saved");
+
+		return ResponseEntity.ok("{\"message\":\"Transaction saved\"}");
+
 	}
 	
 	
 	@PostMapping("/execute")
-	public ResponseEntity<String> ExecuteTransaction (@RequestBody Transaction trans) throws ResourceNotFound, BalanceExceptions
+
+	public ResponseEntity<String> ExecuteTransaction (@RequestBody Transaction trans) throws ResourceNotFound, BalanceExceptions, InvalidException
 	{
 			trans_service.executeTransaction(trans);
-			return ResponseEntity.ok("Transaction is successfull");
+			return ResponseEntity.ok("{\"message\":\"Transaction is Successful\"}");
+
 	}
 	
 

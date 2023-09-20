@@ -52,10 +52,13 @@ const Services = () => {
       iconClass: "fas fa-credit-card",
       link:"/transfer"
     },
+  
+ 
+
     {
       title: "Withdraw Money",
       description: "Unlock Your Fortune with swift withdrawals -Your Money, Your Way!",
-      iconClass: "fas fa-dollar-sign",
+      iconClass: "fas fa-credit-card",
       link:"/withdraw"
     },
    
