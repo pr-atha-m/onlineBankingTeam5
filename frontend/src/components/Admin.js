@@ -1,25 +1,73 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from "react";
 
 import { Link } from "react-router-dom";
+import searchimg from '../images/search.jpeg'
 
 import './Styles/Admin.css'; // Import your CSS file for styling
+import { useNavigate, NavLink } from "react-router-dom";
 
 function Admin() {
+    const navigate = useNavigate();
     const [email, setEmail] = useState('');
-    const [userData, setUserData] = useState(null);
+    const [formErrors, setFormErrors] = useState({});
+    const [isLoggedIn, setIsLoggedIn] = useState(false)
+    const [isSubmit, setIsSubmit] = useState(false);
+    const [user, setUserDetails] = useState({
+        email: "",
+      });
+    
 
-    const fetchUserData = () => {
-        // You can replace this URL with your backend API endpoint
-        fetch(`/api/users?email=${email}`)
-            .then(response => response.json())
-            .then(data => {
-                setUserData(data);
-            })
-            .catch(error => {
-                console.error('Error fetching user data:', error);
-                setUserData(null);
-            });
-    };
+      const changeHandler = (e) => {
+        const { name, value } = e.target;
+        setUserDetails({
+          ...user,
+          [name]: value,
+        });
+      };
+      const validateForm = (values) => {
+        const error = {};
+        const regex = /^[^\s+@]+@[^\s@]+\.[^\s@]{2,}$/i;
+        if (!values.email) {
+          error.email = "Email is required";
+        } else if (!regex.test(values.email)) {
+          error.email = "Please enter a valid email address";
+        }
+       
+        return error;
+      };
+    
+      const loginHandler = (e) => {
+        e.preventDefault();
+        console.log("hello")
+        setFormErrors(validateForm(user));
+        setIsSubmit(true);
+        localStorage.setItem("emailId",user.email)
+        navigate("/admin/userdetails", { replace: true });
+        // if (!formErrors) {
+    
+        // }
+      };
+    
+      useEffect(() => {
+        if (Object.keys(formErrors).length === 0 && isSubmit) {
+          console.log(user);
+          let options = {
+            method:"GET",
+            headers: {
+              'Content-Type': 'application/json',
+          },
+        
+      
+          }
+          fetch(`http://localhost:8080/admin/userdetails/${user.email}`, options)
+          .then((resp)=>  resp.json())
+          .then((resp) => {
+    
+                    console.log(resp)
+          });
+         
+        }
+      }, [formErrors]);
 
     return (
         <div>
@@ -84,11 +132,14 @@ function Admin() {
 <div>
     <div className = "body1">
 <div className="container">
-  <img className="loginimg"  alt="" />
+  <img className="loginimg" src={searchimg} alt="" />
   <div class="vl"></div>
 
   <div className="searchDetails">
     <p className="login-title">Search User</p>
+
+    <div className="searchForm">
+
     <form>
 
 <input
@@ -96,17 +147,19 @@ type="email"
 name="email"
 id="email"
 placeholder="Email"
-// onChange={changeHandler}
-// value={user.email}
+onChange={changeHandler}
+value={user.email}
 className="registerInputs"
 />
-{/* <p className="formerros" >{formErrors.email}</p> */}
 
 
-<button className= "searchBtn">
+
+<button onClick={loginHandler}className= "searchBtn" >
 Search
 </button>
     </form>
+
+    </div>
   </div>
 </div>
 </div>

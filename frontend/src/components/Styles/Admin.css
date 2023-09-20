@@ -49,5 +49,14 @@ button:hover {
 } */
 
 .searchBtn{
-    margin-top:20px;
+    margin-top:25px;
+}
+
+.searchDetails{
+     margin-left: 90px;
+
+}
+
+.searchForm{
+    margin-top:50%;
 }

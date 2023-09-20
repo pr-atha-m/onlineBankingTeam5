@@ -15,6 +15,7 @@ import Transactions from "./components/Transactions";
 import Addfund from "./components/Addfund";
 import AccountNumber from "./components/AccountNumber";
 import Transfer from "./components/Transfer";
+import UserDetails from "./components/UserDetails";
 import Admin from "./components/Admin";
 
 
@@ -55,6 +56,8 @@ function App() {
           <Route path="/transfer" element={<Transfer/>}></Route>
 
           <Route path="/admin" element={<Admin/>}></Route>
+
+          <Route path="/admin/userdetails" element={<UserDetails/>}></Route>
 
         </Routes>
       </Router>
