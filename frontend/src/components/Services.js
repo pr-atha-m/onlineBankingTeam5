@@ -38,19 +38,24 @@ const Services = () => {
       title: "Transaction History",
       description: "Track your recent transactions and manage your finances.",
       iconClass: "fas fa-history",
-      link:"/transactions"
+      link:"/accountno"
     },
     {
-      title: "Apply for Debit Card",
-      description: "Apply for a Debit card and enjoy exclusive benefits.",
-      iconClass: "fas fa-credit-card",
-      link:"/creditcard"
+      title: "Add Funds",
+      description: "Add Funds Today and watch Your Savings Soar!",
+      iconClass: "fas fa-dollar-sign",
+      link:"/deposit"
     },
-
+    {
+      title: "Transfer Money",
+      description: "Open an Account with Us and Take the First step towards a Secure future",
+      iconClass: "fas fa-credit-card",
+      link:"/createaccount"
+    },
     {
       title: "Withdraw Money",
       description: "Unlock Your Fortune with swift withdrawals -Your Money, Your Way!",
-      iconClass: "fas fa-credit-card",
+      iconClass: "fas fa-dollar-sign",
       link:"/withdraw"
     },
    

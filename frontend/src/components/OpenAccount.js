@@ -162,6 +162,7 @@ const Register = () => {
               <select
                 id="dropdown"
                 value={selectedOption}
+                className="dropdown"
                 onChange={handleOptionChange}
               >
                 <option value="">Select An Account Type</option>

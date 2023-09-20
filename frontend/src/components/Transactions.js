@@ -46,7 +46,7 @@ const Transactions = () => {
 
       }
       }
-    fetch(`http://localhost:8080/banking/user/by-email?emailId=${localStorage.getItem("emailId")}`, options)
+    fetch(`http://localhost:8080/transaction/transactionHistory/${localStorage.getItem("acc_no")}`, options)
     .then((resp)=> resp.json())
     .then((resp) => {
      
@@ -70,23 +70,29 @@ console.log(details)
     
       <Navbar isLoggedIn={true}/>
       <Container>
-        <h1 style={{ textAlign: "center" }}>Account Statement</h1>
+        <h1 style={{ textAlign: "center" }}>Transaction History</h1>
         <Table>
           <thead>
             <TableRow>
               <TableHeader>Transaction Id</TableHeader>
-              <TableHeader>Account Type</TableHeader>
-              <TableHeader>Balance</TableHeader>
-              <TableHeader>Account Open Date</TableHeader>
+              <TableHeader>Sender Account</TableHeader>
+              <TableHeader>Receiver Account</TableHeader>
+              <TableHeader>Amount</TableHeader>
+              <TableHeader>Transaction Date</TableHeader>
+              <TableHeader>Maturity Remakrs</TableHeader>
+              <TableHeader>Transaction mode</TableHeader>
             </TableRow>
           </thead>
           <tbody>
             {details.map((account, index) => (
               <TableRow key={index}>
-                <TableCell>{account.acc_no}</TableCell>
-                <TableCell>{account.acc_type}</TableCell>
-                <TableCell>{account.acc_bal}</TableCell>
-                <TableCell>{account.acc_open_date}</TableCell>
+                <TableCell>{account.trans_id}</TableCell>
+                <TableCell>{account.sender_account}</TableCell>
+                <TableCell>{account.receiver_account}</TableCell>
+                <TableCell>{account.amount}</TableCell>
+                <TableCell>{account.trans_date}</TableCell>
+                <TableCell>{account.maturity_remarks}</TableCell>
+                <TableCell>{account.trans_mode}</TableCell>
               </TableRow>
             ))}
           </tbody>

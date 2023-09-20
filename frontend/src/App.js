@@ -12,6 +12,8 @@ import Services from "./components/Services";
 import AccountDetails from "./components/AccountDetails";
 import Withdrawal from "./components/Withdrawal";
 import Transactions from "./components/Transactions";
+import Addfund from "./components/Addfund";
+import AccountNumber from "./components/AccountNumber";
 
 function App() {
   const [userstate, setUserState] = useState({});
@@ -44,6 +46,8 @@ function App() {
           <Route path="/accountdetails" element={<AccountDetails />}></Route>
           <Route path="/withdraw" element={<Withdrawal />}></Route>
           <Route path="/transactions" element={<Transactions />}></Route>
+          <Route path="/deposit" element={<Addfund />}></Route>
+          <Route path="/accountno" element={<AccountNumber/>}></Route>
         </Routes>
       </Router>
     </div>
