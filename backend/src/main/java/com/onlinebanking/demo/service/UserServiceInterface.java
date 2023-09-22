@@ -22,6 +22,7 @@ public interface UserServiceInterface {
   List<User_account> getUserDetailsByEmail(String emailId);
   float Withdraw (String acc_no, float amount) throws BalanceExceptions;
   float Deposit (String acc_no, float amount);
+//User_account updateUser(String user_email, User_account userDetails);
   
 //  Accounts createAccount(Accounts user);
   

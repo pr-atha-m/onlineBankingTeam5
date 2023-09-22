@@ -131,7 +131,7 @@ public class UserService implements UserServiceInterface {
 	
 
 	
-}
+
 //	
 //	@Override
 //	public ResponseEntity<User> updateUser(String user_email ,@Validated@RequestBody User changedUser)
@@ -143,11 +143,18 @@ public class UserService implements UserServiceInterface {
 //	}
 
 //	@Override
-//	public ResponseEntity<User> updateUser(String user_email, User userDetails) {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
-//
+//	public User_account updateUser(String user_email, User_account userDetails) {
+//		Optional<User_account> updateduser=userAccountRepo.findById(user_email);   
+//		updateduser.get().setGross_annual_income(userDetails.getGross_annual_income());
+//		updateduser.get().setOcc_type(userDetails.getOcc_type());
+//		updateduser.get().setPerm_addr(userDetails.getPerm_addr());
+//		updateduser.get().setRes_addr(userDetails.getRes_addr());
+//		updateduser.get().setPhone_no(userDetails.getPhone_no());
+//		updateduser.get().setSource_of_income(userDetails.getSource_of_income());
+//		userAccountRepo.save(updateduser);
+//		
+	}
+
 //	@Override
 //	public Map<String, Boolean> deleteUser(String user_email) {
 //		// TODO Auto-generated method stub

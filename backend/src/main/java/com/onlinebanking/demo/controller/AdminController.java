@@ -149,15 +149,17 @@ public class AdminController {
 	 
 	 
 		
+		
 		@GetMapping("/transactionHistory/{acc_no}")
-		public ResponseEntity<Map<Transaction,String>> transHistory (@RequestParam String acc_no) throws NotFoundException
+		public ResponseEntity<Optional<List<Transaction>>> transHistory (@PathVariable String acc_no) throws NotFoundException
 		{
-			Map<Transaction, String> temp = trans_service.transactionHistory(acc_no);
-			if(temp.isEmpty())
+			Optional<List<Transaction>> temp = trans_service.transactionHistory(acc_no);
+			if(temp.isPresent())
 			{
-			throw new NotFoundException("No transactions for this account",HttpStatus.NOT_FOUND);
+				return ResponseEntity.ok(temp);
 			}
-			return ResponseEntity.ok(temp);
+			
+			throw new NotFoundException("No transactions for this account",HttpStatus.NOT_FOUND);
 		}
 			
 		@PutMapping("/setStatus")

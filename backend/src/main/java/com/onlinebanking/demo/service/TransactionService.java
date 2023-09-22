@@ -114,36 +114,15 @@ public class TransactionService implements TransactionServiceInterface{
 	}
 
 	@Override
-	public Map<Transaction, String> transactionHistory(String acc_no) {
+	public Optional<List<Transaction>> transactionHistory(String acc_no) {
 		// TODO Auto-generated method stub
 		Optional<List<Transaction>> temp = transRepo.findTransactionHistory(acc_no);
-		Map<Transaction, String> trans_type = new HashMap<Transaction, String> ();
-		List<Transaction> x = temp.get();
 		if (temp.isPresent())
 		{
-			for(Transaction i : x)
-			{
-				System.out.println("sender acc"+ i.getSender_account());
-				System.out.println("account number"+ acc_no);
-				boolean y=(i.getSender_account()==acc_no);
-				System.out.println("print"+y);
-				if(i.getSender_account().equals(acc_no))
-				{
-					trans_type.put(i, "Debit");
-					System.out.println("entering 1");
-				}
-				else
-				{
-					trans_type.put(i, "Credit");
-					System.out.println("entering 2");
-				}
-			}
-			
-			
+			return temp;
 		}
-		return trans_type;
+		return Optional.empty();
 	}
-
 	
 	
 

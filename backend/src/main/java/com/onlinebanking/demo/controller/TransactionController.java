@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.gson.Gson;
 import com.onlinebanking.demo.entity.Transaction;
 import com.onlinebanking.demo.exceptions.BalanceExceptions;
 import com.onlinebanking.demo.exceptions.InvalidException;
@@ -34,14 +35,15 @@ public class TransactionController {
 	private TransactionService trans_service;
 	
 	@GetMapping("/transactionHistory/{acc_no}")
-	public ResponseEntity<Map<Transaction,String>> transHistory (@PathVariable String acc_no) throws NotFoundException
+	public ResponseEntity<Optional<List<Transaction>>> transHistory (@PathVariable String acc_no) throws NotFoundException
 	{
-		Map<Transaction, String> temp = trans_service.transactionHistory(acc_no);
-		if(temp.isEmpty())
+		Optional<List<Transaction>> temp = trans_service.transactionHistory(acc_no);
+		if(temp.isPresent())
 		{
-		throw new NotFoundException("No transactions for this account",HttpStatus.NOT_FOUND);
+			return ResponseEntity.ok(temp);
 		}
-		return ResponseEntity.ok(temp);
+		
+		throw new NotFoundException("No transactions for this account",HttpStatus.NOT_FOUND);
 	}
 	
 	@PostMapping("/save")
@@ -62,6 +64,21 @@ public class TransactionController {
 			trans_service.executeTransaction(trans);
 			return ResponseEntity.ok("{\"message\":\"Transaction is Successful\"}");
 	}
+	
+//	@GetMapping("/transactionHistory")
+//	public ResponseEntity<Map<Transaction,String>> transHistory (@PathVariable String acc_no) throws NotFoundException
+//	{
+//		Map<Transaction, String> temp = trans_service.transactionHistory(acc_no);
+////		Gson gson=new Gson();
+////		String json
+//		if(temp.isEmpty())
+//		{
+//		throw new NotFoundException("No transactions for this account",HttpStatus.NOT_FOUND);
+//		}
+//		System.out.println(temp);
+//		return ResponseEntity.ok(temp);
+//		
+//	}
 	
 
 }
