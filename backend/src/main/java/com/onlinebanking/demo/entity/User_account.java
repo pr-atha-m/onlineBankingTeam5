@@ -16,6 +16,7 @@ public class User_account {
 	private int user_id;
 	private String emailId;
 	private String acc_no;
+	private Long acc_bal;
 	private String acc_open_date;
 	private String acc_type;
 	private String phone_no;
@@ -30,7 +31,7 @@ public class User_account {
 	private boolean debit_status;
 	private boolean net_banking;
 	private float balance;
-
+	 private boolean status=true;
 	
 	public User_account() {
 		super();
@@ -39,10 +40,9 @@ public class User_account {
 	
 	
 	
-
 	public User_account(int user_id, String acc_open_date, String emailId, String acc_no, String acc_type, String phone_no, String father_name, String aadhar_no, Date dob,
 			String res_addr, String perm_addr, String occ_type, float gross_annual_income, String source_of_income,
-			boolean debit_status, boolean net_banking, float balance) {
+			boolean debit_status, boolean net_banking, float balance,boolean status) {
 		super();
 		this.user_id = user_id;  
 		this.emailId = emailId;
@@ -61,7 +61,11 @@ public class User_account {
 		this.debit_status = debit_status;
 		this.net_banking = net_banking;
 		this.balance=balance;
-			}
+		this.status=status;
+		
+	}
+	
+	
 
 
 
@@ -235,9 +239,7 @@ public class User_account {
 	}
 
 
-
     @Column(name="Balance",nullable=false)
-
 	public float getBalance() {
 		return balance;
 	}
@@ -248,6 +250,19 @@ public class User_account {
 		this.balance = balance;
 	}
 
+	 @Column(name="Status",nullable=false)
+		public boolean isStatus() {
+			return status;
+		}
+
+
+
+		public void setStatus(boolean status) {
+			this.status = status;
+		}
+
+   
+	
 	
 		
 		

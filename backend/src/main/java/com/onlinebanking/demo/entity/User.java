@@ -28,14 +28,14 @@ public class User {
 		super();
 	}
 	
-	public User(String first_name, String last_name, String user_email, String user_pwd,boolean status) {
+	public User(String first_name, String last_name, String user_email, String user_pwd) {
 		super();
 		
 		this.first_name = first_name;
 		this.user_email = user_email;
 		this.user_pwd = user_pwd;
 		this.last_name=last_name;
-		this.status=status;
+	
 	}
 
 	
@@ -90,15 +90,6 @@ public class User {
 		this.last_name = last_name;
 	}
 	
-	 @Column(name="Status",nullable=false)
-		public boolean isStatus() {
-			return status;
-		}
-
-
-
-		public void setStatus(boolean status) {
-			this.status = status;
-		}
+	
 		
 }

@@ -1,6 +1,7 @@
 package com.onlinebanking.demo.service;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -61,6 +62,9 @@ public class UserService implements UserServiceInterface {
 	@Override
 	public User_account createUserAccount(@Validated @RequestBody User_account user)
 	{
+		DateTimeFormatter date_format= DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		String formatted_date = LocalDate.now().format(date_format);
+		user.setAcc_open_date(formatted_date);
 		user.setAcc_no(generateAccountNumber());
 		return userAccountRepo.save(user) ; 
 	}
@@ -94,17 +98,15 @@ public class UserService implements UserServiceInterface {
 	}
 
 	@Override
-
 	public float Withdraw(String acc_no, float amount) throws BalanceExceptions {
-
 		// TODO Auto-generated method stub
 		Optional<User_account> acc= userAccountRepo.findById(acc_no);
-	
+		
+		System.out.print("Hello");
 		if (amount<0)
 		{
 			throw new BalanceExceptions("amount cannot be negative",HttpStatus.BAD_REQUEST);
 		}
-
 		if(acc.get().getBalance() >=amount)
 		{
 			float new_bal = acc.get().getBalance()-amount;

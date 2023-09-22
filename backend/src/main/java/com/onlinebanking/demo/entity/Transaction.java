@@ -20,6 +20,7 @@ public class Transaction {
 	private String maturity_remarks;
 	private String trans_mode;
 	private String instructions;
+	
 
 	public Transaction() {
 		super();
@@ -36,6 +37,7 @@ public class Transaction {
 		this.maturity_remarks = maturity_remarks;
 		this.trans_mode = trans_mode;
 		this.instructions=instructions;
+		
 	}
 	
 	
