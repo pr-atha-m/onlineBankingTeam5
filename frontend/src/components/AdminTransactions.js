@@ -34,7 +34,7 @@ const TableCell = styled.td`
   border: 1px solid #ddd;
 `;
 
-const Transactions = () => {
+const AdminTransactions = () => {
   const [details,setDetails]=  useState([])
   useEffect(() => {
  
@@ -52,7 +52,7 @@ const Transactions = () => {
     .then((resp) => {
      
     setDetails(resp);
-
+    console.log(resp)
    
       
 
@@ -62,11 +62,8 @@ const Transactions = () => {
 }, []);
 
 
-
-const keys = Object.keys(details);
 console.log(details)
-console.log(keys[0]);
-console.log(details[keys[0]]);
+
 
 
   return (
@@ -92,7 +89,7 @@ console.log(details[keys[0]]);
             </TableRow>
           </thead>
           <tbody>
-            {/* {details.map((account, index) => (
+            {details.map((account, index) => (
               <TableRow key={index}>
 
                 <TableCell>{account.trans_id}</TableCell>
@@ -105,7 +102,7 @@ console.log(details[keys[0]]);
 
 
               </TableRow>
-            ))} */}
+            ))}
           </tbody>
         </Table>
       </Container>
@@ -113,4 +110,4 @@ console.log(details[keys[0]]);
   );
 };
 
-export default Transactions;
+export default AdminTransactions;

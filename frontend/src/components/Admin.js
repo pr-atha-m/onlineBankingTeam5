@@ -14,7 +14,7 @@ function Admin() {
     const [isSubmit, setIsSubmit] = useState(false);
     const [user, setUserDetails] = useState({
         email: "",
-      });
+             });
     
 
       const changeHandler = (e) => {
@@ -36,38 +36,42 @@ function Admin() {
         return error;
       };
     
-      const loginHandler = (e) => {
+      const loginHandler = async(e) => {
         e.preventDefault();
         console.log("hello")
         setFormErrors(validateForm(user));
         setIsSubmit(true);
-        localStorage.setItem("emailId",user.email)
-        navigate("/admin/userdetails", { replace: true });
+
+     
+            console.log(user);
+            let options = {
+              method:"GET",
+              headers: {
+                'Content-Type': 'application/json',
+            },
+          
+        
+            }
+            fetch(`http://localhost:8080/admin/userdetails/${user.email}`, options)
+            .then((resp)=>  resp.json())
+            .then((resp) => {
+                console.log(resp)
+                localStorage.setItem("email",resp.user_email)
+                localStorage.setItem("first",resp.first_name)
+                localStorage.setItem("last",resp.last_name)
+                localStorage.setItem("status",resp.status)
+                
+            });
+           
+          
+       
+        navigate("/admin/userdetails", { replace: true, });
         // if (!formErrors) {
     
         // }
       };
     
-      useEffect(() => {
-        if (Object.keys(formErrors).length === 0 && isSubmit) {
-          console.log(user);
-          let options = {
-            method:"GET",
-            headers: {
-              'Content-Type': 'application/json',
-          },
-        
-      
-          }
-          fetch(`http://localhost:8080/admin/userdetails/${user.email}`, options)
-          .then((resp)=>  resp.json())
-          .then((resp) => {
-    
-                    console.log(resp)
-          });
-         
-        }
-      }, [formErrors]);
+  ;
 
     return (
         <div>

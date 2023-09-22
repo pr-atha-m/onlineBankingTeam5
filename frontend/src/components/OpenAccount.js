@@ -121,7 +121,7 @@ const Register = () => {
         },
         body: JSON.stringify({
           emailId: user.emailId,
-    
+          acc_balance:0,
           acc_type: selectedOption,
           phone_no: user.phoneNumber,
           father_name: user.fatherName,
