@@ -15,5 +15,5 @@ public interface TransactionServiceInterface {
 	Transaction saveTransaction (Transaction trans);
 	void executeTransaction (Transaction trans) throws ResourceNotFound, BalanceExceptions, InvalidException;
 	void performTransaction(Optional<User_account> sender_account, Optional<User_account> receiver_account, Transaction trans);
-	Map<Transaction, String> transactionHistory(String acc_no);
+	Optional<List<Transaction>> transactionHistory(String acc_no);
 }

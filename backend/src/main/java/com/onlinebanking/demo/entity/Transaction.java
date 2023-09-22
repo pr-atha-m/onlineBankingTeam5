@@ -4,6 +4,8 @@ import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.google.gson.Gson;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.NotEmpty;
@@ -41,6 +43,14 @@ public class Transaction {
 	}
 	
 	
+	@Override
+	public String toString() {
+	
+		return "trans_id=" + trans_id + ",sender_account=" + sender_account + ",receiver_account="
+				+ receiver_account + ",amount=" + amount + ",trans_date=" + trans_date + "maturity_remarks="
+				+ maturity_remarks + ", rans_mode=" + trans_mode + ", instructions=" + instructions;
+		
+	}
 	@Id
 	@GeneratedValue(strategy= GenerationType.AUTO)
 	@Column(name="trans_id",nullable=false)
