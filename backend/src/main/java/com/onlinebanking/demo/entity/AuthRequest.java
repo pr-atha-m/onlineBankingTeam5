@@ -1,37 +1,33 @@
 package com.onlinebanking.demo.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-/*@Data
-@AllArgsConstructor
-@NoArgsConstructor*/
-
-
 public class AuthRequest {
 	
-	 private String user_email;
-	 private String user_pwd;
-	 public AuthRequest(String user_email, String user_pwd) {
-			super();
-			this.user_email = user_email;
-			this.user_pwd = user_pwd;
-		}
-	 
-	public String getUser_email() {
-		return user_email;
+	private String email;
+	private String pwd;
+	
+	
+	
+	public AuthRequest() {
+		super();
+		// TODO Auto-generated constructor stub
 	}
-	public void setUser_email(String user_email) {
-		this.user_email = user_email;
+	public AuthRequest(String email, String pwd) {
+		super();
+		this.email = email;
+		this.pwd = pwd;
 	}
-	public String getUser_pwd() {
-		return user_pwd;
+	public String getEmail() {
+		return email;
 	}
-	public void setUser_pwd(String user_pwd) {
-		this.user_pwd = user_pwd;
+	public void setEmail(String email) {
+		this.email = email;
 	}
-		
-	  
-
+	public String getPwd() {
+		return pwd;
+	}
+	public void setPwd(String pwd) {
+		this.pwd = pwd;
+	}
+	
+	
 }

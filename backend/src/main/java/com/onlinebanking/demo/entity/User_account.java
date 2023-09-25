@@ -8,13 +8,14 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-
 @Entity
 @Table(name = "User_account")
 public class User_account {
 	
-	private String user_email;
-	private int acc_no;
+	private int user_id;
+	private String emailId;
+	private String acc_no;
+	private String acc_type;
 	private String phone_no;
 	private String father_name;
 	private String aadhar_no;
@@ -26,6 +27,7 @@ public class User_account {
 	private String source_of_income;
 	private boolean debit_status;
 	private boolean net_banking;
+	private float balance;
 	
 	public User_account() {
 		super();
@@ -33,11 +35,14 @@ public class User_account {
 	}
 	
 	
-	public User_account(String user_email, int acc_no, String phone_no, String father_name, String aadhar_no, Date dob,
+	
+	public User_account(int user_id, String emailId, String acc_no, String acc_type, String phone_no, String father_name, String aadhar_no, Date dob,
 			String res_addr, String perm_addr, String occ_type, float gross_annual_income, String source_of_income,
-			boolean debit_status, boolean net_banking) {
+			boolean debit_status, boolean net_banking, float balance) {
 		super();
-		this.user_email = user_email;
+		this.user_id = user_id;  
+		this.emailId = emailId;
+		this.acc_type  = acc_type;
 		this.acc_no = acc_no;
 		this.phone_no = phone_no;
 		this.father_name = father_name;
@@ -50,28 +55,52 @@ public class User_account {
 		this.source_of_income = source_of_income;
 		this.debit_status = debit_status;
 		this.net_banking = net_banking;
+		this.balance=balance;
+	}
+	
+	
+	
+	@GeneratedValue(strategy= GenerationType.IDENTITY)
+	@Column(name = "id",nullable = true)
+	public int getuser_id() {
+		return user_id;
+	}
+		public void setUser_id(int user_id) {
+		this.user_id = user_id;
+	}
+	
+	
+	
+
+	@Column(name = "emailId", nullable = false)
+	@NotEmpty(message="You need to submit the email id")
+	@Email(message="This is not a valid email format")
+	public String getemailId() {
+		return emailId;
+	}
+	
+	public void setemailId(String emailId) {
+		this.emailId = emailId;
+	}
+	
+	@Column(name = "acc_type", nullable = false)
+	@NotEmpty(message="Account Type cannot be null")
+	public String getAcc_type() {
+		return acc_type;
+	}
+
+	public void setAcc_type(String acc_type) {
+		this.acc_type = acc_type;
 	}
 	
 	@Id
-	@Column(name = "user_email", nullable = false)
-	@NotEmpty(message="You need to submit the email id")
-	@Email(message="This is not a valid email format")
-	public String getUser_email() {
-		return user_email;
-	}
-	
-	public void setUser_email(String user_email) {
-		this.user_email = user_email;
-	}
-	
-
 	@Column(name = "acc_no", nullable = false)
-	@NotEmpty(message="Account number cannot be null")
-	public int getAcc_no() {
+	//@NotEmpty(message="Account number cannot be null")
+	public String getAcc_no() {
 		return acc_no;
 	}
 
-	public void setAcc_no(int acc_no) {
+	public void setAcc_no(String acc_no) {
 		this.acc_no = acc_no;
 	}
 	
@@ -183,5 +212,21 @@ public class User_account {
 	public void setNet_banking(boolean net_banking) {
 		this.net_banking = net_banking;
 	}
+
+
+
+	public float getBalance() {
+		return balance;
+	}
+
+
+
+	public void setBalance(float balance) {
+		this.balance = balance;
+	}
+	
+	
+		
+		
 
 }

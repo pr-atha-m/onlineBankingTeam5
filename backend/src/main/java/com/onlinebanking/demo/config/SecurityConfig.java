@@ -1,126 +1,71 @@
 package com.onlinebanking.demo.config;
 
-import com.onlinebanking.demo.filter.JwtFilter;
-import com.onlinebanking.demo.service.CustomUserDetailsService;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.BeanIds;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-
+import com.onlinebanking.demo.repository.UserRepository;
+import com.onlinebanking.demo.security.JwtAuthenticationEntryPoint;
+import com.onlinebanking.demo.security.JwtFilter;
 
 
 @Configuration
-@EnableWebSecurity
-
-public class SecurityConfig extends WebSecurityConfigurerAdapter 
-{
-	
+public class SecurityConfig {
 	
 	@Autowired
-	private CustomUserDetailsService customUserDetailsService;
+    private JwtAuthenticationEntryPoint point;
+    @Autowired
+    private JwtFilter filter;
+    
+    @Autowired
+    private UserDetailsService userDetailsService;
+    
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 	
-	@Autowired
-	private JwtFilter jwtFilter;
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception
+    {
+    	http.csrf(csrf->csrf.disable())
+    		.cors(cors->cors.disable())
+    		.authorizeHttpRequests(auth->auth
+    				.requestMatchers(new AntPathRequestMatcher("/**")).permitAll()
+    				.anyRequest().authenticated())
+    				.exceptionHandling(ex->ex.authenticationEntryPoint(point))
+    				.sessionManagement(sm->sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+    	;
+    	
+    	http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
+    	return http.build();
+    }
 	
 	
-	@Override
-	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		// TODO Auto-generated method stub
-		auth.userDetailsService(customUserDetailsService);
+	
+	 
+	 @Bean 
+	 public DaoAuthenticationProvider doDaoAuthenticationProvider()
+	 {
+		 DaoAuthenticationProvider dao = new DaoAuthenticationProvider();
+		 dao.setUserDetailsService(userDetailsService);
+		 dao.setPasswordEncoder(passwordEncoder);
+		 return dao;
+	 }
+	
 	}
+	
+	
+	
+   
 
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		
-		http.csrf().disable().authorizeRequests()
-      .antMatchers("/authenticate").permitAll()
-     .antMatchers("/home").permitAll()
-               .anyRequest().authenticated()
-              .and().exceptionHandling().and().sessionManagement()
-              .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        
-		
-		http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
-		// TODO Auto-generated method stub
-	}
-	
-	@Bean
-	public PasswordEncoder passwordEncoder()
-	{
-		return NoOpPasswordEncoder.getInstance();
-	}
-	
-	@Bean(name = BeanIds.AUTHENTICATION_MANAGER)
-    @Override
-	public AuthenticationManager authenticationManagerBean() throws Exception
-	{
-		return super.authenticationManagerBean();
-	}
-	
-}
-
-//import com.onlinebanking.demo.*;
-//import com.onlinebanking.demo.filter.JwtFilter;
-//import com.onlinebanking.demo.service.CustomUserDetailsService;
-//
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.context.annotation.Bean;
-//import org.springframework.context.annotation.Configuration;
-//import org.springframework.security.authentication.AuthenticationManager;
-//import org.springframework.security.config.BeanIds;
-//import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-//import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-//import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-//import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
-//import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-//import org.springframework.security.config.http.SessionCreationPolicy;
-//import org.springframework.security.crypto.password.NoOpPasswordEncoder;
-//import org.springframework.security.crypto.password.PasswordEncoder;
-//import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-//
-//@Configuration
-//@EnableWebSecurity
-//public class SecurityConfig extends WebSecurityConfiguration {
-//
-//    @Autowired
-//    private CustomUserDetailsService userDetailsService;
-//
-//    @Autowired
-//    private JwtFilter jwtFilter;
-//
-//    @Override
-//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//        auth.userDetailsService(userDetailsService);
-//    }
-//    @Bean
-//    public PasswordEncoder passwordEncoder(){
-//        return NoOpPasswordEncoder.getInstance();
-//    }
-//
-//    @Bean(name = BeanIds.AUTHENTICATION_MANAGER)
-//    @Override
-//    public AuthenticationManager authenticationManagerBean() throws Exception {
-//        return super.authenticationManagerBean();
-//    }
-//
-//    @Override
-//    protected void configure(HttpSecurity http) throws Exception {
-//        http.csrf().disable().authorizeRequests()
-//        .antMatchers("/authenticate").permitAll()
-//       // .antMatchers("/home").permitAll()
-//                 .anyRequest().authenticated()
-//                .and().exceptionHandling().and().sessionManagement()
-//                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-//        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);;
-//    }
-//}

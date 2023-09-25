@@ -1,9 +1,12 @@
 package com.onlinebanking.demo.entity;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.Set;
 
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -13,7 +16,7 @@ import jakarta.validation.constraints.*;
 
 @Entity
 @Table(name = "User")
-public class User {
+public class User implements UserDetails {
 	
 	private String user_email;
 	private String user_pwd;
@@ -21,8 +24,8 @@ public class User {
 	private String last_name;
 	
 	//This implies that 1 user can have many accounts.
-	@OneToMany(cascade=CascadeType.ALL)
-	private Set<Account> accounts;
+//	@OneToMany(cascade=CascadeType.ALL)
+//	private Set<Account> accounts;
 	
 	public User() {
 		super();
@@ -39,12 +42,12 @@ public class User {
 
 	
 	
-	public Set<Account> getAccounts() {
-		return accounts;
-	}
-	public void setAccounts(Set<Account> accounts) {
-		this.accounts = accounts;
-	}
+//	public Set<Account> getAccounts() {
+//		return accounts;
+//	}
+//	public void setAccounts(Set<Account> accounts) {
+//		this.accounts = accounts;
+//	}
 	
 	
 	@Id
@@ -87,5 +90,47 @@ public class User {
 
 	public void setLast_name(String last_name) {
 		this.last_name = last_name;
+	}
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getPassword() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getUsername() {
+		// TODO Auto-generated method stub
+		return this.user_email;
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		// TODO Auto-generated method stub
+		return true;
 	}
 }
