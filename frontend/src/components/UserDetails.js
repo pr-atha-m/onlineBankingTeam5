@@ -72,6 +72,10 @@ const UserDetails = ({}) => {
   
 }, []);
 
+const handleAnchorClick = (e) => {
+  console.log(e.target.textContent)
+  localStorage.setItem("acc_no",e.target.textContent)
+}
 
 
 const toggleStatus = (index) => {
@@ -162,7 +166,7 @@ const toggleStatus = (index) => {
            
               <TableRow key={account.acc_no}>
 
-                <TableCell><a href="/admin/transactions" className="accNumber">{account.acc_no}</a></TableCell>
+                <TableCell><a href="/admin/transactions" className="accNumber" onClick={handleAnchorClick}>{account.acc_no}</a></TableCell>
                 <TableCell>{account.acc_type}</TableCell>
                 <TableCell>{account.balance}</TableCell>
                 <TableCell>{account.acc_open_date}</TableCell>

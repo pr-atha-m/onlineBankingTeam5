@@ -34,7 +34,7 @@ const TableCell = styled.td`
   border: 1px solid #ddd;
 `;
 
-const AdminTransactions = () => {
+const Transactions = () => {
   const [details,setDetails]=  useState([])
   useEffect(() => {
  
@@ -52,7 +52,7 @@ const AdminTransactions = () => {
     .then((resp) => {
      
     setDetails(resp);
-    console.log(resp)
+
    
       
 
@@ -62,52 +62,72 @@ const AdminTransactions = () => {
 }, []);
 
 
+
+const keys = Object.keys(details);
 console.log(details)
+console.log(keys[0]);
+console.log(details[keys[0]]);
+
+console.log(details)
+if(details.length!=0){
+
+  return ( 
+    <>
+    <Navbar isLoggedIn={true}/>
+  <Container>
+
+    <h1 style={{ textAlign: "center" }}>Transaction History</h1>
+
+    <Table>
+      <thead>
+        <TableRow>
+          <TableHeader>Transaction Id</TableHeader>
+
+          <TableHeader>Sender Account</TableHeader>
+          <TableHeader>Receiver Account</TableHeader>
+          <TableHeader>Amount</TableHeader>
+          <TableHeader>Transaction Date</TableHeader>
+          <TableHeader>Maturity Remakrs</TableHeader>
+          <TableHeader>Transaction mode</TableHeader>
+          <TableHeader>Status</TableHeader>
+
+        </TableRow>
+      </thead>
+      <tbody>
+        {details.map((account, index) => (
+          <TableRow key={index}>
+
+            <TableCell>{account.trans_id}</TableCell>
+            <TableCell>{account.sender_account}</TableCell>
+            <TableCell>{account.receiver_account}</TableCell>
+            <TableCell>{account.amount}</TableCell>
+            <TableCell>{account.trans_date}</TableCell>
+            <TableCell>{account.maturity_remarks}</TableCell>
+            <TableCell>{account.trans_mode}</TableCell>
+            <TableCell>{localStorage.getItem("acc_no")===account.sender_account? (
+              <span style={{color : 'red'}}>Debited</span>
+
+            ): (
+              <span style={{color : 'green'}}>Credited</span>
+            )}</TableCell>
 
 
-
+          </TableRow>
+        ))}
+      </tbody>
+    </Table>
+  </Container>
+  </>)
+}
+else{
   return (
     <>
-    
-      <Navbar isLoggedIn={true}/>
-      <Container>
-
-        <h1 style={{ textAlign: "center" }}>Transaction History</h1>
-
-        <Table>
-          <thead>
-            <TableRow>
-              <TableHeader>Transaction Id</TableHeader>
-
-              <TableHeader>Sender Account</TableHeader>
-              <TableHeader>Receiver Account</TableHeader>
-              <TableHeader>Amount</TableHeader>
-              <TableHeader>Transaction Date</TableHeader>
-              <TableHeader>Maturity Remakrs</TableHeader>
-              <TableHeader>Transaction mode</TableHeader>
-
-            </TableRow>
-          </thead>
-          <tbody>
-            {details.map((account, index) => (
-              <TableRow key={index}>
-
-                <TableCell>{account.trans_id}</TableCell>
-                <TableCell>{account.sender_account}</TableCell>
-                <TableCell>{account.receiver_account}</TableCell>
-                <TableCell>{account.amount}</TableCell>
-                <TableCell>{account.trans_date}</TableCell>
-                <TableCell>{account.maturity_remarks}</TableCell>
-                <TableCell>{account.trans_mode}</TableCell>
-
-
-              </TableRow>
-            ))}
-          </tbody>
-        </Table>
-      </Container>
-    </>
-  );
+    <Navbar isLoggedIn={true}/><h1>No transaction record found</h1>
+    </>)
+}
+     
+  
+  
 };
 
-export default AdminTransactions;
+export default Transactions;

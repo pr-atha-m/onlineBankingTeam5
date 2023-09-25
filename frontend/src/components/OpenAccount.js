@@ -8,10 +8,12 @@ const Register = () => {
 
   const [formErrors, setFormErrors] = useState({});
   const [isSubmit, setIsSubmit] = useState(false);
-  const min = 100000000000;
-  const max = 999999999999;
+ 
   const [selectedOption, setSelectedOption] = useState("");
-  let acc_no = Math.floor(Math.random() * (max - min + 1)) + min;
+
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupContent, setPopupContent] = useState({ type: null, message: '' });
+  
   const options = ["Savings", "Salary", "Current", "NRI"];
   const [user, setUserDetails] = useState({
     emailId: "",
@@ -29,6 +31,17 @@ const Register = () => {
     netBanking: false,
   });
 
+
+  const showAlertPopup = (type, message) => {
+    setPopupContent({ type, message });
+    setShowPopup(true);
+  };
+
+  // Function to hide the alert popup
+  const hideAlertPopup = () => {
+    setShowPopup(false);
+    navigate("/dashboard", { replace: true });
+  };
   const changeHandler = (e) => {
     const { name, value } = e.target;
     setUserDetails({
@@ -48,7 +61,10 @@ const Register = () => {
     const phoneRegex = /^\d{10}$/;
     const adhaarRegex = /^\d{12}$/;
     const incomeRegex = /^[0-9]+(\.[0-9]{1,2})?$/;
-    if (!values.emailId) {
+    if(!selectedOption){
+      error.accountType = "Please Select An Account Type";
+    }
+    else if (!values.emailId) {
       error.emailId = "Email is required";
     } else if (!regexEmail.test(values.emailId)) {
       error.emailId = "This is not a valid email format!";
@@ -75,31 +91,7 @@ const Register = () => {
     } else if (!values.sourceOfIncome) {
       error.sourceOfIncome = "Source of Income is required!";
     }
-    // const phoneRegex = /^\d{10}$/;
-    // if (!values.email) {
-    //   error.fname = "First Name is required";
-    // }
-    // else if (!values.lname) {
-    //   error.lname = "Last Name is required";
-    // }
-    // else if (!values.email) {
-
-    //   error.email = "Email is required";
-    // } else if (!regexEmail.test(values.email)) {
-    //   error.email = "This is not a valid email format!";
-    // }
-    // else if (!values.password) {
-    //   error.password = "Password is required";
-    // } else if (values.password.length < 4) {
-    //   error.password = "Password must be more than 4 characters";
-    // } else if (values.password.length > 10) {
-    //   error.password = "Password cannot exceed more than 10 characters";
-    // }
-    // else if (!values.cpassword) {
-    //   error.cpassword = "Confirm Password is required";
-    // } else if (values.cpassword !== values.password) {
-    //   error.cpassword = "Confirm password and password should be same";
-    // }
+   
     return error;
   };
   const signupHandler = (e) => {
@@ -120,28 +112,36 @@ const Register = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          emailId: user.emailId,
-          acc_balance:0,
-          acc_type: selectedOption,
-          phone_no: user.phoneNumber,
-          father_name: user.fatherName,
-          aadhar_no: user.adhaarNumber,
-          dob: user.dateOfBirth,
-          res_addr: user.residentialAddress,
-          perm_addr: user.permanentAddress,
-          occ_type: user.occupationType,
-          gross_annual_income: user.grossAnnualIncome,
-          source_of_income: user.sourceOfIncome,
-          debit_status: false,
-          net_banking: false,
+          "emailId": user.emailId,
+          "acc_type": selectedOption,
+          "phone_no": user.phoneNumber,
+          "father_name": user.fatherName,
+          "aadhar_no": user.adhaarNumber,
+          "dob": user.dateOfBirth,
+          "res_addr": user.residentialAddress,
+          "perm_addr": user.permanentAddress,
+          "occ_type": user.occupationType,
+          "gross_annual_income": user.grossAnnualIncome,
+          "source_of_income": user.sourceOfIncome,
+          "debit_status": false,
+          "net_banking": false,
         }),
       };
       fetch("http://localhost:8080/banking/user/open", options)
         .then((resp) => resp.json())
         .then((resp) => {
-          alert("Account Opened");
+          console.log(resp);
+       
+        // Replace with your actual success/error logic
+        if (resp.status !== 400) {
+          showAlertPopup('success', "Account Opened Successfully");
+         
+           // Update with the actual new balance
+        } else {
+          showAlertPopup('error', "Error");
+        }
+ 
 
-          // navigate("/dashboard", { replace: true });;
         });
     }
   }, [formErrors]);
@@ -172,6 +172,8 @@ const Register = () => {
                   </option>
                 ))}
               </select>
+
+              <p className="formerros">{formErrors.accountType}</p>
               <input
                 type="email"
                 name="emailId"
@@ -181,7 +183,7 @@ const Register = () => {
                 value={user.emailId}
                 className="openinputs"
               />
-              <p className="formerros">{formErrors.accountType}</p>
+              <p className="formerros">{formErrors.emailId}</p>
 
               {/* <input
             type="accountType"
@@ -298,6 +300,21 @@ const Register = () => {
           </div>
         </div>
       </div>
+
+      {showPopup && (
+        <div className="popup-container">
+          <div className="popup">
+            <span className="close-button" onClick={hideAlertPopup}>
+              &times;
+            </span>
+            {popupContent.type === 'success' ? (
+              <p className="success">{popupContent.message}</p>
+            ) : (
+              <p className="error">{popupContent.message}</p>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
