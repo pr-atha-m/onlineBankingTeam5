@@ -28,7 +28,7 @@ import com.onlinebanking.demo.service.TransactionService;
 
 @RestController
 @RequestMapping("/transaction")
-@CrossOrigin(origins="http://localhost:8080")
+@CrossOrigin
 public class TransactionController {
 	
 	@Autowired

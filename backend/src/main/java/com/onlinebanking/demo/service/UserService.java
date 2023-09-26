@@ -38,9 +38,9 @@ public class UserService implements UserServiceInterface {
 	private final BCryptPasswordEncoder passwordEncoder=new BCryptPasswordEncoder();
 	
 	@Override
-	public List<User> getUser()
+	public List<User_account> getUser()
 	{
-		return userRepo.findAll();
+		return userAccountRepo.findAll();
 	}
 	
 	@Override

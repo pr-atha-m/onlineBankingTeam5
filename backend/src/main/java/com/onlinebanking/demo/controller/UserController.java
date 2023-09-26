@@ -39,7 +39,7 @@ import com.onlinebanking.demo.service.UserServiceInterface;
 
 @RestController
 @RequestMapping("/banking")
-@CrossOrigin(origins="http://localhost:8080")
+@CrossOrigin
 public class UserController {
 	
 	
@@ -51,7 +51,7 @@ public class UserController {
 	
 	 //To get the details of all users
     @GetMapping(path = "/userdetails", produces = {MediaType.APPLICATION_JSON_VALUE})
-    List<User> users(){
+    List<User_account> users(){
         return userService.getUser();
     }
     

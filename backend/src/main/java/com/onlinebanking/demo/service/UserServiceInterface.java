@@ -13,7 +13,8 @@ import com.onlinebanking.demo.exceptions.BalanceExceptions;
 //import com.onlinebanking.demo.exception.ResourceNotFoundException;
 
 public interface UserServiceInterface {
-	List<User> getUser();
+	List<User_account
+	> getUser();
 	Optional<User> getUserByEmail(String user_email);
 
   User createUser(User user);

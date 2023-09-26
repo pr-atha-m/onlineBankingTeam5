@@ -36,7 +36,7 @@ import com.onlinebanking.demo.service.UserServiceInterface;
 
 @RestController
 @RequestMapping("/admin")
-@CrossOrigin(origins="http://localhost:8080")
+@CrossOrigin
 
 
 public class AdminController {
