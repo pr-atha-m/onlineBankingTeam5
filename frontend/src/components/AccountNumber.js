@@ -64,7 +64,7 @@ const AccountNumber = () => {
 
         <select
                 id="dropdown"
-                className="dropdown"
+                className="dropdown2"
                 value={selectedOption}
                 onChange={handleOptionChange}
               >

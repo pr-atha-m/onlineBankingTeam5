@@ -11,27 +11,30 @@ export const Withdrawal = ({ setUserState }) => {
    
     amount: "",
   });
+
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupContent, setPopupContent] = useState({ type: null, message: '' });
+
+  // Function to show the alert popup with the provided content
+  const showAlertPopup = (type, message) => {
+    setPopupContent({ type, message });
+    setShowPopup(true);
+  };
+
+  // Function to hide the alert popup
+  const hideAlertPopup = () => {
+    setShowPopup(false);
+  };
+
+
   const loginHandler = async (e) => {
     e.preventDefault();
     
     setFormErrors(validateForm(user));
     console.log(user,selectedOption)
+    setIsSubmit(true);
     
-    const options = {
-      method:"PUT",
-      headers: {
-        'Content-Type': 'application/json',
-
-      }
-
-    };
-
-    fetch(`http://localhost:8080/banking/withdraw?acc_no=${selectedOption}&amount=${user.amount}`,options)
-    .then((resp)=> resp.json()
-    .then((resp) => {
-      console.log(resp.message);
-      alert(resp.message);
-    }))
+   
     
   
 
@@ -62,9 +65,36 @@ export const Withdrawal = ({ setUserState }) => {
       
 
     });
+
+    if (Object.keys(formErrors).length === 0 && isSubmit) {
+
+    const options = {
+      method:"PUT",
+      headers: {
+        'Content-Type': 'application/json',
+
+      }
+
+    };
+
+    fetch(`http://localhost:8080/banking/withdraw?acc_no=${selectedOption}&amount=${user.amount}`,options)
+    .then((resp)=> resp.json()
+    .then((resp) => {
+
+      console.log(resp);
+      setTimeout(() => {
+        // Replace with your actual success/error logic
+        if (resp.status !== 400) {
+          showAlertPopup('success', `Withdrawal successful. ${resp.message}`); // Update with the actual new balance
+        } else {
+          showAlertPopup('error', resp.message);
+        }
+      }, 500); 
+    }))
    
+  }
   
-}, []);
+}, [formErrors]);
 
   const [selectedOption, setSelectedOption] = useState("");
   const options = [];
@@ -143,6 +173,21 @@ export const Withdrawal = ({ setUserState }) => {
           </div>
         </div>
       </div>
+
+      {showPopup && (
+        <div className="popup-container">
+          <div className="popup">
+            <span className="close-button" onClick={hideAlertPopup}>
+              &times;
+            </span>
+            {popupContent.type === 'success' ? (
+              <p className="success">{popupContent.message}</p>
+            ) : (
+              <p className="error">{popupContent.message}</p>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

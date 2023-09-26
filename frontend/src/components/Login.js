@@ -70,7 +70,7 @@ export const Login = ({ setUserState }) => {
           setIsLoggedIn(true);
           localStorage.setItem("emailId",user.email)
 
-          if(user.email === "Admin@gmail.com"){
+          if(user.email === "admin@gmail.com"){
             navigate("/Admin", { replace: true });
           }
           else{
@@ -110,7 +110,7 @@ export const Login = ({ setUserState }) => {
           placeholder="Email"
           onChange={changeHandler}
           value={user.email}
-          className="registerInputs"
+          className="loginInputs"
         />
         <p className="formerros" >{formErrors.email}</p>
         <input
@@ -120,7 +120,7 @@ export const Login = ({ setUserState }) => {
           placeholder="Password"
           onChange={changeHandler}
           value={user.password}
-          className="registerInputs"
+          className="loginInputs"
         />
         <p className="formerros">{formErrors.password}</p>
         <button onClick={loginHandler}>

@@ -1,6 +1,7 @@
 import React,{useEffect, useState} from "react";
 import styled from "styled-components";
 import Navbar from "./Navbar";
+import './Styles/Userdetails.css'; // Import your CSS file for styling
 
 const Container = styled.div`
   max-width: 800px;
@@ -34,8 +35,17 @@ const TableCell = styled.td`
   border: 1px solid #ddd;
 `;
 
-const UserDetails = () => {
-  const [details,setDetails]=  useState([])
+const UserDetails = ({}) => {
+  const [userAccounts, setUserAccounts] = useState([]);
+  const [accountStatus, setAccountStatus] = useState([]);
+    // const toggle = () => {
+    //     setCondition(!condition);
+    // }
+
+
+   
+
+
   useEffect(() => {
  
    
@@ -46,13 +56,14 @@ const UserDetails = () => {
 
       }
     }
-    fetch(`http://localhost:8080/transaction/transactionHistory/${localStorage.getItem("acc_no")}`, options)
-  
+    fetch(`http://localhost:8080/admin/useraccounts?emailId=${localStorage.getItem("email")}`, options)
     .then((resp)=> resp.json())
     .then((resp) => {
-     
-    setDetails(resp);
-    console.log(resp)
+        console.log(resp)
+   
+    setUserAccounts(resp);
+    setAccountStatus(resp.map(account => account.status))
+   
    
       
 
@@ -61,8 +72,42 @@ const UserDetails = () => {
   
 }, []);
 
+const handleAnchorClick = (e) => {
+  console.log(e.target.textContent)
+  localStorage.setItem("acc_no",e.target.textContent)
+}
 
-console.log(details)
+
+const toggleStatus = (index) => {
+  // Update the local state
+  const newStatus = [...accountStatus];
+  newStatus[index] = !newStatus[index];
+  setAccountStatus(newStatus);
+
+  // Make a POST request when status is set to false
+
+    // Replace with your API endpoint and request configuration
+    fetch(`http://localhost:8080/admin/setStatus?acc_num=${userAccounts[index].acc_no}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(response => {
+        // Handle the response as needed
+        if (response.status === 200) {
+          // Successful POST
+          console.log("Status Changed")
+        } else {
+          // Handle errors
+          console.log("error changing status")
+        }
+      })
+      .catch(error => {
+        // Handle network errors
+      });
+  
+};
 
 
 
@@ -70,38 +115,83 @@ console.log(details)
     <>
     
       <Navbar isLoggedIn={true}/>
+
+      <div className="user-details">
+      <div className="user-detail">
+        <i className="fas fa-envelope"></i>
+        <span>Email :&nbsp; </span>
+        <span>{localStorage.getItem("email")}</span>
+      </div>
+      <div className="user-detail">
+        <i className="fas fa-user"></i>
+        <span>Name :&nbsp; </span>
+        <span>{localStorage.getItem("first")}</span>
+      </div>
+      <div className="user-detail">
+        <i className="fas fa-phone"></i>
+        <span>Phone :&nbsp; </span>
+        <span>{userAccounts[0]?userAccounts[0].phone_no:""}</span>
+      </div>
+      <div className="user-detail">
+        <i className="fas fa-id-card"></i>
+        <span>Aadhar :&nbsp; </span>
+        <span>{userAccounts[0]?userAccounts[0].aadhar_no:""}</span>
+      </div>
+    </div>
+ 
+      
       <Container>
 
-        <h1 style={{ textAlign: "center" }}>Transaction History</h1>
+
+        <h1 style={{ textAlign: "center" }}>Account Details</h1>
 
         <Table>
           <thead>
             <TableRow>
-              <TableHeader>Email</TableHeader>
 
               <TableHeader>Account Number</TableHeader>
-              <TableHeader>First Name</TableHeader>
-              <TableHeader>Last Name</TableHeader>
-              <TableHeader>Phone</TableHeader>
+              <TableHeader>Account Type</TableHeader>
+              <TableHeader>Account Balance</TableHeader>
+              <TableHeader>Account Open Date</TableHeader>
+              <TableHeader>Account Status</TableHeader>
+              
              
 
             </TableRow>
           </thead>
           <tbody>
-            {details.map((account, index) => (
-              <TableRow key={index}>
+          {userAccounts.map((account, index) => (
+           
 
-                <TableCell>{account.trans_id}</TableCell>
-                <TableCell>{account.sender_account}</TableCell>
-                <TableCell>{account.receiver_account}</TableCell>
-                <TableCell>{account.amount}</TableCell>
-                <TableCell>{account.trans_date}</TableCell>
-                <TableCell>{account.maturity_remarks}</TableCell>
-                <TableCell>{account.trans_mode}</TableCell>
+           
+              <TableRow key={account.acc_no}>
+
+                <TableCell><a href="/admin/transactions" className="accNumber" onClick={handleAnchorClick}>{account.acc_no}</a></TableCell>
+                <TableCell>{account.acc_type}</TableCell>
+                <TableCell>{account.balance}</TableCell>
+                <TableCell>{account.acc_open_date}</TableCell>
+               <TableCell>
+                <label>
+                  <input
+                  type = "checkbox"
+                   checked = {accountStatus[index]} 
+                   onChange = {() => toggleStatus(index) }
+
+                   />
+
+                   {accountStatus[index] ? 'Active' : 'Inactive'}
+
+                  </label>
+
+               </TableCell>
+             
 
 
               </TableRow>
+             
             ))}
+
+           
           </tbody>
         </Table>
       </Container>

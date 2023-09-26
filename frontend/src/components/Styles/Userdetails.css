@@ -1,0 +1,93 @@
+
+
+  .accNumber{
+    text-decoration:underline;
+  }
+
+
+
+  h3{
+    font-family: Georgia, "Times New Roman", Times, serif;
+  }
+  
+  
+  
+  h2 {
+    font-size: 1.5rem;
+    margin: 0;
+  }
+  
+  p {
+    font-size: 1rem;
+    margin: 0;
+  }
+
+
+
+  .toggle-button{
+    width: 60px;
+    height:30px;
+    background-color:#ccc;
+    position:relative;
+    border-radius:15px;
+    cursor:pointer;
+
+  }
+
+
+  .toggle-silder{
+    width:30px;
+    height:30px;
+    background-color: #fff;
+    position: absolute;
+    border-radius:50%;
+    transition: transform 0.3s ease-in-out background-color 0.3s ease-in-out;
+
+
+  }
+
+
+  .toggle-slider.on{
+    transform: translateX(30px);
+    background-color: #4CAF50;
+  }
+  .user-details {
+    width: 100%; /* Take full width of the page */
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    background-color: #f5f5f5;
+    border-radius: 0; /* Remove border-radius */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .user-detail {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+
+  }
+  
+  .user-detail i {
+    font-size: 24px;
+    margin-right: 10px;
+    color: #007BFF;
+  }
+  
+  .user-detail span {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  /* Style the heading (if used in the same component) */
+  h1 {
+    text-align: center;
+    color: #007BFF;
+    margin-bottom: 20px;
+  }
+  
+  /* Optional: Add hover effect on icons */
+  .user-detail i:hover {
+    color: #FF5722;
+  }
