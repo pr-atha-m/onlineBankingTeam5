@@ -2,6 +2,7 @@ import React from "react";
 import ServiceCard from "./ServiceCard";
 import styled from "styled-components";
 import Navbar from "./Navbar";
+import Footer from "./Footer";
 
 const CardRow = styled.div`
   display: flex;
@@ -20,6 +21,8 @@ const CenteredContainer = styled.div`
 
 
 const Services = () => {
+  localStorage.setItem("isLogged","false");
+  localStorage.setItem("isAdmin","false");
   const services = [
     {
       title: "10 Tips for  Managing Your Finances",
@@ -60,6 +63,7 @@ const Services = () => {
           
         </CardRow>
       </CenteredContainer>
+      <Footer/>
     </>
   );
 };

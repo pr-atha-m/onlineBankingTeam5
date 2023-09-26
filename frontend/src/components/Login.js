@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from "react";
 import "./Styles/Login.css";
 import loginpic from "../images/login.jpg";
+import Cookies from 'js-cookie';
+
 
 import { useNavigate, NavLink } from "react-router-dom";
-export const Login = ({ setUserState }) => {
+import User from "./User";
+export const Login = () => {
   const navigate = useNavigate();
   const [formErrors, setFormErrors] = useState({});
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [isSubmit, setIsSubmit] = useState(false);
+  
   const [user, setUserDetails] = useState({
     email: "",
     password: "",
@@ -34,18 +38,26 @@ export const Login = ({ setUserState }) => {
     return error;
   };
 
-  const loginHandler = (e) => {
+  const loginHandler = async(e) => {
     e.preventDefault();
     setFormErrors(validateForm(user));
     setIsSubmit(true);
+
+   
+
+
     // if (!formErrors) {
 
     // }
   };
 
   useEffect(() => {
+    if(Cookies.get("myCookie")){
+        navigate("/service")
+    }
     if (Object.keys(formErrors).length === 0 && isSubmit) {
       console.log(user);
+      
       let options = {
         method:"POST",
         headers: {
@@ -54,36 +66,45 @@ export const Login = ({ setUserState }) => {
         body:JSON.stringify(
          
           {
-              "user_email":user.email,
-              "user_pwd":user.password
+              "email":user.email,
+              "pwd":user.password
           
           }
         
         )
   
       }
-      fetch("http://localhost:8080/banking/validate", options)
-      .then((resp)=>  resp.json())
-      .then((resp) => {
-       
-        if(resp.message === "Login Successful"){
-          setIsLoggedIn(true);
-          localStorage.setItem("emailId",user.email)
+      fetch("http://localhost:8080/authentication/login", options)
 
-          if(user.email === "admin@gmail.com"){
-            navigate("/Admin", { replace: true });
+      .then((resp) => resp.json())
+      .then((resp) => {
+        console.log(resp)
+          if(resp.token){
+            // localStorage.setItem("emailId", user.email);
+            Cookies.set('emailId', user.email)
+            Cookies.set('myCookie', resp.token, {expires:1});
+
+         
+          
+       
+            navigate('/service')
           }
           else{
-          navigate("/dashboard", { replace: true });
+            alert("Invalid Credentials")
           }
+  
+     
 
-        }
-        else{ alert(resp.message);
-        }
-        setUserState(resp.user);
+      })
+
+
+      
+     
+
+      
         
 
-      });
+    
      
     }
   }, [formErrors]);

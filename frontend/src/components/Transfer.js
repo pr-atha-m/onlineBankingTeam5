@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate, NavLink } from "react-router-dom";
 import transferpic from "../images/transfer.jpeg";
 import "./Styles/OpenAccount.css";
+import Cookies from "js-cookie";
 const Transfer = () => {
   const navigate = useNavigate();
 
@@ -88,12 +89,16 @@ const options1 = [];
   };
 
   useEffect(() => {
+    if(!Cookies.get('myCookie')){
+      navigate('/login')
+  }
     if (Object.keys(formErrors).length === 0 && isSubmit) {
       console.log(user);
       let options = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          'Authorization' :  `Bearer ${Cookies.get("myCookie")}`
         },
         body: JSON.stringify({
             sender_account: selectedOption1,
@@ -121,7 +126,7 @@ const options1 = [];
   
         }
         }
-      fetch(`http://localhost:8080/banking/user/by-email?emailId=${localStorage.getItem("emailId")}`, options)
+      fetch(`http://localhost:8080/banking/user/by-email?emailId=${Cookies.get("emailId")}`, options)
       .then((resp)=> resp.json())
       .then((resp) => {
        

@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ServiceCard from "./ServiceCard";
 import styled from "styled-components";
 import Navbar from "./Navbar";
-
+import Footer from "./Footer";
+import Cookies from "js-cookie";
+import { useNavigate, NavLink } from "react-router-dom";
 const CardRow = styled.div`
   display: flex; 
   flex-wrap:wrap;
@@ -21,6 +23,7 @@ const CenteredContainer = styled.div`
 
 
 const Services = () => {
+  const navigate = useNavigate();
   const services = [
     {
       title: "Open an Account",
@@ -64,6 +67,39 @@ const Services = () => {
    
     // Add more services here
   ];
+ 
+
+  useEffect(() => {
+    if(!Cookies.get('myCookie')){
+        navigate('/login')
+    }
+
+
+    let options = {
+      method:"GET",
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization' :  `Bearer ${Cookies.get("myCookie")}`
+    },
+  
+
+    }
+    fetch(`http://localhost:8080/admin/userdetails/${Cookies.get("emailId")}`, options)
+    .then((resp)=>  resp.json())
+    .then((resp) => {
+        console.log(resp)
+        localStorage.setItem("first",resp.first_name)
+        localStorage.setItem("last",resp.first_name)
+        localStorage.setItem("status",resp.first_name)
+        Cookies.set("first",resp.first_name);
+        Cookies.set("last",resp.last_name);
+        Cookies.set("status",resp.status);
+        
+    });
+
+   
+  }, [])
+  
   return (
     <>
       <Navbar isLoggedIn={true} />
@@ -83,6 +119,7 @@ const Services = () => {
           
         </CardRow>
       </CenteredContainer>
+      <Footer/>
     </>
   );
 };

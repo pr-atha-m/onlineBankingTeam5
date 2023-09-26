@@ -1,7 +1,20 @@
 import React from "react";
-import { Link } from "react-router-dom";
-
+import "./Styles/Animate.css";
+import { Link, useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 const Navbar = ({ isLoggedIn }) => {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    Cookies.remove("myCookie")
+    Cookies.remove("emailId")
+    Cookies.remove("first")
+    Cookies.remove("last")
+    Cookies.remove("status")
+ 
+    console.log("hello")
+    navigate('/')
+  }
   return (
     <nav style={{ backgroundColor: "#f5f5f5", padding: "7px" }}>
       <div
@@ -33,17 +46,15 @@ const Navbar = ({ isLoggedIn }) => {
               gap: "20px",
             }}
           >
+                
             
-            {isLoggedIn ? (
+            {Cookies.get("myCookie") ? (
               <>
-              <li>
-              <Link
-                to="/service"
-                style={{ textDecoration: "none", color: "#333" }}
-              >
-                Services
-              </Link>
-            </li>
+
+<span className="animate-text"> Welcome, {localStorage.getItem("first")} {localStorage.getItem("last")} ! 
+                 
+                 </span>
+           
                 <li>
                   <Link
                     to="/profile"
@@ -54,7 +65,8 @@ const Navbar = ({ isLoggedIn }) => {
                 </li>
                 <li>
                   <Link
-                    to="/"
+                  to="/"
+                  onClick={handleClick}
                     style={{
                       textDecoration: "none",
                       color: "#333",
@@ -69,7 +81,8 @@ const Navbar = ({ isLoggedIn }) => {
               <>
                 <li>
                   <Link
-                    to="/login"
+                  
+                   to="/login"
                     style={{
                       textDecoration: "none",
                       color: "#333",

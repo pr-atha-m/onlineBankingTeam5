@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./Styles/Withdraw.css";
 
+import Cookies from "js-cookie";
 import { useNavigate, NavLink } from "react-router-dom";
 
 const AccountNumber = () => {
@@ -9,7 +10,7 @@ const AccountNumber = () => {
       const [details,setDetails]=  useState([]);
       const loginHandler =  (e) => {
         e.preventDefault();
-        localStorage.setItem("acc_no",selectedOption)
+        Cookies.set('acc_no',selectedOption);
         navigate("/transactions", { replace: true });
       
     
@@ -21,16 +22,19 @@ const AccountNumber = () => {
       };
     
     useEffect(() => {
-     
+      if(!Cookies.get('myCookie')){
+        navigate('/login')
+    }
        
         let options = {
           method:"GET",
           headers: {
             'Content-Type': 'application/json',
+            'Authorization' :  `Bearer ${Cookies.get("myCookie")}`
     
           }
           }
-        fetch(`http://localhost:8080/banking/user/by-email?emailId=${localStorage.getItem("emailId")}`, options)
+        fetch(`http://localhost:8080/banking/user/by-email?emailId=${Cookies.get("emailId")}`, options)
         .then((resp)=> resp.json())
         .then((resp) => {
          

@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import "./Styles/Withdraw.css";
+import Cookies from "js-cookie";
 import withdrawpic from "../images/withdrawal.jpeg";
 
 import { useNavigate, NavLink } from "react-router-dom";
 export const Withdrawal = ({ setUserState }) => {
-  
+  const navigate = useNavigate();
   const [formErrors, setFormErrors] = useState({});
   const [isSubmit, setIsSubmit] = useState(false);
   const [user, setUserDetails] = useState({
@@ -46,16 +47,20 @@ export const Withdrawal = ({ setUserState }) => {
   };
   const [details,setDetails]=  useState([])
   useEffect(() => {
- 
+    if(!Cookies.get('myCookie')){
+      navigate('/login')
+  }
+
    
     let options = {
       method:"GET",
       headers: {
         'Content-Type': 'application/json',
+        'Authorization' :  `Bearer ${Cookies.get("myCookie")}`
 
       }
       }
-    fetch(`http://localhost:8080/banking/user/by-email?emailId=${localStorage.getItem("emailId")}`, options)
+    fetch(`http://localhost:8080/banking/user/by-email?emailId=${Cookies.get("emailId")}`, options)
     .then((resp)=> resp.json())
     .then((resp) => {
      
@@ -72,6 +77,7 @@ export const Withdrawal = ({ setUserState }) => {
       method:"PUT",
       headers: {
         'Content-Type': 'application/json',
+        'Authorization' :  `Bearer ${Cookies.get("myCookie")}`
 
       }
 

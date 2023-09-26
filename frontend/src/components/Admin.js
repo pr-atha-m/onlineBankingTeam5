@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 import { Link } from "react-router-dom";
 import searchimg from '../images/search.jpeg'
-
+import Cookies from "js-cookie";
 import './Styles/Admin.css'; // Import your CSS file for styling
 import { useNavigate, NavLink } from "react-router-dom";
 
@@ -24,6 +24,10 @@ function Admin() {
           [name]: value,
         });
       };
+      const handleClick = () => {
+        localStorage.setItem("isAdmin", "false");
+        navigate('/')
+      }
       const validateForm = (values) => {
         const error = {};
         const regex = /^[^\s+@]+@[^\s@]+\.[^\s@]{2,}$/i;
@@ -35,6 +39,15 @@ function Admin() {
        
         return error;
       };
+
+      useEffect(() => {
+        if(!Cookies.get('myCookie')){
+          navigate('/login')
+      }
+      
+      
+      }, [])
+      
     
       const loginHandler = async(e) => {
         e.preventDefault();
@@ -48,6 +61,7 @@ function Admin() {
               method:"GET",
               headers: {
                 'Content-Type': 'application/json',
+                'Authorization' :  `Bearer ${Cookies.get("myCookie")}`
             },
           
         
@@ -109,15 +123,17 @@ function Admin() {
     
                   <li>
                     <Link
-                      to="/profile"
+                      to="/admin/viewall"
                       style={{ textDecoration: "none", color: "#333" }}
                     >
-                      Profile
+                      View All Users
                     </Link>
                   </li>
+
                   <li>
                     <Link
                       to="/"
+                      onClick={handleClick}
                       style={{
                         textDecoration: "none",
                         color: "#333",
@@ -127,6 +143,7 @@ function Admin() {
                       Logout
                     </Link>
                   </li>
+                  
                 
             </ul>
           </div>

@@ -1,6 +1,8 @@
 import React,{useEffect, useState} from "react";
 import styled from "styled-components";
 import Navbar from "./Navbar";
+import Cookies from "js-cookie";
+import { useNavigate, NavLink } from "react-router-dom";
 
 const Container = styled.div`
   max-width: 800px;
@@ -36,13 +38,17 @@ const TableCell = styled.td`
 
 const Transactions = () => {
   const [details,setDetails]=  useState([])
+  const navigate = useNavigate();
   useEffect(() => {
  
-   
+    if(!Cookies.get('myCookie')){
+      navigate('/login')
+  }
     let options = {
       method:"GET",
       headers: {
         'Content-Type': 'application/json',
+        'Authorization' :  `Bearer ${Cookies.get("myCookie")}`
 
       }
     }

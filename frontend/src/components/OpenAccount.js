@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, NavLink } from "react-router-dom";
 import createAccountpic from "../images/createAccount.jpg";
+import Cookies from "js-cookie";
 import "./Styles/OpenAccount.css";
 const Register = () => {
   const navigate = useNavigate();
@@ -104,12 +105,16 @@ const Register = () => {
   };
 
   useEffect(() => {
+    if(!Cookies.get('myCookie')){
+      navigate('/login')
+  }
     if (Object.keys(formErrors).length === 0 && isSubmit) {
       console.log(user);
       let options = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          'Authorization' :  `Bearer ${Cookies.get("myCookie")}`
         },
         body: JSON.stringify({
           "emailId": user.emailId,

@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import "./Styles/Withdraw.css";
+import Cookies from 'js-cookie';
 import "./Styles/Alert.css"
 import withdrawpic from "../images/withdrawal.jpeg";
 
 import { useNavigate, NavLink } from "react-router-dom";
 export const Addfund = ({ setUserState }) => {
-  
+  const navigate = useNavigate();
   const [formErrors, setFormErrors] = useState({});
   const [isSubmit, setIsSubmit] = useState(false);
   const [user, setUserDetails] = useState({
@@ -45,12 +46,15 @@ export const Addfund = ({ setUserState }) => {
   };
   const [details,setDetails]=  useState([])
   useEffect(() => {
- 
+  if(!Cookies.get('myCookie')){
+        navigate('/login')
+    }
    
     let options = {
       method:"GET",
       headers: {
         'Content-Type': 'application/json',
+        'Authorization' :  `Bearer ${Cookies.get("myCookie")}`
 
       }
       }
@@ -71,6 +75,7 @@ export const Addfund = ({ setUserState }) => {
         method:"PUT",
         headers: {
           'Content-Type': 'application/json',
+          'Authorization' :  `Bearer ${Cookies.get("myCookie")}`
   
         }
   

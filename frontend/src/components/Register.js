@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, NavLink } from "react-router-dom";
 import signuppic from '../images/signup.jpg'
+import Footer from "./Footer";
 import './Styles/Register.css'
 const Register = () => {
   const navigate = useNavigate();
@@ -25,6 +26,7 @@ const Register = () => {
   };
 
   const validateForm = (values) => {
+
     const error = {};
     const regex = /^[^\s+@]+@[^\s@]+\.[^\s@]{2,}$/i;
     if (!values.fname) {
@@ -88,12 +90,13 @@ const Register = () => {
        
         console.log("Registration Success")
         
-        navigate("/login", { replace: true });;
+        navigate("/login", { replace: true });
 
       });
     }
   }, [formErrors]);
   return (
+    <>
     <div className="body1">
     <div>
       <div className="container1">
@@ -166,6 +169,9 @@ const Register = () => {
       </div>
     </div>
   </div>
+
+  <Footer/>
+  </>
   );
 };
 export default Register;

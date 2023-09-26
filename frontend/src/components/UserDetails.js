@@ -1,8 +1,9 @@
 import React,{useEffect, useState} from "react";
 import styled from "styled-components";
 import Navbar from "./Navbar";
+import Cookies from "js-cookie";
 import './Styles/Userdetails.css'; // Import your CSS file for styling
-
+import { useNavigate, NavLink } from "react-router-dom";
 const Container = styled.div`
   max-width: 800px;
   margin: 0 auto;
@@ -38,6 +39,7 @@ const TableCell = styled.td`
 const UserDetails = ({}) => {
   const [userAccounts, setUserAccounts] = useState([]);
   const [accountStatus, setAccountStatus] = useState([]);
+  const navigate = useNavigate();
     // const toggle = () => {
     //     setCondition(!condition);
     // }
@@ -48,15 +50,19 @@ const UserDetails = ({}) => {
 
   useEffect(() => {
  
+    if(!Cookies.get('myCookie')){
+      navigate('/login')
+  }
    
     let options = {
       method:"GET",
       headers: {
         'Content-Type': 'application/json',
+        'Authorization' :  `Bearer ${Cookies.get("myCookie")}`
 
       }
     }
-    fetch(`http://localhost:8080/admin/useraccounts?emailId=${localStorage.getItem("email")}`, options)
+    fetch(`http://localhost:8080/admin/useraccounts?emailId=${Cookies.get("email")}`, options)
     .then((resp)=> resp.json())
     .then((resp) => {
         console.log(resp)
@@ -91,6 +97,7 @@ const toggleStatus = (index) => {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization' :  `Bearer ${Cookies.get("myCookie")}`
       },
     })
       .then(response => {
