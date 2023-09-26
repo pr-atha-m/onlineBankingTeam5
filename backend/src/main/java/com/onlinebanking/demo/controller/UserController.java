@@ -201,11 +201,15 @@ public class UserController {
 	  
 	  
 	  @PutMapping ("/deposit")
-	  public ResponseEntity<String> Depoist(@RequestParam String acc_no, @RequestParam String amount) 
+	  public ResponseEntity<String> Deposit(@RequestParam String acc_no, @RequestParam String amount) throws InvalidException 
 	  {
 		  
 		  System.out.print(amount);
 		  float am  =  Float.parseFloat(amount); 
+		  if(am<0)
+		  {
+			  throw new InvalidException("Amount cannot be negative",HttpStatus.BAD_REQUEST);
+		  }
 		  float rem_balance = userService.Deposit(acc_no, am);
 		  
 		
