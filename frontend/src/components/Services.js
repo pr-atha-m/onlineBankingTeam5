@@ -88,16 +88,18 @@ const Services = () => {
     .then((resp)=>  resp.json())
     .then((resp) => {
         console.log(resp)
-        localStorage.setItem("first",resp.first_name)
-        localStorage.setItem("last",resp.first_name)
-        localStorage.setItem("status",resp.first_name)
+
+
         Cookies.set("first",resp.first_name);
         Cookies.set("last",resp.last_name);
         Cookies.set("status",resp.status);
-        
+     
     });
 
-   
+    if(!Cookies.get("first")){
+    window.location.reload();
+    }
+
   }, [])
   
   return (

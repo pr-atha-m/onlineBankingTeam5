@@ -51,7 +51,7 @@ const Navbar = ({ isLoggedIn }) => {
             {Cookies.get("myCookie") ? (
               <>
 
-<span className="animate-text"> Welcome, {localStorage.getItem("first")} {localStorage.getItem("last")} ! 
+<span className="animate-text"> Welcome, {Cookies.get("first")} {Cookies.get("last")} ! 
                  
                  </span>
            
