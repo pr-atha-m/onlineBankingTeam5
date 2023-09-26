@@ -21,8 +21,7 @@ const CenteredContainer = styled.div`
 
 
 const Services = () => {
-  localStorage.setItem("isLogged","false");
-  localStorage.setItem("isAdmin","false");
+
   const services = [
     {
       title: "10 Tips for  Managing Your Finances",
@@ -46,7 +45,7 @@ const Services = () => {
   ];
   return (
     <>
-      <Navbar isLoggedIn={false} />
+      <Navbar />
       <CenteredContainer>
         <CardRow>
         

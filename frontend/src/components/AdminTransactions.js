@@ -2,6 +2,7 @@ import React,{useEffect, useState} from "react";
 import styled from "styled-components";
 import Navbar from "./Navbar";
 import Cookies from "js-cookie";
+import { Link } from "react-router-dom";
 import { useNavigate, NavLink } from "react-router-dom";
 
 const Container = styled.div`
@@ -39,6 +40,15 @@ const TableCell = styled.td`
 const Transactions = () => {
   const [details,setDetails]=  useState([])
   const navigate = useNavigate();
+  const handleClick = () => {
+    Cookies.remove("myCookie")
+    Cookies.remove("emailId")
+    Cookies.remove("first")
+    Cookies.remove("last")
+    Cookies.remove("status")
+    Cookies.remove("searchEmail");
+    navigate('/')
+  }
   useEffect(() => {
  
     if(!Cookies.get('myCookie')){
@@ -79,7 +89,66 @@ if(details.length!=0){
 
   return ( 
     <>
-    <Navbar isLoggedIn={true}/>
+    <nav style={{ backgroundColor: "#f5f5f5", padding: "7px" }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <div>
+            <Link
+              to="/"
+              style={{
+                textDecoration: "none",
+                color: "#333",
+                fontSize: "24px",
+                marginLeft: "20px",
+              }}
+            >
+             Admin Dashboard
+            </Link>
+          </div>
+          <div>
+            <ul
+              style={{
+                listStyleType: "none",
+                padding: 0,
+                display: "flex",
+                gap: "20px",
+              }}
+            >
+              
+    
+                  <li>
+                    <Link
+                      to="/admin/viewall"
+                      style={{ textDecoration: "none", color: "#333" }}
+                    >
+                      View All Users
+                    </Link>
+                  </li>
+
+                  <li>
+                    <Link
+                      to="/"
+                      onClick={handleClick}
+                      style={{
+                        textDecoration: "none",
+                        color: "#333",
+                        marginRight: "20px",
+                      }}
+                    >
+                      Logout
+                    </Link>
+                  </li>
+                  
+                
+            </ul>
+          </div>
+        </div>
+      </nav>
   <Container>
 
     <h1 style={{ textAlign: "center" }}>Transaction History</h1>

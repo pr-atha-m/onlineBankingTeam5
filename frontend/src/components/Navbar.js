@@ -11,6 +11,7 @@ const Navbar = ({ isLoggedIn }) => {
     Cookies.remove("first")
     Cookies.remove("last")
     Cookies.remove("status")
+    Cookies.remove("searchEmail")
  
     console.log("hello")
     navigate('/')

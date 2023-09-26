@@ -9,6 +9,8 @@ const Register = () => {
 
   const [formErrors, setFormErrors] = useState({});
   const [isSubmit, setIsSubmit] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupContent, setPopupContent] = useState({ type: null, message: '' });
   const [user, setUserDetails] = useState({
     fname: "",
     lname: "",
@@ -23,6 +25,16 @@ const Register = () => {
       ...user,
       [name]: value,
     });
+  };
+  const showAlertPopup = (type, message) => {
+    setPopupContent({ type, message });
+    setShowPopup(true);
+  };
+
+  // Function to hide the alert popup
+  const hideAlertPopup = () => {
+    setShowPopup(false);
+    navigate("/", { replace: true });
   };
 
   const validateForm = (values) => {
@@ -88,9 +100,9 @@ const Register = () => {
       .then((resp)=>  resp.json())
       .then((resp) => {
        
-        console.log("Registration Success")
+       
+        showAlertPopup('success', "Account Opened Successfully");
         
-        navigate("/login", { replace: true });
 
       });
     }
@@ -168,6 +180,20 @@ const Register = () => {
         </div>
       </div>
     </div>
+    {showPopup && (
+        <div className="popup-container">
+          <div className="popup">
+            <span className="close-button" onClick={hideAlertPopup}>
+              &times;
+            </span>
+            {popupContent.type === 'success' ? (
+              <p className="success">{popupContent.message}</p>
+            ) : (
+              <p className="error">{popupContent.message}</p>
+            )}
+          </div>
+        </div>
+      )}
   </div>
 
   <Footer/>

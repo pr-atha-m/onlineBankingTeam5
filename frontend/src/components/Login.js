@@ -86,8 +86,12 @@ export const Login = () => {
 
          
           
-       
+              if(user.email === "admin@gmail.com"){
+                navigate("/admin");
+              }
+              else{
             navigate('/service')
+              }
           }
           else{
             alert("Invalid Credentials")

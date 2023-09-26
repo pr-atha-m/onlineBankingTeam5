@@ -2,6 +2,7 @@ import React,{useEffect, useState} from "react";
 import styled from "styled-components";
 import Navbar from "./Navbar";
 import Cookies from "js-cookie";
+import { Link } from "react-router-dom";
 import './Styles/Userdetails.css'; // Import your CSS file for styling
 import { useNavigate, NavLink } from "react-router-dom";
 const Container = styled.div`
@@ -45,7 +46,15 @@ const UserDetails = ({}) => {
     // }
 
 
-   
+    const handleClick = () => {
+      Cookies.remove("searchEmail");
+      Cookies.remove("myCookie")
+      Cookies.remove("emailId")
+      Cookies.remove("first")
+      Cookies.remove("last")
+      Cookies.remove("status")
+      navigate('/')
+    }
 
 
   useEffect(() => {
@@ -53,7 +62,10 @@ const UserDetails = ({}) => {
     if(!Cookies.get('myCookie')){
       navigate('/login')
   }
-   
+   else if(!Cookies.get("searchEmail")){
+    window.location.reload();
+   }
+
     let options = {
       method:"GET",
       headers: {
@@ -62,7 +74,7 @@ const UserDetails = ({}) => {
 
       }
     }
-    fetch(`http://localhost:8080/admin/useraccounts?emailId=${Cookies.get("email")}`, options)
+    fetch(`http://localhost:8080/admin/useraccounts?emailId=${Cookies.get("searchEmail")}`, options)
     .then((resp)=> resp.json())
     .then((resp) => {
         console.log(resp)
@@ -121,18 +133,77 @@ const toggleStatus = (index) => {
   return (
     <>
     
-      <Navbar isLoggedIn={true}/>
+    <nav style={{ backgroundColor: "#f5f5f5", padding: "7px" }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <div>
+            <Link
+              to="/"
+              style={{
+                textDecoration: "none",
+                color: "#333",
+                fontSize: "24px",
+                marginLeft: "20px",
+              }}
+            >
+             Admin Dashboard
+            </Link>
+          </div>
+          <div>
+            <ul
+              style={{
+                listStyleType: "none",
+                padding: 0,
+                display: "flex",
+                gap: "20px",
+              }}
+            >
+              
+    
+                  <li>
+                    <Link
+                      to="/admin/viewall"
+                      style={{ textDecoration: "none", color: "#333" }}
+                    >
+                      View All Users
+                    </Link>
+                  </li>
+
+                  <li>
+                    <Link
+                      to="/"
+                      onClick={handleClick}
+                      style={{
+                        textDecoration: "none",
+                        color: "#333",
+                        marginRight: "20px",
+                      }}
+                    >
+                      Logout
+                    </Link>
+                  </li>
+                  
+                
+            </ul>
+          </div>
+        </div>
+      </nav>
 
       <div className="user-details">
       <div className="user-detail">
         <i className="fas fa-envelope"></i>
         <span>Email :&nbsp; </span>
-        <span>{localStorage.getItem("email")}</span>
+        <span>{Cookies.get("searchEmail")}</span>
       </div>
       <div className="user-detail">
         <i className="fas fa-user"></i>
         <span>Name :&nbsp; </span>
-        <span>{localStorage.getItem("first")}</span>
+        <span>{Cookies.get("first")}</span>
       </div>
       <div className="user-detail">
         <i className="fas fa-phone"></i>

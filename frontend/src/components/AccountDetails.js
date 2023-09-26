@@ -53,7 +53,7 @@ const AccountDetails = () => {
 
       }
       }
-    fetch(`http://localhost:8080/banking/user/by-email?emailId=${localStorage.getItem("emailId")}`, options)
+    fetch(`http://localhost:8080/banking/user/by-email?emailId=${Cookies.get("emailId")}`, options)
     .then((resp)=> resp.json())
     .then((resp) => {
      

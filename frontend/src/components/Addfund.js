@@ -26,6 +26,7 @@ export const Addfund = ({ setUserState }) => {
   // Function to hide the alert popup
   const hideAlertPopup = () => {
     setShowPopup(false);
+    navigate("/service", { replace: true });
   };
 
   const loginHandler = async (e) => {
@@ -58,7 +59,7 @@ export const Addfund = ({ setUserState }) => {
 
       }
       }
-    fetch(`http://localhost:8080/banking/user/by-email?emailId=${localStorage.getItem("emailId")}`, options)
+    fetch(`http://localhost:8080/banking/user/by-email?emailId=${Cookies.get("emailId")}`, options)
     .then((resp)=> resp.json())
     .then((resp) => {
      

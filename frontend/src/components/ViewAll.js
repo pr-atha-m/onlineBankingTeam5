@@ -40,6 +40,17 @@ const TableCell = styled.td`
 const Transactions = () => {
   const navigate = useNavigate();
   const [details,setDetails]=  useState([])
+
+
+  const handleClick = () => {
+    Cookies.remove("searchEmail");
+    Cookies.remove("myCookie")
+    Cookies.remove("emailId")
+    Cookies.remove("first")
+    Cookies.remove("last")
+    Cookies.remove("status")
+    navigate('/')
+  }
   useEffect(() => {
  
     if(!Cookies.get('myCookie')){
@@ -127,6 +138,7 @@ if(details.length!=0){
                   <li>
                     <Link
                       to="/"
+                      onClick={handleClick}
                       style={{
                         textDecoration: "none",
                         color: "#333",

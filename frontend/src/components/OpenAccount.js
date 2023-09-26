@@ -41,7 +41,7 @@ const Register = () => {
   // Function to hide the alert popup
   const hideAlertPopup = () => {
     setShowPopup(false);
-    navigate("/dashboard", { replace: true });
+    navigate("/service", { replace: true });
   };
   const changeHandler = (e) => {
     const { name, value } = e.target;

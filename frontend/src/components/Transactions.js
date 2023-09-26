@@ -110,7 +110,7 @@ if(details.length!=0){
             <TableCell>{account.trans_date}</TableCell>
             <TableCell>{account.maturity_remarks}</TableCell>
             <TableCell>{account.trans_mode}</TableCell>
-            <TableCell>{localStorage.getItem("acc_no")===account.sender_account? (
+            <TableCell>{Cookies.get("acc_no")===account.sender_account? (
               <span style={{color : 'red'}}>Debited</span>
 
             ): (

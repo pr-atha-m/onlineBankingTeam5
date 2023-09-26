@@ -25,6 +25,8 @@ export const Withdrawal = ({ setUserState }) => {
   // Function to hide the alert popup
   const hideAlertPopup = () => {
     setShowPopup(false);
+    navigate("/service", { replace: true });
+
   };
 
 

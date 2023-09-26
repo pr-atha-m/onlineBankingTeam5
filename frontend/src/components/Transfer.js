@@ -10,9 +10,12 @@ const Transfer = () => {
   const [formErrors, setFormErrors] = useState({});
   const [isSubmit, setIsSubmit] = useState(false);
 
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupContent, setPopupContent] = useState({ type: null, message: '' });
   const [selectedOption, setSelectedOption] = useState("");
 
   const [selectedOption1, setSelectedOption1] = useState("");
+
 
  
   const options = ["NEFT", "IMPS", "RTGS"];
@@ -31,6 +34,17 @@ const Transfer = () => {
     });
   };
 
+  
+  const showAlertPopup = (type, message) => {
+    setPopupContent({ type, message });
+    setShowPopup(true);
+  };
+
+  // Function to hide the alert popup
+  const hideAlertPopup = () => {
+    setShowPopup(false);
+    navigate("/service", { replace: true });
+  };
   const handleOptionChange = (e) => {
     setSelectedOption(e.target.value);
   };
@@ -113,7 +127,14 @@ const options1 = [];
       fetch("http://localhost:8080/transaction/execute", options)
         .then((resp) => resp.json())
         .then((resp) => {
-          alert(resp.message);
+        
+          if (resp.status !== 400) {
+            showAlertPopup('success', "Transaction Success");
+           
+             // Update with the actual new balance
+          } else {
+            showAlertPopup('Transaction Failed', resp.message);
+          }
 
           // navigate("/dashboard", { replace: true });;
         });
@@ -244,6 +265,21 @@ const options1 = [];
           </div>
         </div>
       </div>
+
+      {showPopup && (
+        <div className="popup-container">
+          <div className="popup">
+            <span className="close-button" onClick={hideAlertPopup}>
+              &times;
+            </span>
+            {popupContent.type === 'success' ? (
+              <p className="success">{popupContent.message}</p>
+            ) : (
+              <p className="error">{popupContent.message}</p>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -25,7 +25,12 @@ function Admin() {
         });
       };
       const handleClick = () => {
-        localStorage.setItem("isAdmin", "false");
+        Cookies.remove("searchEmail");
+        Cookies.remove("myCookie")
+        Cookies.remove("emailId")
+        Cookies.remove("first")
+        Cookies.remove("last")
+        Cookies.remove("status")
         navigate('/')
       }
       const validateForm = (values) => {
@@ -70,10 +75,10 @@ function Admin() {
             .then((resp)=>  resp.json())
             .then((resp) => {
                 console.log(resp)
-                localStorage.setItem("email",resp.user_email)
-                localStorage.setItem("first",resp.first_name)
-                localStorage.setItem("last",resp.last_name)
-                localStorage.setItem("status",resp.status)
+                Cookies.set("searchEmail",user.email)
+                Cookies.set("first",resp.first_name)
+                Cookies.set("last",resp.last_name)
+                Cookies.set("status",resp.status)
                 
             });
            
