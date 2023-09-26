@@ -88,7 +88,8 @@ public class UserService implements UserServiceInterface {
        
         if (maxAccountNumber != null && maxAccountNumber.length()>=2 ) {
             try {
-                nextNumber = Integer.parseInt(maxAccountNumber.substring(2)) + 1;
+                nextNumber = Integer
+                		.parseInt(maxAccountNumber.substring(2)) + 1;
             } catch (NumberFormatException e) {
                 // Handle parsing error as needed
             }
