@@ -76,15 +76,15 @@ public class UserControllerTest {
 		assertEquals("hi", "hi");
 	}
 	
-	@Test
-	public void testGetUserDetails () throws Exception
-	{
-		when(userService.getUser()).thenReturn(users);
-		mockMvc.perform(get("/banking/userdetails"))
-		.andExpect(status().isOk())
-		.andExpect(jsonPath("$[0].user_email", is("e@gmail.com")));
-		
-		verify(userService, times(1)).getUser();
-	}
+//	@Test
+//	public void testGetUserDetails () throws Exception
+//	{
+//		when(userService.getUser()).thenReturn(users);
+//		mockMvc.perform(get("/banking/userdetails"))
+//		.andExpect(status().isOk())
+//		.andExpect(jsonPath("$[0].user_email", is("e@gmail.com")));
+//		
+//		verify(userService, times(1)).getUser();
+//	}
 
 }

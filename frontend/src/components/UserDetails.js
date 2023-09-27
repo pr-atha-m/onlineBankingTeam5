@@ -1,7 +1,7 @@
 import React,{useEffect, useState} from "react";
 import styled from "styled-components";
 import Navbar from "./Navbar";
-import Cookies from "js-cookie";
+import Cookies from "universal-cookie";
 import { Link } from "react-router-dom";
 import './Styles/Userdetails.css'; // Import your CSS file for styling
 import { useNavigate, NavLink } from "react-router-dom";
@@ -38,8 +38,11 @@ const TableCell = styled.td`
 `;
 
 const UserDetails = ({}) => {
+  const cookie =new Cookies();
   const [userAccounts, setUserAccounts] = useState([]);
   const [accountStatus, setAccountStatus] = useState([]);
+  const [searchEmail, setSearchEmail] = useState("");
+  const [cookieValue,setCookieValue] = useState(null);
   const navigate = useNavigate();
     // const toggle = () => {
     //     setCondition(!condition);
@@ -47,48 +50,64 @@ const UserDetails = ({}) => {
 
 
     const handleClick = () => {
-      Cookies.remove("searchEmail");
-      Cookies.remove("myCookie")
-      Cookies.remove("emailId")
-      Cookies.remove("first")
-      Cookies.remove("last")
-      Cookies.remove("status")
+      cookie.remove("searchEmail");
+      cookie.remove("myCookie")
+      cookie.remove("emailId")
+      cookie.remove("first")
+      cookie.remove("last")
+      cookie.remove("status")
       navigate('/')
     }
 
+    useEffect(() => {
+      setSearchEmail(cookie.get('searchEmail'))
+    }, [])
 
   useEffect(() => {
  
-    if(!Cookies.get('myCookie')){
+    if(!cookie.get('myCookie')){
       navigate('/login')
   }
-   else if(!Cookies.get("searchEmail")){
-    window.location.reload();
-   }
+  //  else if(!localStorage.getItem("searchEmail")){
+  //   window.location.reload();
+  //  }
 
+ 
     let options = {
       method:"GET",
       headers: {
         'Content-Type': 'application/json',
-        'Authorization' :  `Bearer ${Cookies.get("myCookie")}`
+        'Authorization' :  `Bearer ${cookie.get("myCookie")}`
 
       }
     }
-    fetch(`http://localhost:8080/admin/useraccounts?emailId=${Cookies.get("searchEmail")}`, options)
-    .then((resp)=> resp.json())
-    .then((resp) => {
-        console.log(resp)
-   
-    setUserAccounts(resp);
-    setAccountStatus(resp.map(account => account.status))
-   
-   
-      
+    console.log(cookie.get("searchEmail"))
+   setCookieValue(cookie.get('searchEmail'));
 
-    });
-   
+
+    if(cookieValue){
+      fetch(`http://localhost:8080/admin/useraccounts?emailId=${cookieValue}`, options)
+      .then((resp)=> resp.json())
+      .then((resp) => {
+          console.log(resp)
+     
+      setUserAccounts(resp);
+      setAccountStatus(resp.map(account => account.status))
+     
+     
+        
   
-}, []);
+      });
+  
+    }
+    else{
+      
+    }
+  
+ 
+
+  
+}, [cookieValue]);
 
 const handleAnchorClick = (e) => {
   console.log(e.target.textContent)
@@ -109,7 +128,7 @@ const toggleStatus = (index) => {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization' :  `Bearer ${Cookies.get("myCookie")}`
+        'Authorization' :  `Bearer ${cookie.get("myCookie")}`
       },
     })
       .then(response => {
@@ -198,12 +217,12 @@ const toggleStatus = (index) => {
       <div className="user-detail">
         <i className="fas fa-envelope"></i>
         <span>Email :&nbsp; </span>
-        <span>{Cookies.get("searchEmail")}</span>
+        <span>{cookie.get("searchEmail")}</span>
       </div>
       <div className="user-detail">
         <i className="fas fa-user"></i>
         <span>Name :&nbsp; </span>
-        <span>{Cookies.get("first")}</span>
+        <span>{cookie.get("first")}</span>
       </div>
       <div className="user-detail">
         <i className="fas fa-phone"></i>

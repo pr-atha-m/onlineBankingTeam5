@@ -117,11 +117,19 @@
 			<artifactId>spring-rest-hello-world</artifactId>
 			
 		</dependency>-->
-		<dependency>
+	<!--	<dependency>
 			<groupId>com.javatechie</groupId>
 			<artifactId>spring-security-jwt-example</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
+		</dependency>-->
+		
+		<!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-jwt -->
+<dependency>
+    <groupId>org.springframework.security</groupId>
+    <artifactId>spring-security-jwt</artifactId>
+    <version>1.1.1.RELEASE</version>
+</dependency>
+
 	</dependencies>
 
 	<build>

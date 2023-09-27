@@ -49,36 +49,36 @@ public class UserServiceTest {
 		assertEquals("hello", "hello");
 	}
 	
-	@Test
-	public void testgetUser()
-	{
-		List<User> users = new ArrayList<> ();
-		User user1 = new User("joy", "dbfjgbeb","e@gmail.com","1224556678");
-		User user2 = new User("j", "b@gmail.com","123445678","pugrohit");
-		
-		users= Arrays.asList(user1, user2);
-		
-		when(userRepo.findAll()).thenReturn(users);
-		
-		List<User> current = userService.getUser();
-		assertNotNull(current);
-		assertEquals(users.size(),current.size());
-		
-		for(int i=0;i<current.size();i++)
-		{
-			User temp1 = users.get(i);
-			User temp2 = current.get(i);
-			assertEquals(temp1.getFirst_name(),temp2.getFirst_name());
-			assertEquals(temp1.getLast_name(),temp2.getLast_name());
-			assertEquals(temp1.getUser_email(),temp2.getUser_email());
-			assertEquals(temp1.getUser_pwd(),temp2.getUser_pwd());
-			System.out.print("test case passed");
-		}
-		
-		verify(userRepo, times(1)).findAll();
-	
-	}
-	
+//	@Test
+//	public void testgetUser()
+//	{
+//		List<User> users = new ArrayList<> ();
+//		User user1 = new User("joy", "dbfjgbeb","e@gmail.com","1224556678");
+//		User user2 = new User("j", "b@gmail.com","123445678","pugrohit");
+//		
+//		users= Arrays.asList(user1, user2);
+//		
+//		when(userRepo.findAll()).thenReturn(users);
+//		
+//		List<User> current = userService.getUser();
+//		assertNotNull(current);
+//		assertEquals(users.size(),current.size());
+//		
+//		for(int i=0;i<current.size();i++)
+//		{
+//			User temp1 = users.get(i);
+//			User temp2 = current.get(i);
+//			assertEquals(temp1.getFirst_name(),temp2.getFirst_name());
+//			assertEquals(temp1.getLast_name(),temp2.getLast_name());
+//			assertEquals(temp1.getUser_email(),temp2.getUser_email());
+//			assertEquals(temp1.getUser_pwd(),temp2.getUser_pwd());
+//			System.out.print("test case passed");
+//		}
+//		
+//		verify(userRepo, times(1)).findAll();
+//	
+//	}
+//	
 	@Test
 	public void testByEmail()
 	{

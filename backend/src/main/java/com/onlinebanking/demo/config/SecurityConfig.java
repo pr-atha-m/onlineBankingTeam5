@@ -61,9 +61,9 @@ public class SecurityConfig {
     	http.csrf(csrf->csrf.disable())
     		.cors(cors->cors.disable())
     		.authorizeHttpRequests(auth->auth
-    				.requestMatchers(antMatcher("/authentication/**")).permitAll()
+    				.requestMatchers(antMatcher("/authentication/**"),antMatcher("/banking/user/**")).permitAll()
     				.anyRequest().authenticated())
-    				.exceptionHandling(ex->ex.authenticationEntryPoint(point))
+//    				.exceptionHandling(ex->ex.authenticationEntryPoint(point))
     				.sessionManagement(sm->sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
     	;
     	

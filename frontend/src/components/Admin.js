@@ -2,15 +2,17 @@ import React, { useState, useEffect } from "react";
 
 import { Link } from "react-router-dom";
 import searchimg from '../images/search.jpeg'
-import Cookies from "js-cookie";
+import Cookies from "universal-cookie";
 import './Styles/Admin.css'; // Import your CSS file for styling
 import { useNavigate, NavLink } from "react-router-dom";
 
 function Admin() {
+  const cookie =new Cookies();
     const navigate = useNavigate();
-    const [email, setEmail] = useState('');
+    
     const [formErrors, setFormErrors] = useState({});
     const [isLoggedIn, setIsLoggedIn] = useState(false)
+    // const [email,setEmail] useState();
     const [isSubmit, setIsSubmit] = useState(false);
     const [user, setUserDetails] = useState({
         email: "",
@@ -25,12 +27,12 @@ function Admin() {
         });
       };
       const handleClick = () => {
-        Cookies.remove("searchEmail");
-        Cookies.remove("myCookie")
-        Cookies.remove("emailId")
-        Cookies.remove("first")
-        Cookies.remove("last")
-        Cookies.remove("status")
+        cookie.remove("searchEmail");
+        cookie.remove("myCookie")
+        cookie.remove("emailId")
+        cookie.remove("first")
+        cookie.remove("last")
+        cookie.remove("status")
         navigate('/')
       }
       const validateForm = (values) => {
@@ -46,27 +48,16 @@ function Admin() {
       };
 
       useEffect(() => {
-        if(!Cookies.get('myCookie')){
+        if(!cookie.get('myCookie')){
           navigate('/login')
-      }
-      
-      
-      }, [])
-      
-    
-      const loginHandler = async(e) => {
-        e.preventDefault();
-        console.log("hello")
-        setFormErrors(validateForm(user));
-        setIsSubmit(true);
+        }
 
-     
-            console.log(user);
-            let options = {
+          if (Object.keys(formErrors).length === 0 && isSubmit) {
+            const options = {
               method:"GET",
               headers: {
                 'Content-Type': 'application/json',
-                'Authorization' :  `Bearer ${Cookies.get("myCookie")}`
+                'Authorization' :  `Bearer ${cookie.get("myCookie")}`
             },
           
         
@@ -75,17 +66,41 @@ function Admin() {
             .then((resp)=>  resp.json())
             .then((resp) => {
                 console.log(resp)
-                Cookies.set("searchEmail",user.email)
-                Cookies.set("first",resp.first_name)
-                Cookies.set("last",resp.last_name)
-                Cookies.set("status",resp.status)
+
+                cookie.set("searchEmail", user.email, {path:'/admin'});
+                cookie.set("first", resp.first_name,{path:'/admin'});
+                // localStorage.setItem("last", resp.last_name);
+                
+                // localStorage.setItem("searchEmail", user.email);
+                // localStorage.setItem("first", resp.first_name);
+                // localStorage.setItem("last", resp.last_name);
+                //  localStorage.setItem("status", user.s);
+                
+                
                 
             });
            
           
        
         navigate("/admin/userdetails", { replace: true, });
+       
         // if (!formErrors) {
+      }
+      
+      
+      }, [formErrors])
+      
+    
+      const loginHandler = async(e) => {
+        // e.preventDefault();
+        // console.log("hello");
+      
+        setFormErrors(validateForm(user));
+        setIsSubmit(true);
+
+     
+            console.log(user);
+          
     
         // }
       };

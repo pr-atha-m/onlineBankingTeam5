@@ -20,6 +20,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 		// TODO Auto-generated method stub
 		response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         PrintWriter writer = response.getWriter();
+        String message = authException.getMessage();
         writer.println("Access Denied !! " + authException.getMessage());
 		
 	}

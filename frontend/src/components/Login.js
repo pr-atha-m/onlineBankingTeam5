@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from "react";
 import "./Styles/Login.css";
 import loginpic from "../images/login.jpg";
-import Cookies from 'js-cookie';
+import Cookies from 'universal-cookie';
 
 
 import { useNavigate, NavLink } from "react-router-dom";
 import User from "./User";
 export const Login = () => {
+  const cookie = new Cookies();
   const navigate = useNavigate();
   const [formErrors, setFormErrors] = useState({});
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [isSubmit, setIsSubmit] = useState(false);
-  
+ 
   const [user, setUserDetails] = useState({
     email: "",
     password: "",
@@ -52,7 +53,7 @@ export const Login = () => {
   };
 
   useEffect(() => {
-    if(Cookies.get("myCookie")){
+    if(cookie.get("myCookie")){
         navigate("/service")
     }
     if (Object.keys(formErrors).length === 0 && isSubmit) {
@@ -76,13 +77,19 @@ export const Login = () => {
       }
       fetch("http://localhost:8080/authentication/login", options)
 
-      .then((resp) => resp.json())
       .then((resp) => {
+        if(resp.status=== 200) { 
+     
+          resp.json()
+        }
+      })
+      .then((resp) => {
+   
         console.log(resp)
-          if(resp.token){
+          if(resp && resp.token){
             // localStorage.setItem("emailId", user.email);
-            Cookies.set('emailId', user.email)
-            Cookies.set('myCookie', resp.token, {expires:1});
+            cookie.set('emailId', user.email)
+            cookie.set('myCookie', resp.token);
 
          
           
@@ -93,14 +100,14 @@ export const Login = () => {
             navigate('/service')
               }
           }
-          else{
-            alert("Invalid Credentials")
-          }
-  
+
+        }
+          
      
 
-      })
+      )
 
+      
 
       
      
