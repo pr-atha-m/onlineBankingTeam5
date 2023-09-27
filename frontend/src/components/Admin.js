@@ -67,8 +67,8 @@ function Admin() {
             .then((resp) => {
                 console.log(resp)
 
-                cookie.set("searchEmail", user.email, {path:'/admin'});
-                cookie.set("first", resp.first_name,{path:'/admin'});
+                cookie.set("searchEmail", user.email, {path:'/'});
+                cookie.set("first", resp.first_name,{path:'/'});
                 // localStorage.setItem("last", resp.last_name);
                 
                 // localStorage.setItem("searchEmail", user.email);

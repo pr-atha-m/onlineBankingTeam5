@@ -75,37 +75,42 @@ export const Login = () => {
         )
   
       }
-      fetch("http://localhost:8080/authentication/login", options)
+
+      try{
+        fetch("http://localhost:8080/authentication/login", options)
 
       .then((resp) => {
-        if(resp.status=== 200) { 
-     
-          resp.json()
-        }
+       if(!resp.ok){
+        alert("Invalid Credentials");
+      }
+      return resp.json();
       })
       .then((resp) => {
-   
-        console.log(resp)
-          if(resp && resp.token){
             // localStorage.setItem("emailId", user.email);
             cookie.set('emailId', user.email)
-            cookie.set('myCookie', resp.token);
-
-         
-          
+            cookie.set('myCookie', resp.token)
               if(user.email === "admin@gmail.com"){
                 navigate("/admin");
               }
               else{
             navigate('/service')
               }
-          }
+          
 
         }
+      )
+      .catch(error => {
+        console.error(error)
+      })
+
+      } catch(error){
+        console.error(error)
+      }
+      
           
      
 
-      )
+      
 
       
 
