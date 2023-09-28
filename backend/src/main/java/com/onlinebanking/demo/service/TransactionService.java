@@ -78,7 +78,7 @@ public class TransactionService implements TransactionServiceInterface{
 			}
 			else {
 				
-				saveTransaction(trans);
+				
 			String am = trans.getAmount();
 			
 				float amount = Float.parseFloat(am);
@@ -88,6 +88,7 @@ public class TransactionService implements TransactionServiceInterface{
 				}
 				if (sender.get().getBalance() >= amount)
 				{
+					saveTransaction(trans);
 					performTransaction(sender, receiver, trans);
 				}
 				else
