@@ -73,6 +73,8 @@ public class Admin {
 	public void setAdmin_pwd(String admin_pwd) {
 		this.admin_pwd = admin_pwd;
 	}
+
+	
 	
 	
 	

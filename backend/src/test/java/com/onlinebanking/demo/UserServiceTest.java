@@ -17,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import com.onlinebanking.demo.entity.User;
 import com.onlinebanking.demo.entity.User_account;
 import com.onlinebanking.demo.exceptions.BalanceExceptions;
+import com.onlinebanking.demo.exceptions.InvalidException;
 import com.onlinebanking.demo.entity.User_account;
 import com.onlinebanking.demo.repository.UserAccountRepository;
 import com.onlinebanking.demo.repository.UserRepository;
@@ -49,36 +50,38 @@ public class UserServiceTest {
 		assertEquals("hello", "hello");
 	}
 	
-//	@Test
-//	public void testgetUser()
-//	{
-//		List<User> users = new ArrayList<> ();
-//		User user1 = new User("joy", "dbfjgbeb","e@gmail.com","1224556678");
-//		User user2 = new User("j", "b@gmail.com","123445678","pugrohit");
-//		
-//		users= Arrays.asList(user1, user2);
-//		
-//		when(userRepo.findAll()).thenReturn(users);
-//		
-//		List<User> current = userService.getUser();
-//		assertNotNull(current);
-//		assertEquals(users.size(),current.size());
-//		
-//		for(int i=0;i<current.size();i++)
-//		{
-//			User temp1 = users.get(i);
-//			User temp2 = current.get(i);
-//			assertEquals(temp1.getFirst_name(),temp2.getFirst_name());
-//			assertEquals(temp1.getLast_name(),temp2.getLast_name());
-//			assertEquals(temp1.getUser_email(),temp2.getUser_email());
-//			assertEquals(temp1.getUser_pwd(),temp2.getUser_pwd());
-//			System.out.print("test case passed");
-//		}
-//		
-//		verify(userRepo, times(1)).findAll();
-//	
-//	}
-//	
+	@Test
+	public void testgetUser()
+	{
+		List<User_account> users = new ArrayList<> ();
+		DateTimeFormatter date_format= DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		String formatted_date = LocalDate.now().format(date_format);
+		
+		User_account user1 = new User_account (1,formatted_date,"b@gmail.com","100000000006","Savings","9082582204",
+				"salman", "939619640567",new Date(),"mumbai", "mumbai", "business", 9000.0f, "stocks",false,false,9876.0f,true);
+		User_account user2 = new User_account (1,formatted_date,"e@gmail.com","100000000006","Savings","9082582204",
+				"salman", "939619650567",new Date(),"mumbai", "mumbai", "business", 9000.0f, "stocks",false,false,9876.0f,true);
+		
+		users= Arrays.asList(user1, user2);
+		
+		when(userAccRepo.findAll()).thenReturn(users);
+		
+		List<User_account> current = userService.getUser();
+		assertNotNull(current);
+		assertEquals(users.size(),current.size());
+		
+		for(int i=0;i<current.size();i++)
+		{
+			User_account temp1 = users.get(i);
+			User_account temp2 = current.get(i);
+			assertEquals(temp1,temp2);
+			System.out.print("test case passed");
+		}
+		
+		verify(userAccRepo, times(1)).findAll();
+	
+	}
+	
 	@Test
 	public void testByEmail()
 	{
@@ -122,7 +125,7 @@ public class UserServiceTest {
 //	}
 //	
 	@Test
-	public void testWithdraw() throws BalanceExceptions
+	public void testWithdraw() throws BalanceExceptions, InvalidException
 	{
 		String acc_no = "100000000006";
 		float amount = 100.0f;
@@ -146,7 +149,7 @@ public class UserServiceTest {
 	}
 	
 	@Test
-	public void testDeposit()
+	public void testDeposit() throws InvalidException
 	{
 		String acc_no = "100000000005";
 		float amount = 100.0f;

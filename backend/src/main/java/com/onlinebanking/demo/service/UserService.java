@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.onlinebanking.demo.entity.User;
 import com.onlinebanking.demo.entity.User_account;
 import com.onlinebanking.demo.exceptions.BalanceExceptions;
+import com.onlinebanking.demo.exceptions.InvalidException;
 import com.onlinebanking.demo.repository.UserAccountRepository;
 import com.onlinebanking.demo.repository.UserRepository;
 
@@ -37,6 +38,7 @@ public class UserService implements UserServiceInterface {
 	
 	private final BCryptPasswordEncoder passwordEncoder=new BCryptPasswordEncoder();
 	
+	//To get the details of all user accounts
 	@Override
 	public List<User_account> getUser()
 	{
@@ -99,11 +101,15 @@ public class UserService implements UserServiceInterface {
 	}
 
 	@Override
-	public float Withdraw(String acc_no, float amount) throws BalanceExceptions {
+	public float Withdraw(String acc_no, float amount) throws BalanceExceptions, InvalidException {
 		// TODO Auto-generated method stub
 		Optional<User_account> acc= userAccountRepo.findById(acc_no);
 		
 		System.out.print("Hello");
+		if(!acc.get().isStatus())
+		{
+			throw new InvalidException("Your account has been disabled by the admin",HttpStatus.BAD_REQUEST);
+		}
 		if (amount<0)
 		{
 			throw new BalanceExceptions("amount cannot be negative",HttpStatus.BAD_REQUEST);
@@ -119,9 +125,14 @@ public class UserService implements UserServiceInterface {
 	}
 	
 	@Override
-	public float Deposit(String acc_no, float amount) {
+	public float Deposit(String acc_no, float amount) throws InvalidException {
 		// TODO Auto-generated method stub
 		Optional<User_account> acc= userAccountRepo.findById(acc_no);
+		
+		if(!acc.get().isStatus())
+		{
+			throw new InvalidException("Your account has been disabled by the admin",HttpStatus.BAD_REQUEST);
+		}
 		
 			float new_bal = acc.get().getBalance()+amount;
 			acc.get().setBalance(new_bal);
