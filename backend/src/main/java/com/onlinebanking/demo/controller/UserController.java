@@ -54,7 +54,7 @@ public class UserController {
     List<User_account> users(){
         return userService.getUser();
     }
-    
+    //To get a user by user_email
     @GetMapping("/user/by-email")
 	public ResponseEntity<List<User_account>> getUserDetailsByEmail(@RequestParam("emailId") String emailId){
 		List<User_account> user = userService.getUserDetailsByEmail(emailId);
@@ -81,7 +81,7 @@ public class UserController {
 	  {
 		  return email.matches("^[\\w-]+(\\.[\\w-]+)*@[\\w-]+(\\.[\\w-]+)+$");
 	  }
-	//For new registration
+	//For new registration of a user
 	  @PostMapping("/user/register")
 	    public ResponseEntity<Object> creatingUser(@Validated @RequestBody User newUser)throws InvalidException {
 		  String email=newUser.getUser_email();
@@ -129,11 +129,13 @@ public class UserController {
 	
 	
 	 
-	  
+	 //Validation of password 
   private boolean isValidPassword(String password) {
 	  return password.length()>=8;
 	
   		}
+  
+  //To validate the login
 	  @PostMapping("/validate")
 	  public ResponseEntity<Object> validateLogin(@RequestBody User loginReq)throws ResourceNotFound, InvalidException, NotFoundException
 	  {
@@ -169,19 +171,10 @@ public class UserController {
 	       
 	  }
 	  
-//	  @PutMapping("/withdraw1/{acc_no}/{amount}")
-//	  public void Withdraw1(@PathVariable String acc_no, @PathVariable String amount) throws BalanceExceptions
-//	  {
-//		  float am  =  Float.parseFloat(amount); 
-//		  float rem_balance = userService.Withdraw(acc_no, am);
-//		  System.out.print(rem_balance);
-//		  System.out.print(am);
-//	  }
-//	  
 	  
-	  
+	//To withdraw amount  
 	  @PutMapping ("/withdraw")
-	  public ResponseEntity<String> Withdraw(@RequestParam String acc_no, @RequestParam String amount) throws BalanceExceptions
+	  public ResponseEntity<String> Withdraw(@RequestParam String acc_no, @RequestParam String amount) throws BalanceExceptions, InvalidException
 	  {
 		  
 		  System.out.print(amount);
@@ -197,9 +190,9 @@ public class UserController {
 	  }
 
 	  
-//	  "{\"message\":\"Your remaining balance is now \" + rem_balance\"}"
+
 	  
-	  
+	  //To deposit amount
 	  @PutMapping ("/deposit")
 	  public ResponseEntity<String> Deposit(@RequestParam String acc_no, @RequestParam String amount) throws InvalidException 
 	  {
