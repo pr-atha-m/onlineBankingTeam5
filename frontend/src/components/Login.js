@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./Styles/Login.css";
 import loginpic from "../images/login.jpg";
-import Cookies from 'universal-cookie';
-
+import Cookies from "universal-cookie";
 
 import { useNavigate, NavLink } from "react-router-dom";
 import User from "./User";
@@ -10,9 +9,9 @@ export const Login = () => {
   const cookie = new Cookies();
   const navigate = useNavigate();
   const [formErrors, setFormErrors] = useState({});
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isSubmit, setIsSubmit] = useState(false);
- 
+
   const [user, setUserDetails] = useState({
     email: "",
     password: "",
@@ -39,13 +38,10 @@ export const Login = () => {
     return error;
   };
 
-  const loginHandler = async(e) => {
+  const loginHandler = (e) => {
     e.preventDefault();
     setFormErrors(validateForm(user));
     setIsSubmit(true);
-
-   
-
 
     // if (!formErrors) {
 
@@ -53,134 +49,96 @@ export const Login = () => {
   };
 
   useEffect(() => {
-    if(cookie.get("myCookie")){
-        navigate("/service")
+    if (cookie.get("myCookie")) {
+      navigate("/service");
     }
     if (Object.keys(formErrors).length === 0 && isSubmit) {
       console.log(user);
-      
+
       let options = {
-        method:"POST",
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-      },
-        body:JSON.stringify(
-         
-          {
-              "email":user.email,
-              "pwd":user.password
-          
-          }
-        
-        )
-  
-      }
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: user.email,
+          pwd: user.password,
+        }),
+      };
 
-      try{
+      try {
         fetch("http://localhost:8080/authentication/login", options)
-
-      .then((resp) => {
-       if(!resp.ok){
-        alert("Invalid Credentials");
-      }
-      return resp.json();
-      })
-      .then((resp) => {
+          .then((resp) => {
+            if (!resp.ok) {
+              alert("Invalid Credentials");
+            }
+            return resp.json();
+          })
+          .then((resp) => {
             // localStorage.setItem("emailId", user.email);
-            cookie.set('emailId', user.email)
-            cookie.set('myCookie', resp.token)
-              if(user.email === "admin@gmail.com"){
-                navigate("/admin");
-              }
-              else{
-            navigate('/service')
-              }
-          
-
-        }
-      )
-      .catch(error => {
-        console.error(error)
-      })
-
-      } catch(error){
-        console.error(error)
+            cookie.set("emailId", user.email, { path: "/" });
+            cookie.set("myCookie", resp.token, { path: "/" });
+            if (user.email === "admin@gmail.com") {
+              navigate("/admin", { replace: true });
+            } else {
+              navigate("/service", { replace: true });
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      } catch (error) {
+        console.error(error);
       }
-      
-          
-     
-
-      
-
-      
-
-      
-     
-
-      
-        
-
-    
-     
     }
   }, [formErrors]);
 
-
-  if(isLoggedIn){
-    return <div>logged in</div>
-  }
   return (
     <div className="body1">
-            <div>
-              <div className="container">
-                <img className="loginimg" src={loginpic} alt="" />
-                <div class="vl"></div>
-    
-                <div className="logindetails">
-                  <p className="login-title">Login Page</p>
-                  <form>
-     
-        <input
-          type="email"
-          name="email"
-          id="email"
-          placeholder="Email"
-          onChange={changeHandler}
-          value={user.email}
-          className="loginInputs"
-        />
-        <p className="formerros" >{formErrors.email}</p>
-        <input
-          type="password"
-          name="password"
-          id="password"
-          placeholder="Password"
-          onChange={changeHandler}
-          value={user.password}
-          className="loginInputs"
-        />
-        <p className="formerros">{formErrors.password}</p>
-        <button onClick={loginHandler}>
-          Login
-        </button>
-    
-                  
-    
-                    <div>
-                      <div className="createaccount">
-                        <a href="/signup">Create Account</a>
-                      </div>
-    
-                      <div className="forgotpassword">
-                        <a href="/forgotpassword">Forgot Password?</a>
-                      </div>
-                    </div>
-                  </form>
+      <div>
+        <div className="container">
+          <img className="loginimg" src={loginpic} alt="" />
+          <div class="vl"></div>
+
+          <div className="logindetails">
+            <p className="login-title">Login Page</p>
+            <form>
+              <input
+                type="email"
+                name="email"
+                id="email"
+                placeholder="Email"
+                onChange={changeHandler}
+                value={user.email}
+                className="loginInputs"
+              />
+              <p className="formerros">{formErrors.email}</p>
+              <input
+                type="password"
+                name="password"
+                id="password"
+                placeholder="Password"
+                onChange={changeHandler}
+                value={user.password}
+                className="loginInputs"
+              />
+              <p className="formerros">{formErrors.password}</p>
+              <button onClick={loginHandler}>Login</button>
+
+              <div>
+                <div className="createaccount">
+                  <a href="/signup">Create Account</a>
+                </div>
+
+                <div className="forgotpassword">
+                  <a href="/forgotpassword">Forgot Password?</a>
                 </div>
               </div>
-            </div>
+            </form>
           </div>
-    
+        </div>
+      </div>
+    </div>
   );
 };
 export default Login;

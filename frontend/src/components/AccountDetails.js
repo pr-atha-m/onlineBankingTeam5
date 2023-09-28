@@ -1,6 +1,6 @@
-import React,{useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import Cookies from "js-cookie";
+import Cookies from "universal-cookie";
 import Navbar from "./Navbar";
 import { useNavigate, NavLink } from "react-router-dom";
 
@@ -37,45 +37,38 @@ const TableCell = styled.td`
 `;
 
 const AccountDetails = () => {
+  const cookie = new Cookies();
   const navigate = useNavigate();
-  const [details,setDetails]=  useState([])
+  const [details, setDetails] = useState([]);
   useEffect(() => {
- 
-    if(!Cookies.get('myCookie')){
-      navigate('/login')
-  }
+    if (!cookie.get("myCookie")) {
+      navigate("/login");
+    }
     let options = {
-      method:"GET",
+      method: "GET",
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization' :  `Bearer ${Cookies.get("myCookie")}`
-        
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${cookie.get("myCookie")}`,
+      },
+    };
+    fetch(
+      `http://localhost:8080/banking/user/by-email?emailId=${cookie.get(
+        "emailId"
+      )}`,
+      options
+    )
+      .then((resp) => resp.json())
+      .then((resp) => {
+        setDetails(resp);
+        console.log(resp);
+      });
+  }, []);
 
-      }
-      }
-    fetch(`http://localhost:8080/banking/user/by-email?emailId=${Cookies.get("emailId")}`, options)
-    .then((resp)=> resp.json())
-    .then((resp) => {
-     
-    setDetails(resp);
-    console.log(resp)
-   
-      
-
-    });
-   
-  
-}, []);
-
-
-console.log(details)
-
-
+  console.log(details);
 
   return (
     <>
-    
-      <Navbar isLoggedIn={true}/>
+      <Navbar isLoggedIn={true} />
       <Container>
         <h1 style={{ textAlign: "center" }}>Account Statement</h1>
         <Table>

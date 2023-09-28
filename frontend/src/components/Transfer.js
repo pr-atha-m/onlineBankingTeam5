@@ -3,21 +3,20 @@ import axios from "axios";
 import { useNavigate, NavLink } from "react-router-dom";
 import transferpic from "../images/transfer.jpeg";
 import "./Styles/OpenAccount.css";
-import Cookies from "js-cookie";
+import Cookies from "universal-cookie";
 const Transfer = () => {
+  const cookie = new Cookies();
   const navigate = useNavigate();
 
   const [formErrors, setFormErrors] = useState({});
   const [isSubmit, setIsSubmit] = useState(false);
 
   const [showPopup, setShowPopup] = useState(false);
-  const [popupContent, setPopupContent] = useState({ type: null, message: '' });
+  const [popupContent, setPopupContent] = useState({ type: null, message: "" });
   const [selectedOption, setSelectedOption] = useState("");
 
   const [selectedOption1, setSelectedOption1] = useState("");
 
-
- 
   const options = ["NEFT", "IMPS", "RTGS"];
   const [user, setUserDetails] = useState({
     receiver_account: "",
@@ -34,7 +33,6 @@ const Transfer = () => {
     });
   };
 
-  
   const showAlertPopup = (type, message) => {
     setPopupContent({ type, message });
     setShowPopup(true);
@@ -52,25 +50,17 @@ const Transfer = () => {
     setSelectedOption1(e.target.value);
   };
 
+  const [details, setDetails] = useState([]);
 
-  const [details,setDetails]=  useState([]);
-  
-//   useEffect(() => {
- 
-   
-    
-   
-  
-// }, []);
+  //   useEffect(() => {
 
+  // }, []);
 
-const options1 = [];
+  const options1 = [];
 
-
-  {details.map((account, index) => (
-      options1.push(account.acc_no)
-  ))}
-
+  {
+    details.map((account, index) => options1.push(account.acc_no));
+  }
 
   const validateForm = (values) => {
     console.log(values);
@@ -79,17 +69,15 @@ const options1 = [];
     const phoneRegex = /^\d{10}$/;
     const adhaarRegex = /^\d{12}$/;
 
-    if(!selectedOption){
-        error.trans_mode = "Please select Transaction Mode"
-      }
-      else if (!selectedOption1) {
-        error.sender_account = "Please select an Account Number";
-      }
-      else if (!values.amount) {
-        error.amount = "Please enter a Amount";
-      }else if(values.amount <=0){
-        error.amount = "Please Enter A valid Amount";
-      } 
+    if (!selectedOption) {
+      error.trans_mode = "Please select Transaction Mode";
+    } else if (!selectedOption1) {
+      error.sender_account = "Please select an Account Number";
+    } else if (!values.amount) {
+      error.amount = "Please enter a Amount";
+    } else if (values.amount <= 0) {
+      error.amount = "Please Enter A valid Amount";
+    }
 
     return error;
   };
@@ -103,37 +91,35 @@ const options1 = [];
   };
 
   useEffect(() => {
-    if(!Cookies.get('myCookie')){
-      navigate('/login')
-  }
+    if (!cookie.get("myCookie")) {
+      navigate("/login");
+    }
     if (Object.keys(formErrors).length === 0 && isSubmit) {
       console.log(user);
       let options = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          'Authorization' :  `Bearer ${Cookies.get("myCookie")}`
+          Authorization: `Bearer ${cookie.get("myCookie")}`,
         },
         body: JSON.stringify({
-            sender_account: selectedOption1,
-            receiver_account: user.receiver_account ,
-            amount: user.amount,
-            maturity_remarks: user.maturity_remarks,
-            trans_mode: selectedOption,
-            instructions: user.instructions,
-    
+          sender_account: selectedOption1,
+          receiver_account: user.receiver_account,
+          amount: user.amount,
+          maturity_remarks: user.maturity_remarks,
+          trans_mode: selectedOption,
+          instructions: user.instructions,
         }),
       };
       fetch("http://localhost:8080/transaction/execute", options)
         .then((resp) => resp.json())
         .then((resp) => {
-        
           if (resp.status !== 400) {
-            showAlertPopup('success', "Transaction Success");
-           
-             // Update with the actual new balance
+            showAlertPopup("success", "Transaction Success");
+
+            // Update with the actual new balance
           } else {
-            showAlertPopup('Transaction Failed', resp.message);
+            showAlertPopup("Transaction Failed", resp.message);
           }
 
           // navigate("/dashboard", { replace: true });;
@@ -141,21 +127,22 @@ const options1 = [];
     }
 
     let options = {
-        method:"GET",
-        headers: {
-          'Content-Type': 'application/json',
-  
-        }
-        }
-      fetch(`http://localhost:8080/banking/user/by-email?emailId=${Cookies.get("emailId")}`, options)
-      .then((resp)=> resp.json())
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${cookie.get("myCookie")}`,
+      },
+    };
+    fetch(
+      `http://localhost:8080/banking/user/by-email?emailId=${cookie.get(
+        "emailId"
+      )}`,
+      options
+    )
+      .then((resp) => resp.json())
       .then((resp) => {
-       
-      setDetails(resp);
-      console.log(resp)
-     
-        
-  
+        setDetails(resp);
+        console.log(resp);
       });
   }, [formErrors]);
   return (
@@ -221,7 +208,6 @@ const options1 = [];
                 className="registerInputs"
               />
               <p className="formerros">{formErrors.receiver_account}</p>
-            
 
               <input
                 type="number"
@@ -245,7 +231,6 @@ const options1 = [];
               />
               <p className="formerros">{formErrors.maturity_remarks}</p>
 
-
               <input
                 type="text"
                 name="instructions"
@@ -256,7 +241,6 @@ const options1 = [];
                 className="registerInputs"
               />
               <p className="formerros">{formErrors.instructions}</p>
-              
 
               <button className="openAccountBtn" onClick={signupHandler}>
                 Transfer
@@ -272,7 +256,7 @@ const options1 = [];
             <span className="close-button" onClick={hideAlertPopup}>
               &times;
             </span>
-            {popupContent.type === 'success' ? (
+            {popupContent.type === "success" ? (
               <p className="success">{popupContent.message}</p>
             ) : (
               <p className="error">{popupContent.message}</p>

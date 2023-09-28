@@ -1,0 +1,35 @@
+/* UserInfo.css */
+
+.user-info-container {
+  text-align: center; /* Center-align the contents */
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 20px;
+  background-color: #f5f5f5;
+}
+
+.user-details-heading {
+  font-size: 24px;
+  margin-bottom: 20px; /* Add some spacing below the heading */
+}
+
+.user-info-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.user-info-item i {
+  font-size: 24px;
+  margin-right: 10px;
+}
+
+.user-info-item span {
+  font-size: 18px;
+
+  margin-right: 10px;
+}
+
+.span {
+  color: rgb(0, 183, 250);
+}

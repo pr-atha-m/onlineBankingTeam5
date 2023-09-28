@@ -1,20 +1,21 @@
 import React, { useState, useEffect } from "react";
 import "./Styles/Withdraw.css";
-import Cookies from "js-cookie";
+import Cookies from "universal-cookie";
+
 import withdrawpic from "../images/withdrawal.jpeg";
 
 import { useNavigate, NavLink } from "react-router-dom";
 export const Withdrawal = ({ setUserState }) => {
+  const cookie = new Cookies();
   const navigate = useNavigate();
   const [formErrors, setFormErrors] = useState({});
   const [isSubmit, setIsSubmit] = useState(false);
   const [user, setUserDetails] = useState({
-   
     amount: "",
   });
 
   const [showPopup, setShowPopup] = useState(false);
-  const [popupContent, setPopupContent] = useState({ type: null, message: '' });
+  const [popupContent, setPopupContent] = useState({ type: null, message: "" });
 
   // Function to show the alert popup with the provided content
   const showAlertPopup = (type, message) => {
@@ -26,95 +27,81 @@ export const Withdrawal = ({ setUserState }) => {
   const hideAlertPopup = () => {
     setShowPopup(false);
     navigate("/service", { replace: true });
-
   };
-
 
   const loginHandler = async (e) => {
     e.preventDefault();
-    
-    setFormErrors(validateForm(user));
-    console.log(user,selectedOption)
-    setIsSubmit(true);
-    
-   
-    
-  
 
-   
+    setFormErrors(validateForm(user));
+    console.log(user, selectedOption);
+    setIsSubmit(true);
 
     // if (!formErrors) {
 
     // }
   };
-  const [details,setDetails]=  useState([])
+  const [details, setDetails] = useState([]);
   useEffect(() => {
-    if(!Cookies.get('myCookie')){
-      navigate('/login')
-  }
+    if (!cookie.get("myCookie")) {
+      navigate("/login");
+    }
 
-   
     let options = {
-      method:"GET",
+      method: "GET",
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization' :  `Bearer ${Cookies.get("myCookie")}`
-
-      }
-      }
-    fetch(`http://localhost:8080/banking/user/by-email?emailId=${Cookies.get("emailId")}`, options)
-    .then((resp)=> resp.json())
-    .then((resp) => {
-     
-    setDetails(resp);
-    console.log(resp)
-   
-      
-
-    });
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${cookie.get("myCookie")}`,
+      },
+    };
+    fetch(
+      `http://localhost:8080/banking/user/by-email?emailId=${cookie.get(
+        "emailId"
+      )}`,
+      options
+    )
+      .then((resp) => resp.json())
+      .then((resp) => {
+        setDetails(resp);
+        console.log(resp);
+      });
 
     if (Object.keys(formErrors).length === 0 && isSubmit) {
+      const options = {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${cookie.get("myCookie")}`,
+        },
+      };
 
-    const options = {
-      method:"PUT",
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization' :  `Bearer ${Cookies.get("myCookie")}`
-
-      }
-
-    };
-
-    fetch(`http://localhost:8080/banking/withdraw?acc_no=${selectedOption}&amount=${user.amount}`,options)
-    .then((resp)=> resp.json()
-    .then((resp) => {
-
-      console.log(resp);
-      setTimeout(() => {
-        // Replace with your actual success/error logic
-        if (resp.status !== 400) {
-          showAlertPopup('success', `Withdrawal successful. ${resp.message}`); // Update with the actual new balance
-        } else {
-          showAlertPopup('error', resp.message);
-        }
-      }, 500); 
-    }))
-   
-  }
-  
-}, [formErrors]);
+      fetch(
+        `http://localhost:8080/banking/withdraw?acc_no=${selectedOption}&amount=${user.amount}`,
+        options
+      ).then((resp) =>
+        resp.json().then((resp) => {
+          console.log(resp);
+          setTimeout(() => {
+            // Replace with your actual success/error logic
+            if (resp.status !== 400) {
+              showAlertPopup(
+                "success",
+                `Withdrawal successful. ${resp.message}`
+              ); // Update with the actual new balance
+            } else {
+              showAlertPopup("error", resp.message);
+            }
+          }, 500);
+        })
+      );
+    }
+  }, [formErrors]);
 
   const [selectedOption, setSelectedOption] = useState("");
   const options = [];
 
-
-  {details.map((account, index) => (
-      options.push(account.acc_no)
-  ))}
-
-
-  
-  
+  {
+    details.map((account, index) => options.push(account.acc_no));
+  }
 
   const changeHandler = (e) => {
     const { name, value } = e.target;
@@ -130,14 +117,13 @@ export const Withdrawal = ({ setUserState }) => {
   const validateForm = (values) => {
     const error = {};
     const regex = /^[^\s+@]+@[^\s@]+\.[^\s@]{2,}$/i;
-    if(!selectedOption){
-      error.account = "Please select a account number"
-    }
-    else if (!values.amount) {
+    if (!selectedOption) {
+      error.account = "Please select a account number";
+    } else if (!values.amount) {
       error.amount = "Please enter a Amount";
-    }else if(values.amount <=0){
+    } else if (values.amount <= 0) {
       error.amount = "Please Enter A valid Amount";
-    } 
+    }
     return error;
   };
 
@@ -163,7 +149,7 @@ export const Withdrawal = ({ setUserState }) => {
                   </option>
                 ))}
               </select>
-             
+
               <p className="formerros">{formErrors.account}</p>
               <input
                 type="number"
@@ -175,8 +161,10 @@ export const Withdrawal = ({ setUserState }) => {
                 className="amountInput"
               />
 
-<p className="formerros">{formErrors.amount}</p>
-              <button className="withdrawBtn" onClick={loginHandler}>Withdraw</button>
+              <p className="formerros">{formErrors.amount}</p>
+              <button className="withdrawBtn" onClick={loginHandler}>
+                Withdraw
+              </button>
             </form>
           </div>
         </div>
@@ -188,7 +176,7 @@ export const Withdrawal = ({ setUserState }) => {
             <span className="close-button" onClick={hideAlertPopup}>
               &times;
             </span>
-            {popupContent.type === 'success' ? (
+            {popupContent.type === "success" ? (
               <p className="success">{popupContent.message}</p>
             ) : (
               <p className="error">{popupContent.message}</p>

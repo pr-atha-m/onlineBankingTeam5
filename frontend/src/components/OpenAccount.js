@@ -2,19 +2,20 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, NavLink } from "react-router-dom";
 import createAccountpic from "../images/createAccount.jpg";
-import Cookies from "js-cookie";
+import Cookies from "universal-cookie";
 import "./Styles/OpenAccount.css";
 const Register = () => {
+  const cookie = new Cookies();
   const navigate = useNavigate();
 
   const [formErrors, setFormErrors] = useState({});
   const [isSubmit, setIsSubmit] = useState(false);
- 
+
   const [selectedOption, setSelectedOption] = useState("");
 
   const [showPopup, setShowPopup] = useState(false);
-  const [popupContent, setPopupContent] = useState({ type: null, message: '' });
-  
+  const [popupContent, setPopupContent] = useState({ type: null, message: "" });
+
   const options = ["Savings", "Salary", "Current", "NRI"];
   const [user, setUserDetails] = useState({
     emailId: "",
@@ -31,7 +32,6 @@ const Register = () => {
     debitStatus: "",
     netBanking: false,
   });
-
 
   const showAlertPopup = (type, message) => {
     setPopupContent({ type, message });
@@ -62,10 +62,9 @@ const Register = () => {
     const phoneRegex = /^\d{10}$/;
     const adhaarRegex = /^\d{12}$/;
     const incomeRegex = /^[0-9]+(\.[0-9]{1,2})?$/;
-    if(!selectedOption){
+    if (!selectedOption) {
       error.accountType = "Please Select An Account Type";
-    }
-    else if (!values.emailId) {
+    } else if (!values.emailId) {
       error.emailId = "Email is required";
     } else if (!regexEmail.test(values.emailId)) {
       error.emailId = "This is not a valid email format!";
@@ -92,7 +91,7 @@ const Register = () => {
     } else if (!values.sourceOfIncome) {
       error.sourceOfIncome = "Source of Income is required!";
     }
-   
+
     return error;
   };
   const signupHandler = (e) => {
@@ -105,48 +104,46 @@ const Register = () => {
   };
 
   useEffect(() => {
-    if(!Cookies.get('myCookie')){
-      navigate('/login')
-  }
+    if (!cookie.get("myCookie")) {
+      navigate("/login");
+    }
     if (Object.keys(formErrors).length === 0 && isSubmit) {
       console.log(user);
       let options = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          'Authorization' :  `Bearer ${Cookies.get("myCookie")}`
+          Authorization: `Bearer ${cookie.get("myCookie")}`,
         },
         body: JSON.stringify({
-          "emailId": user.emailId,
-          "acc_type": selectedOption,
-          "phone_no": user.phoneNumber,
-          "father_name": user.fatherName,
-          "aadhar_no": user.adhaarNumber,
-          "dob": user.dateOfBirth,
-          "res_addr": user.residentialAddress,
-          "perm_addr": user.permanentAddress,
-          "occ_type": user.occupationType,
-          "gross_annual_income": user.grossAnnualIncome,
-          "source_of_income": user.sourceOfIncome,
-          "debit_status": false,
-          "net_banking": false,
+          emailId: user.emailId,
+          acc_type: selectedOption,
+          phone_no: user.phoneNumber,
+          father_name: user.fatherName,
+          aadhar_no: user.adhaarNumber,
+          dob: user.dateOfBirth,
+          res_addr: user.residentialAddress,
+          perm_addr: user.permanentAddress,
+          occ_type: user.occupationType,
+          gross_annual_income: user.grossAnnualIncome,
+          source_of_income: user.sourceOfIncome,
+          debit_status: false,
+          net_banking: false,
         }),
       };
       fetch("http://localhost:8080/banking/user/open", options)
         .then((resp) => resp.json())
         .then((resp) => {
           console.log(resp);
-       
-        // Replace with your actual success/error logic
-        if (resp.status !== 400) {
-          showAlertPopup('success', "Account Opened Successfully");
-         
-           // Update with the actual new balance
-        } else {
-          showAlertPopup('error', "Error");
-        }
- 
 
+          // Replace with your actual success/error logic
+          if (resp.status !== 400) {
+            showAlertPopup("success", "Account Opened Successfully");
+
+            // Update with the actual new balance
+          } else {
+            showAlertPopup("error", "Error");
+          }
         });
     }
   }, [formErrors]);
@@ -312,7 +309,7 @@ const Register = () => {
             <span className="close-button" onClick={hideAlertPopup}>
               &times;
             </span>
-            {popupContent.type === 'success' ? (
+            {popupContent.type === "success" ? (
               <p className="success">{popupContent.message}</p>
             ) : (
               <p className="error">{popupContent.message}</p>

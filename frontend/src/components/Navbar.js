@@ -1,21 +1,22 @@
 import React from "react";
 import "./Styles/Animate.css";
 import { Link, useNavigate } from "react-router-dom";
-import Cookies from "js-cookie";
-const Navbar = ({ isLoggedIn }) => {
+import Cookies from "universal-cookie";
+const Navbar = (props) => {
   const navigate = useNavigate();
-
+  const cookie = new Cookies();
   const handleClick = () => {
-    Cookies.remove("myCookie")
-    Cookies.remove("emailId")
-    Cookies.remove("first")
-    Cookies.remove("last")
-    Cookies.remove("status")
-    Cookies.remove("searchEmail")
- 
-    console.log("hello")
-    navigate('/')
-  }
+    cookie.remove("myCookie", { path: "/" });
+    cookie.remove("emailId", { path: "/" });
+    cookie.remove("first", { path: "/" });
+    cookie.remove("last", { path: "/" });
+    cookie.remove("acc_no", { path: "/" });
+    cookie.remove("status", { path: "/" });
+    cookie.remove("searchEmail", { path: "/" });
+
+    console.log("hello");
+    navigate("/");
+  };
   return (
     <nav style={{ backgroundColor: "#f5f5f5", padding: "7px" }}>
       <div
@@ -47,15 +48,15 @@ const Navbar = ({ isLoggedIn }) => {
               gap: "20px",
             }}
           >
-                
-            
-            {Cookies.get("myCookie") ? (
+            {cookie.get("myCookie") ? (
               <>
+                <span className="animate-text">
+                  {" "}
+                  Welcome,{" "}
+                  {cookie.get("first") ? cookie.get("first") : props.first}{" "}
+                  {cookie.get("last") ? cookie.get("last") : props.last} !
+                </span>
 
-<span className="animate-text"> Welcome, {Cookies.get("first")} {Cookies.get("last")} ! 
-                 
-                 </span>
-           
                 <li>
                   <Link
                     to="/profile"
@@ -66,8 +67,8 @@ const Navbar = ({ isLoggedIn }) => {
                 </li>
                 <li>
                   <Link
-                  to="/"
-                  onClick={handleClick}
+                    to="/"
+                    onClick={handleClick}
                     style={{
                       textDecoration: "none",
                       color: "#333",
@@ -82,8 +83,7 @@ const Navbar = ({ isLoggedIn }) => {
               <>
                 <li>
                   <Link
-                  
-                   to="/login"
+                    to="/login"
                     style={{
                       textDecoration: "none",
                       color: "#333",
