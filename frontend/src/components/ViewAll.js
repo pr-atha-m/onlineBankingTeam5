@@ -63,11 +63,18 @@ const Transactions = () => {
         Authorization: `Bearer ${cookie.get("myCookie")}`,
       },
     };
-    fetch("http://localhost:8080/banking/userdetails", options)
-      .then((resp) => resp.json())
-      .then((resp) => {
-        setDetails(resp);
-      });
+    try {
+      fetch("http://localhost:8080/banking/userdetails", options)
+        .then((resp) => resp.json())
+        .then((resp) => {
+          setDetails(resp);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } catch (error) {
+      console.error(error);
+    }
   }, []);
 
   const keys = Object.keys(details);

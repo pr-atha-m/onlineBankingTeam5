@@ -4,7 +4,7 @@ import styled from "styled-components";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import Cookies from "universal-cookie";
-import { useNavigate, NavLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 const CardRow = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -86,20 +86,27 @@ const Services = () => {
         Authorization: `Bearer ${cookie.get("myCookie")}`,
       },
     };
-    fetch(
-      `http://localhost:8080/admin/userdetails/${cookie.get("emailId")}`,
-      options
-    )
-      .then((resp) => resp.json())
-      .then((resp) => {
-        console.log(resp);
+    try {
+      fetch(
+        `http://localhost:8080/admin/userdetails/${cookie.get("emailId")}`,
+        options
+      )
+        .then((resp) => resp.json())
+        .then((resp) => {
+          console.log(resp);
 
-        setFirst(resp.first_name);
-        setLast(resp.last_name);
-        cookie.set("first", resp.first_name, { path: "/" });
-        cookie.set("last", resp.last_name, { path: "/" });
-        cookie.set("status", resp.status, { path: "/" });
-      });
+          setFirst(resp.first_name);
+          setLast(resp.last_name);
+          cookie.set("first", resp.first_name, { path: "/" });
+          cookie.set("last", resp.last_name, { path: "/" });
+          cookie.set("status", resp.status, { path: "/" });
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } catch (error) {
+      console.error(error);
+    }
   }, []);
 
   return (

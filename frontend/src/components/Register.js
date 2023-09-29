@@ -65,9 +65,6 @@ const Register = () => {
     e.preventDefault();
     setFormErrors(validateForm(user));
     setIsSubmit(true);
-    // if (!formErrors) {
-    //   setIsSubmit(true);
-    // }
   };
 
   useEffect(() => {
@@ -85,11 +82,18 @@ const Register = () => {
           user_pwd: user.password,
         }),
       };
-      fetch("http://localhost:8080/banking/user/register", options)
-        .then((resp) => resp.json())
-        .then((resp) => {
-          showAlertPopup("success", "Account Opened Successfully");
-        });
+      try {
+        fetch("http://localhost:8080/banking/user/register", options)
+          .then((resp) => resp.json())
+          .then((resp) => {
+            showAlertPopup("success", "Account Opened Successfully");
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      } catch (error) {
+        console.error(error);
+      }
     }
   }, [formErrors]);
   return (

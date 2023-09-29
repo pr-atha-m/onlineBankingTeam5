@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { useNavigate, NavLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import createAccountpic from "../images/createAccount.jpg";
 import Cookies from "universal-cookie";
 import "./Styles/OpenAccount.css";
@@ -131,20 +130,28 @@ const Register = () => {
           net_banking: false,
         }),
       };
-      fetch("http://localhost:8080/banking/user/open", options)
-        .then((resp) => resp.json())
-        .then((resp) => {
-          console.log(resp);
 
-          // Replace with your actual success/error logic
-          if (resp.status !== 400) {
-            showAlertPopup("success", "Account Opened Successfully");
+      try {
+        fetch("http://localhost:8080/banking/user/open", options)
+          .then((resp) => resp.json())
+          .then((resp) => {
+            console.log(resp);
 
-            // Update with the actual new balance
-          } else {
-            showAlertPopup("error", "Error");
-          }
-        });
+            // Replace with your actual success/error logic
+            if (resp.status !== 400) {
+              showAlertPopup("success", "Account Opened Successfully");
+
+              // Update with the actual new balance
+            } else {
+              showAlertPopup("error", "Error");
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      } catch (error) {
+        console.error(error);
+      }
     }
   }, [formErrors]);
   return (

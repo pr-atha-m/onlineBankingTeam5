@@ -76,19 +76,26 @@ const UserDetails = () => {
         },
       };
 
-      fetch(
-        `http://localhost:8080/admin/useraccounts?emailId=${cookie.get(
-          "searchEmail"
-        )}`,
-        options
-      )
-        .then((resp) => resp.json())
-        .then((resp) => {
-          console.log(resp);
+      try {
+        fetch(
+          `http://localhost:8080/admin/useraccounts?emailId=${cookie.get(
+            "searchEmail"
+          )}`,
+          options
+        )
+          .then((resp) => resp.json())
+          .then((resp) => {
+            console.log(resp);
 
-          setUserAccounts(resp);
-          setAccountStatus(resp.map((account) => account.status));
-        });
+            setUserAccounts(resp);
+            setAccountStatus(resp.map((account) => account.status));
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      } catch (error) {
+        console.error(error);
+      }
     }, 1000); // 3000
   }, []);
 
@@ -106,29 +113,33 @@ const UserDetails = () => {
     // Make a POST request when status is set to false
 
     // Replace with your API endpoint and request configuration
-    fetch(
-      `http://localhost:8080/admin/setStatus?acc_num=${userAccounts[index].acc_no}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${cookie.get("myCookie")}`,
-        },
-      }
-    )
-      .then((response) => {
-        // Handle the response as needed
-        if (response.status === 200) {
-          // Successful POST
-          console.log("Status Changed");
-        } else {
-          // Handle errors
-          console.log("error changing status");
+    try {
+      fetch(
+        `http://localhost:8080/admin/setStatus?acc_num=${userAccounts[index].acc_no}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${cookie.get("myCookie")}`,
+          },
         }
-      })
-      .catch((error) => {
-        // Handle network errors
-      });
+      )
+        .then((response) => {
+          // Handle the response as needed
+          if (response.status === 200) {
+            // Successful POST
+            console.log("Status Changed");
+          } else {
+            // Handle errors
+            console.log("error changing status");
+          }
+        })
+        .catch((error) => {
+          // Handle network errors
+        });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (

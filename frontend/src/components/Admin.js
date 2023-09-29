@@ -4,15 +4,13 @@ import { Link } from "react-router-dom";
 import searchimg from "../images/search.jpeg";
 import Cookies from "universal-cookie";
 import "./Styles/Admin.css"; // Import your CSS file for styling
-import { useNavigate, NavLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function Admin() {
   const cookie = new Cookies();
   const navigate = useNavigate();
 
   const [formErrors, setFormErrors] = useState({});
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  // const [email,setEmail] useState();
   const [isSubmit, setIsSubmit] = useState(false);
   const [user, setUserDetails] = useState({
     email: "",
@@ -61,23 +59,22 @@ function Admin() {
           Authorization: `Bearer ${cookie.get("myCookie")}`,
         },
       };
-      fetch(`http://localhost:8080/admin/userdetails/${user.email}`, options)
-        .then((resp) => resp.json())
-        .then((resp) => {
-          console.log(resp);
+      try {
+        fetch(`http://localhost:8080/admin/userdetails/${user.email}`, options)
+          .then((resp) => resp.json())
+          .then((resp) => {
+            console.log(resp);
 
-          cookie.set("searchEmail", user.email, { path: "/" });
-          cookie.set("first", resp.first_name, { path: "/" });
-          // localStorage.setItem("last", resp.last_name);
-
-          // localStorage.setItem("searchEmail", user.email);
-          // localStorage.setItem("first", resp.first_name);
-          // localStorage.setItem("last", resp.last_name);
-          //  localStorage.setItem("status", user.s);
-        });
-
-      navigate("/admin/userdetails", { replace: true });
-
+            cookie.set("searchEmail", user.email, { path: "/" });
+            cookie.set("first", resp.first_name, { path: "/" });
+            navigate("/admin/userdetails", { replace: true });
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      } catch (error) {
+        console.error(error);
+      }
       // if (!formErrors) {
     }
   }, [formErrors]);

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Navbar from "./Navbar";
 import Cookies from "universal-cookie";
-import { useNavigate, NavLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   max-width: 800px;
@@ -51,16 +51,23 @@ const Transactions = () => {
         Authorization: `Bearer ${cookie.get("myCookie")}`,
       },
     };
-    fetch(
-      `http://localhost:8080/transaction/transactionHistory/${cookie.get(
-        "acc_no"
-      )}`,
-      options
-    )
-      .then((resp) => resp.json())
-      .then((resp) => {
-        setDetails(resp);
-      });
+    try {
+      fetch(
+        `http://localhost:8080/transaction/transactionHistory/${cookie.get(
+          "acc_no"
+        )}`,
+        options
+      )
+        .then((resp) => resp.json())
+        .then((resp) => {
+          setDetails(resp);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } catch (error) {
+      console.error(error);
+    }
   }, []);
 
   const keys = Object.keys(details);

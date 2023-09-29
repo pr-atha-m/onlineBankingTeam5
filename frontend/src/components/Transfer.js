@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { useNavigate, NavLink } from "react-router-dom";
 import transferpic from "../images/transfer.jpeg";
 import "./Styles/OpenAccount.css";
@@ -52,22 +51,13 @@ const Transfer = () => {
 
   const [details, setDetails] = useState([]);
 
-  //   useEffect(() => {
-
-  // }, []);
-
   const options1 = [];
 
-  {
-    details.map((account, index) => options1.push(account.acc_no));
-  }
+  details.map((account, index) => options1.push(account.acc_no));
 
   const validateForm = (values) => {
     console.log(values);
     const error = {};
-    const regexEmail = /^[^\s+@]+@[^\s@]+\.[^\s@]{2,}$/i;
-    const phoneRegex = /^\d{10}$/;
-    const adhaarRegex = /^\d{12}$/;
 
     if (!selectedOption) {
       error.trans_mode = "Please select Transaction Mode";
@@ -111,21 +101,27 @@ const Transfer = () => {
           instructions: user.instructions,
         }),
       };
-      fetch("http://localhost:8080/transaction/execute", options)
-        .then((resp) => resp.json())
-        .then((resp) => {
-          if (resp.status !== 400) {
-            showAlertPopup("success", "Transaction Success");
+      try {
+        fetch("http://localhost:8080/transaction/execute", options)
+          .then((resp) => resp.json())
+          .then((resp) => {
+            if (resp.status !== 400) {
+              showAlertPopup("success", "Transaction Success");
 
-            // Update with the actual new balance
-          } else {
-            showAlertPopup("Transaction Failed", resp.message);
-          }
+              // Update with the actual new balance
+            } else {
+              showAlertPopup("Transaction Failed", resp.message);
+            }
 
-          // navigate("/dashboard", { replace: true });;
-        });
+            // navigate("/dashboard", { replace: true });;
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      } catch (error) {
+        console.error(error);
+      }
     }
-
     let options = {
       method: "GET",
       headers: {
@@ -133,17 +129,24 @@ const Transfer = () => {
         Authorization: `Bearer ${cookie.get("myCookie")}`,
       },
     };
-    fetch(
-      `http://localhost:8080/banking/user/by-email?emailId=${cookie.get(
-        "emailId"
-      )}`,
-      options
-    )
-      .then((resp) => resp.json())
-      .then((resp) => {
-        setDetails(resp);
-        console.log(resp);
-      });
+    try {
+      fetch(
+        `http://localhost:8080/banking/user/by-email?emailId=${cookie.get(
+          "emailId"
+        )}`,
+        options
+      )
+        .then((resp) => resp.json())
+        .then((resp) => {
+          setDetails(resp);
+          console.log(resp);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } catch (error) {
+      console.error(error);
+    }
   }, [formErrors]);
   return (
     <div className="body1">

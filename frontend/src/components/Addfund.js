@@ -53,17 +53,24 @@ export const Addfund = ({ setUserState }) => {
         Authorization: `Bearer ${cookie.get("myCookie")}`,
       },
     };
-    fetch(
-      `http://localhost:8080/banking/user/by-email?emailId=${cookie.get(
-        "emailId"
-      )}`,
-      options
-    )
-      .then((resp) => resp.json())
-      .then((resp) => {
-        setDetails(resp);
-        console.log(resp);
-      });
+    try {
+      fetch(
+        `http://localhost:8080/banking/user/by-email?emailId=${cookie.get(
+          "emailId"
+        )}`,
+        options
+      )
+        .then((resp) => resp.json())
+        .then((resp) => {
+          setDetails(resp);
+          console.log(resp);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } catch (error) {
+      console.error(error);
+    }
 
     if (Object.keys(formErrors).length === 0 && isSubmit) {
       const options = {
@@ -74,22 +81,36 @@ export const Addfund = ({ setUserState }) => {
         },
       };
 
-      fetch(
-        `http://localhost:8080/banking/deposit?acc_no=${selectedOption}&amount=${user.amount}`,
-        options
-      ).then((resp) =>
-        resp.json().then((resp) => {
-          console.log(resp.message);
-          setTimeout(() => {
-            // Replace with your actual success/error logic
-            if (resp.status !== 400) {
-              showAlertPopup("success", `Deposit successful. ${resp.message}`); // Update with the actual new balance
-            } else {
-              showAlertPopup("error", "Error: Unable to complete the deposit.");
-            }
-          }, 500);
-        })
-      );
+      try {
+        fetch(
+          `http://localhost:8080/banking/deposit?acc_no=${selectedOption}&amount=${user.amount}`,
+          options
+        )
+          .then((resp) =>
+            resp.json().then((resp) => {
+              console.log(resp.message);
+              setTimeout(() => {
+                // Replace with your actual success/error logic
+                if (resp.status !== 400) {
+                  showAlertPopup(
+                    "success",
+                    `Deposit successful. ${resp.message}`
+                  ); // Update with the actual new balance
+                } else {
+                  showAlertPopup(
+                    "error",
+                    "Error: Unable to complete the deposit."
+                  );
+                }
+              }, 500);
+            })
+          )
+          .catch((error) => {
+            console.error(error);
+          });
+      } catch (error) {
+        console.error(error);
+      }
     }
   }, [formErrors]);
 

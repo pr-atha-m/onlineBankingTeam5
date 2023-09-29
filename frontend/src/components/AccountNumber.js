@@ -29,17 +29,24 @@ const AccountNumber = () => {
         Authorization: `Bearer ${cookie.get("myCookie")}`,
       },
     };
-    fetch(
-      `http://localhost:8080/banking/user/by-email?emailId=${cookie.get(
-        "emailId"
-      )}`,
-      options
-    )
-      .then((resp) => resp.json())
-      .then((resp) => {
-        setDetails(resp);
-        console.log(resp);
-      });
+    try {
+      fetch(
+        `http://localhost:8080/banking/user/by-email?emailId=${cookie.get(
+          "emailId"
+        )}`,
+        options
+      )
+        .then((resp) => resp.json())
+        .then((resp) => {
+          setDetails(resp);
+          console.log(resp);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } catch (error) {
+      console.error(error);
+    }
   }, []);
 
   const [selectedOption, setSelectedOption] = useState("");

@@ -1,21 +1,34 @@
 import React, { useState, useEffect } from "react";
 import "./Styles/Login.css";
+
 import loginpic from "../images/login.jpg";
 import Cookies from "universal-cookie";
 
-import { useNavigate, NavLink } from "react-router-dom";
-import User from "./User";
+import { useNavigate } from "react-router-dom";
+
 export const Login = () => {
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupContent, setPopupContent] = useState("");
   const cookie = new Cookies();
   const navigate = useNavigate();
   const [formErrors, setFormErrors] = useState({});
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
   const [isSubmit, setIsSubmit] = useState(false);
 
   const [user, setUserDetails] = useState({
     email: "",
     password: "",
   });
+
+  const showAlertPopup = (message) => {
+    setPopupContent(message);
+    setShowPopup(true);
+  };
+
+  // Function to hide the alert popup
+  const hideAlertPopup = () => {
+    setShowPopup(false);
+  };
 
   const changeHandler = (e) => {
     const { name, value } = e.target;
@@ -42,10 +55,6 @@ export const Login = () => {
     e.preventDefault();
     setFormErrors(validateForm(user));
     setIsSubmit(true);
-
-    // if (!formErrors) {
-
-    // }
   };
 
   useEffect(() => {
@@ -70,12 +79,11 @@ export const Login = () => {
         fetch("http://localhost:8080/authentication/login", options)
           .then((resp) => {
             if (!resp.ok) {
-              alert("Invalid Credentials");
+              showAlertPopup("Invalid Username or Password !");
             }
             return resp.json();
           })
           .then((resp) => {
-            // localStorage.setItem("emailId", user.email);
             cookie.set("emailId", user.email, { path: "/" });
             cookie.set("myCookie", resp.token, { path: "/" });
             if (user.email === "admin@gmail.com") {
@@ -138,6 +146,18 @@ export const Login = () => {
           </div>
         </div>
       </div>
+
+      {showPopup && (
+        <div className="popup-container">
+          <div className="popup">
+            <span className="close-button" onClick={hideAlertPopup}>
+              &times;
+            </span>
+
+            <p className="error">{popupContent}</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

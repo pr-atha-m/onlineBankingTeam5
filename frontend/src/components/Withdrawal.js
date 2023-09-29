@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./Styles/Withdraw.css";
+
 import Cookies from "universal-cookie";
 
 import withdrawpic from "../images/withdrawal.jpeg";
@@ -26,7 +27,6 @@ export const Withdrawal = ({ setUserState }) => {
   // Function to hide the alert popup
   const hideAlertPopup = () => {
     setShowPopup(false);
-    navigate("/service", { replace: true });
   };
 
   const loginHandler = async (e) => {
@@ -48,22 +48,31 @@ export const Withdrawal = ({ setUserState }) => {
 
     let options = {
       method: "GET",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${cookie.get("myCookie")}`,
       },
     };
-    fetch(
-      `http://localhost:8080/banking/user/by-email?emailId=${cookie.get(
-        "emailId"
-      )}`,
-      options
-    )
-      .then((resp) => resp.json())
-      .then((resp) => {
-        setDetails(resp);
-        console.log(resp);
-      });
+
+    try {
+      fetch(
+        `http://localhost:8080/banking/user/by-email?emailId=${cookie.get(
+          "emailId"
+        )}`,
+        options
+      )
+        .then((resp) => resp.json())
+        .then((resp) => {
+          setDetails(resp);
+          console.log(resp);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } catch (error) {
+      console.error(error);
+    }
 
     if (Object.keys(formErrors).length === 0 && isSubmit) {
       const options = {
@@ -74,34 +83,40 @@ export const Withdrawal = ({ setUserState }) => {
         },
       };
 
-      fetch(
-        `http://localhost:8080/banking/withdraw?acc_no=${selectedOption}&amount=${user.amount}`,
-        options
-      ).then((resp) =>
-        resp.json().then((resp) => {
-          console.log(resp);
-          setTimeout(() => {
-            // Replace with your actual success/error logic
-            if (resp.status !== 400) {
-              showAlertPopup(
-                "success",
-                `Withdrawal successful. ${resp.message}`
-              ); // Update with the actual new balance
-            } else {
-              showAlertPopup("error", resp.message);
-            }
-          }, 500);
-        })
-      );
+      try {
+        fetch(
+          `http://localhost:8080/banking/withdraw?acc_no=${selectedOption}&amount=${user.amount}`,
+          options
+        )
+          .then((resp) =>
+            resp.json().then((resp) => {
+              console.log(resp);
+              setTimeout(() => {
+                // Replace with your actual success/error logic
+                if (resp.status !== 400) {
+                  showAlertPopup(
+                    "success",
+                    `Withdrawal successful. ${resp.message}`
+                  ); // Update with the actual new balance
+                } else {
+                  showAlertPopup("error", resp.message);
+                }
+              }, 500);
+            })
+          )
+          .catch((error) => {
+            console.error(error);
+          });
+      } catch (error) {
+        console.error(error);
+      }
     }
   }, [formErrors]);
 
   const [selectedOption, setSelectedOption] = useState("");
   const options = [];
 
-  {
-    details.map((account, index) => options.push(account.acc_no));
-  }
+  details.map((account, index) => options.push(account.acc_no));
 
   const changeHandler = (e) => {
     const { name, value } = e.target;

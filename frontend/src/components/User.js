@@ -11,19 +11,26 @@ export const User = () => {
         Authorization: `Bearer ${cookie.get("myCookie")}`,
       },
     };
-    fetch(
-      `http://localhost:8080/admin/useraccounts?emailId=${cookie.get(
-        "emailId"
-      )}`,
-      options
-    )
-      .then((resp) => resp.json())
-      .then((resp) => {
-        console.log(resp);
-        cookie.set("first", resp.first_name);
-        cookie.set("last", resp.last_name);
-        cookie.set("status", resp.status);
-      });
+    try {
+      fetch(
+        `http://localhost:8080/admin/useraccounts?emailId=${cookie.get(
+          "emailId"
+        )}`,
+        options
+      )
+        .then((resp) => resp.json())
+        .then((resp) => {
+          console.log(resp);
+          cookie.set("first", resp.first_name);
+          cookie.set("last", resp.last_name);
+          cookie.set("status", resp.status);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } catch (error) {
+      console.error(error);
+    }
   }, []);
   return <div></div>;
 };
